@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowRight, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
+  ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
   ClipboardCheck, Compass, Gauge, Handshake, Lightbulb, Megaphone, RefreshCw,
   Rocket, Scale, Search, Settings2, ShieldCheck, Sparkles, Target, Users, Workflow,
 } from "lucide-react";
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StoryModal } from "@/components/StoryModal";
+import { STORY_STAGES } from "@/data/storyData";
 
 type Stage = {
   id: string; number: string; title: string; mm: string; phase: string; color: string; pale: string;
@@ -114,7 +116,9 @@ export default function Home() {
   const [done,setDone]=useState<Record<string,boolean>>({});
   const [finder,setFinder]=useState<Record<string,"yes"|"no">>({});
   const [finderOpen,setFinderOpen]=useState(true);
+  const [storyOpen,setStoryOpen]=useState(false);
   const active=stages.find(s=>s.id===activeId)??stages[0];
+  const activeStory=STORY_STAGES.find(s=>s.id===active.id)??STORY_STAGES[0];
   useEffect(()=>{try{const a=localStorage.getItem("startup-roadmap-progress"),b=localStorage.getItem("startup-roadmap-stage");if(a)setDone(JSON.parse(a));if(b)setActiveId(b)}catch{}},[]);
   const setStage=(id:string)=>{setActiveId(id);localStorage.setItem("startup-roadmap-stage",id)};
   const toggle=(key:string,value:boolean)=>{const next={...done,[key]:value};setDone(next);localStorage.setItem("startup-roadmap-progress",JSON.stringify(next))};
@@ -125,14 +129,27 @@ export default function Home() {
     <header className="sticky top-0 z-40 border-b border-[#d9d5ca] bg-[#f3f1eb]/92 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3.5 sm:px-7">
         <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg"><Rocket className="size-5"/></span><div><p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#687085]">Founder Learning OS</p><h1 className="text-base font-extrabold sm:text-lg">AI Startup Roadmap</h1></div></div>
-        <div className="flex items-center gap-3"><div className="hidden w-36 sm:block"><div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]"><span>ACTION PROGRESS</span><span>{percent}%</span></div><Progress value={percent} className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/></div><Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/60" onClick={()=>setFinderOpen(v=>!v)}><Gauge className="size-4"/> Focus Finder</Button></div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden w-36 md:block"><div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]"><span>ACTION PROGRESS</span><span>{percent}%</span></div><Progress value={percent} className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/></div>
+          <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white" onClick={()=>setStoryOpen(true)}><BookOpen className="size-4 text-[#4f7cff]"/> Story Mode</Button>
+          <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/60 font-bold" onClick={()=>setFinderOpen(v=>!v)}><Gauge className="size-4"/> Focus Finder</Button>
+        </div>
       </div>
     </header>
 
     <section className="mx-auto max-w-[1500px] px-4 py-5 sm:px-7 sm:py-7">
       <div className="overflow-hidden rounded-[28px] bg-[#14213d] text-white shadow-[0_24px_70px_rgba(20,33,61,.18)]">
         <div className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-end lg:p-8">
-          <div><p className="mb-3 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#91a2c7]"><Sparkles className="size-4 text-[#f6c85f]"/> Idea မှ Scale အထိ</p><h2 className="max-w-4xl text-2xl font-black leading-tight sm:text-4xl">Startup ကို မှတ်သားဖို့မလိုဘဲ<br className="hidden sm:block"/> အဆင့်လိုက် နားလည်ပြီး လုပ်ကြည့်ပါ</h2><p className="mt-4 max-w-3xl text-sm leading-7 text-[#c7d0e4]">အဆင့် ၈ ခုကို တစ်ခါတည်းမလုပ်ပါနဲ့။ လက်ရှိ Bottleneck ကိုရှာ၊ Action ကိုစမ်း၊ Evidence ရမှ နောက် Gate ကိုဖြတ်ပါ။</p></div>
+          <div>
+            <p className="mb-3 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#91a2c7]"><Sparkles className="size-4 text-[#f6c85f]"/> Idea မှ Scale အထိ</p>
+            <h2 className="max-w-4xl text-2xl font-black leading-tight sm:text-4xl">Startup ကို မှတ်သားဖို့မလိုဘဲ<br className="hidden sm:block"/> အဆင့်လိုက် နားလည်ပြီး လုပ်ကြည့်ပါ</h2>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#c7d0e4]">အဆင့် ၈ ခုကို တစ်ခါတည်းမလုပ်ပါနဲ့။ လက်ရှိ Bottleneck ကိုရှာ၊ Action ကိုစမ်း၊ Evidence ရမှ နောက် Gate ကိုဖြတ်ပါ။</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button onClick={()=>setStoryOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white">
+                <BookOpen className="size-4 text-[#f6c85f]"/> Ko Moe ရဲ့ AI Startup Journey ဖတ်ရန် <ArrowRight className="size-3.5"/>
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-3 gap-2 text-center"><MiniStat n="8" label="Stages"/><MiniStat n="32" label="Actions"/><MiniStat n="1" label="Next focus"/></div>
         </div>
         <div className="border-t border-white/10 bg-white/[.04] p-3 sm:p-5">
@@ -163,10 +180,63 @@ export default function Home() {
             </div>
 
             <Tabs key={active.id} defaultValue="understand" className="p-5 sm:p-8">
-              <TabsList className="grid h-auto w-full grid-cols-3 rounded-2xl bg-[#ece9e1] p-1.5"><TabsTrigger value="understand" className="h-11 rounded-xl text-xs">Understand</TabsTrigger><TabsTrigger value="do" className="h-11 rounded-xl text-xs">Do it</TabsTrigger><TabsTrigger value="gate" className="h-11 rounded-xl text-xs">Pass the Gate</TabsTrigger></TabsList>
+              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-[#ece9e1] p-1.5 sm:grid-cols-4 sm:gap-0">
+                <TabsTrigger value="understand" className="h-11 rounded-xl text-xs">Understand</TabsTrigger>
+                <TabsTrigger value="story" className="flex h-11 items-center gap-1.5 rounded-xl text-xs"><BookOpen className="size-3.5 text-[#4f7cff]"/> Story (Ko Moe)</TabsTrigger>
+                <TabsTrigger value="do" className="h-11 rounded-xl text-xs">Do it</TabsTrigger>
+                <TabsTrigger value="gate" className="h-11 rounded-xl text-xs">Pass the Gate</TabsTrigger>
+              </TabsList>
               <TabsContent value="understand" className="mt-6">
-                <div className="grid gap-4 xl:grid-cols-[1.1fr_.9fr]"><div className="rounded-2xl border border-[#dfdcd3] bg-white p-5"><p className="flex items-center gap-2 text-xs font-black" style={{color:active.color}}><Lightbulb className="size-4"/> WHAT IS IT?</p><p className="mt-4 text-sm leading-7 text-[#4d566b]">{active.what}</p><div className="mt-5 rounded-xl p-4" style={{background:active.pale}}><p className="text-[9px] font-black uppercase tracking-widest" style={{color:active.color}}>Example</p><p className="mt-2 text-xs font-semibold leading-6">{active.example}</p></div></div>
-                  <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5"><p className="flex items-center gap-2 text-xs font-black text-[#3156a3]"><ShieldCheck className="size-4"/> WHY IT MATTERS</p><ul className="mt-4 space-y-3">{active.why.map(v=><li key={v} className="flex gap-3 text-xs leading-6 text-[#4d566b]"><CheckCircle2 className="mt-1 size-4 shrink-0 text-[#1da98a]"/>{v}</li>)}</ul><div className="mt-5 rounded-xl bg-[#fff0e9] p-4"><p className="text-[9px] font-black uppercase tracking-widest text-[#e8693e]">Common mistake</p><p className="mt-2 text-xs font-semibold leading-6">{active.mistake}</p></div></div></div>
+                <div className="grid gap-4 xl:grid-cols-[1.1fr_.9fr]">
+                  <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
+                    <p className="flex items-center gap-2 text-xs font-black" style={{color:active.color}}><Lightbulb className="size-4"/> WHAT IS IT?</p>
+                    <p className="mt-4 text-sm leading-7 text-[#4d566b]">{active.what}</p>
+                    <div className="mt-5 rounded-xl p-4" style={{background:active.pale}}><p className="text-[9px] font-black uppercase tracking-widest" style={{color:active.color}}>Example</p><p className="mt-2 text-xs font-semibold leading-6">{active.example}</p></div>
+                  </div>
+                  <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
+                    <p className="flex items-center gap-2 text-xs font-black text-[#3156a3]"><ShieldCheck className="size-4"/> WHY IT MATTERS</p>
+                    <ul className="mt-4 space-y-3">{active.why.map(v=><li key={v} className="flex gap-3 text-xs leading-6 text-[#4d566b]"><CheckCircle2 className="mt-1 size-4 shrink-0 text-[#1da98a]"/>{v}</li>)}</ul>
+                    <div className="mt-5 rounded-xl bg-[#fff0e9] p-4"><p className="text-[9px] font-black uppercase tracking-widest text-[#e8693e]">Common mistake</p><p className="mt-2 text-xs font-semibold leading-6">{active.mistake}</p></div>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="story" className="mt-6">
+                <div className="rounded-2xl border border-[#26304a] bg-[#0b1020] p-6 text-[#eef3ff] shadow-sm sm:p-7">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <span className="inline-block rounded-full bg-[#1b2b4a] px-3.5 py-1 text-xs font-extrabold text-[#bcd3ff]">
+                      {activeStory.stageBadge}
+                    </span>
+                    <Button size="sm" variant="ghost" className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#8ea8df] hover:bg-[#253250] hover:text-white" onClick={()=>setStoryOpen(true)}>
+                      Story Mode အပြည့်ဖွင့်မည် <ArrowRight className="size-3.5"/>
+                    </Button>
+                  </div>
+                  <h3 className="mt-4 text-xl font-black text-white sm:text-2xl">{activeStory.title}</h3>
+                  <div className="mt-4 space-y-3 text-sm leading-relaxed text-[#c7d0e4]">
+                    {activeStory.paragraphs.map((p,i)=><p key={i}>{p}</p>)}
+                  </div>
+                  {activeStory.quote && (
+                    <div className="mt-5 rounded-xl border-l-4 border-[#6ea8fe] bg-[#18223b] p-4 text-xs font-semibold leading-6 text-[#eef3ff]">
+                      {activeStory.quote}
+                    </div>
+                  )}
+                  {activeStory.flow && (
+                    <div className="mt-5 rounded-xl border border-[#26304a] bg-[#090e1a] p-4 font-mono text-xs leading-6 text-[#8ea8df]">
+                      <p className="mb-2 font-sans text-[10px] font-black uppercase tracking-widest text-[#6ea8fe]">Operating Workflow</p>
+                      <div className="space-y-1">
+                        {activeStory.flow.map((step, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <span className="text-[#4f7cff]">{idx + 1 < activeStory.flow!.length ? "↓" : "✓"}</span>
+                            <span className="font-bold text-white">{step}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#245b41] bg-[#123626] p-4 text-xs font-semibold leading-relaxed text-[#a3f0c4]">
+                    <Lightbulb className="mt-0.5 size-4 shrink-0 text-[#f6c85f]"/>
+                    <div><span className="font-black text-white">💡 Lesson: </span>{activeStory.lesson}</div>
+                  </div>
+                </div>
               </TabsContent>
               <TabsContent value="do" className="mt-6"><div className="space-y-3">{active.actions.map((a,i)=>{const key=`${active.id}-${i}`,checked=!!done[key];return <label key={a.title} className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${checked?"border-transparent bg-[#eeeee9] opacity-65":"border-[#dfdcd3] bg-white hover:shadow-sm"}`}><Checkbox checked={checked} onCheckedChange={v=>toggle(key,v===true)} className="mt-1 size-5"/><span className="grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black" style={{background:active.pale,color:active.color}}>{i+1}</span><span><span className={`block text-sm font-extrabold ${checked?"line-through":""}`}>{a.title}</span><span className="mt-1 block text-xs leading-6 text-[#687085]">{a.detail}</span></span></label>})}</div></TabsContent>
               <TabsContent value="gate" className="mt-6"><div className="grid gap-5 xl:grid-cols-[1fr_.7fr]"><div className="rounded-2xl border border-[#dfdcd3] bg-white p-5"><p className="flex items-center gap-2 text-xs font-black"><Scale className="size-4" style={{color:active.color}}/> BEFORE MOVING ON</p><div className="mt-4 space-y-3">{active.gate.map(g=><div key={g} className="flex gap-3 rounded-xl bg-[#f7f6f2] p-3 text-xs font-semibold leading-5"><Check className="mt-0.5 size-4 shrink-0 text-[#1da98a]"/>{g}</div>)}</div></div><div className="rounded-2xl p-5" style={{background:active.pale}}><p className="text-[10px] font-black uppercase tracking-[.18em]" style={{color:active.color}}>Evidence over opinion</p><p className="mt-3 text-sm font-extrabold leading-6">Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။</p><Button className="mt-5 w-full rounded-xl bg-[#14213d]" onClick={()=>setStage(stages[(idx+1)%8].id)}>နောက် Stage ကိုကြည့်မယ် <ArrowRight className="size-4"/></Button></div></div></TabsContent>
@@ -186,6 +256,13 @@ export default function Home() {
         </article>
       </div>
     </section>
+
+    <StoryModal
+      isOpen={storyOpen}
+      onClose={()=>setStoryOpen(false)}
+      onSelectStage={(id)=>setStage(id)}
+      initialStageId={activeId}
+    />
   </main>
 }
 
