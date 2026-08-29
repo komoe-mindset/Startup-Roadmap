@@ -1,0 +1,6 @@
+{
+  "name": "AI Startup Roadmap",
+  "description": "Problem Validation မှ Operations & Scale အထိ Startup အဆင့် ၈ ခုကို လက်တွေ့လေ့လာနိုင်သော interactive Myanmar guide.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
