@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
-  ClipboardCheck, Compass, Gauge, Handshake, Lightbulb, Megaphone, RefreshCw,
+  ClipboardCheck, Compass, ExternalLink, Gauge, Handshake, Lightbulb, Megaphone, RefreshCw,
   Rocket, Scale, Search, Settings2, ShieldCheck, Sparkles, Target, Users, Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StoryModal } from "@/components/StoryModal";
+import { GeminiGemIcon } from "@/components/GeminiGemIcon";
 import { STORY_STAGES } from "@/data/storyData";
+
+export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
 
 type Stage = {
   id: string; number: string; title: string; mm: string; phase: string; color: string; pale: string;
@@ -130,7 +133,19 @@ export default function Home() {
       <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3.5 sm:px-7">
         <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg"><Rocket className="size-5"/></span><div><p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#687085]">Founder Learning OS</p><h1 className="text-base font-extrabold sm:text-lg">AI Startup Roadmap</h1></div></div>
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden w-36 md:block"><div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]"><span>ACTION PROGRESS</span><span>{percent}%</span></div><Progress value={percent} className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/></div>
+          <div className="hidden w-36 lg:block"><div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]"><span>ACTION PROGRESS</span><span>{percent}%</span></div><Progress value={percent} className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/></div>
+          <a
+            href={GEMINI_ASSISTANT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Ask Gemini Custom Gem - Startup Mentor"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm"
+          >
+            <GeminiGemIcon className="size-4" />
+            <span className="hidden sm:inline">AI Gem Mentor</span>
+            <span className="sm:hidden">Gemini</span>
+            <ExternalLink className="size-3 opacity-60" />
+          </a>
           <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white" onClick={()=>setStoryOpen(true)}><BookOpen className="size-4 text-[#4f7cff]"/> Story Mode</Button>
           <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/60 font-bold" onClick={()=>setFinderOpen(v=>!v)}><Gauge className="size-4"/> Focus Finder</Button>
         </div>
@@ -148,6 +163,16 @@ export default function Home() {
               <button onClick={()=>setStoryOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white">
                 <BookOpen className="size-4 text-[#f6c85f]"/> Ko Moe ရဲ့ AI Startup Journey ဖတ်ရန် <ArrowRight className="size-3.5"/>
               </button>
+              <a
+                href={GEMINI_ASSISTANT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80"
+              >
+                <GeminiGemIcon className="size-4" />
+                <span>Gemini Custom Gem ဖြင့် ဆွေးနွေးမေးမြန်းရန်</span>
+                <ExternalLink className="size-3.5 opacity-80" />
+              </a>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center"><MiniStat n="8" label="Stages"/><MiniStat n="32" label="Actions"/><MiniStat n="1" label="Next focus"/></div>
@@ -236,6 +261,24 @@ export default function Home() {
                     <Lightbulb className="mt-0.5 size-4 shrink-0 text-[#f6c85f]"/>
                     <div><span className="font-black text-white">💡 Lesson: </span>{activeStory.lesson}</div>
                   </div>
+
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#26304a] bg-[#121a2f] p-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <GeminiGemIcon className="size-4 shrink-0" />
+                      <p className="text-xs text-[#c7d0e4]">
+                        ဒီ <span className="font-bold text-white">{active.title}</span> အဆင့်ကို သင့်ရဲ့ကိုယ်ပိုင် Idea နဲ့ Gemini Custom Gem ဆီမှာ မေးမြန်းတိုင်ပင်ပါ။
+                      </p>
+                    </div>
+                    <a
+                      href={GEMINI_ASSISTANT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#4f7cff]/40 bg-[#4f7cff]/20 px-3 py-1 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#4f7cff] hover:text-white"
+                    >
+                      <span>Gemini Gem မေးမယ်</span>
+                      <ExternalLink className="size-3" />
+                    </a>
+                  </div>
                 </div>
               </TabsContent>
               <TabsContent value="do" className="mt-6"><div className="space-y-3">{active.actions.map((a,i)=>{const key=`${active.id}-${i}`,checked=!!done[key];return <label key={a.title} className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${checked?"border-transparent bg-[#eeeee9] opacity-65":"border-[#dfdcd3] bg-white hover:shadow-sm"}`}><Checkbox checked={checked} onCheckedChange={v=>toggle(key,v===true)} className="mt-1 size-5"/><span className="grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black" style={{background:active.pale,color:active.color}}>{i+1}</span><span><span className={`block text-sm font-extrabold ${checked?"line-through":""}`}>{a.title}</span><span className="mt-1 block text-xs leading-6 text-[#687085]">{a.detail}</span></span></label>})}</div></TabsContent>
@@ -244,7 +287,26 @@ export default function Home() {
           </section>
 
           <section className="grid gap-5 xl:grid-cols-2">
-            <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white"><Bot className="size-5"/></span><div><p className="text-sm font-extrabold">AI + Human Team</p><p className="text-[10px] text-[#687085]">Speed + judgment</p></div></div><div className="mt-5 grid gap-4 sm:grid-cols-2"><Role title="AI က ကူညီမယ်" values={active.ai} color="#8c70db"/><Role title="လူက တာဝန်ယူမယ်" values={active.human} color="#1da98a"/></div></div>
+            <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white"><Bot className="size-5"/></span>
+                  <div><p className="text-sm font-extrabold">AI + Human Team</p><p className="text-[10px] text-[#687085]">Speed + judgment</p></div>
+                </div>
+                <a
+                  href={GEMINI_ASSISTANT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff]"
+                  title="Ask Gemini Custom Gem"
+                >
+                  <GeminiGemIcon className="size-3.5" />
+                  <span>Gemini Gem</span>
+                  <ExternalLink className="size-2.5 opacity-60" />
+                </a>
+              </div>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2"><Role title="AI က ကူညီမယ်" values={active.ai} color="#8c70db"/><Role title="လူက တာဝန်ယူမယ်" values={active.human} color="#1da98a"/></div>
+            </div>
             <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl" style={{background:active.pale,color:active.color}}><Gauge className="size-5"/></span><div><p className="text-sm font-extrabold">Startup Health Metrics</p><p className="text-[10px] text-[#687085]">Activity မဟုတ်ဘဲ Evidence ကိုတိုင်းပါ</p></div></div><div className="mt-5 grid grid-cols-2 gap-2">{active.kpis.map(k=><div key={k} className="rounded-xl border border-[#dfdcd3] bg-white p-3"><span className="mb-2 block h-1 w-8 rounded-full" style={{background:active.color}}/><p className="text-xs font-extrabold">{k}</p></div>)}</div></div>
           </section>
 

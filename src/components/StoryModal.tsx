@@ -15,6 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { STORY_STAGES, STORY_SUMMARY, StoryStage } from "@/data/storyData";
+import { GeminiGemIcon } from "@/components/GeminiGemIcon";
+
+const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
 
 interface StoryModalProps {
   isOpen: boolean;
@@ -104,6 +107,18 @@ export function StoryModal({
                 <ListOrdered className="size-3.5" /> အကုန်ဖတ်ရန်
               </button>
             </div>
+
+            <a
+              href={GEMINI_ASSISTANT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-xl border border-[#7c3aed]/50 bg-gradient-to-r from-[#4f46e5]/40 to-[#7c3aed]/40 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:border-[#a78bfa] hover:from-[#4f46e5]/60 hover:to-[#7c3aed]/60"
+              title="Open Gemini Custom Gem for personalized AI Startup guidance"
+            >
+              <GeminiGemIcon className="size-3.5" />
+              <span className="hidden sm:inline">AI Gem Mentor</span>
+              <ExternalLink className="size-3 opacity-75" />
+            </a>
 
             <a
               href="./story.html"
@@ -385,6 +400,25 @@ export function StoryModal({
 
                 <div className="mt-4 rounded-xl border-l-4 border-[#6ea8fe] bg-[#121a2f] p-4 text-xs font-bold leading-6 text-[#eef3ff]">
                   {STORY_SUMMARY.oneLiner}
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#7c3aed]/40 bg-gradient-to-r from-[#4f46e5]/20 to-[#7c3aed]/20 p-4">
+                  <div className="flex items-center gap-3">
+                    <GeminiGemIcon className="size-5 shrink-0" />
+                    <div>
+                      <p className="text-xs font-bold text-white">AI Startup Mentor Gem ဖြင့် ဆွေးနွေးပါ</p>
+                      <p className="text-[11px] text-[#c7d0e4]">ဒီခရီးစဉ်အတိုင်း သင့်ကိုယ်ပိုင် Idea ကို Gemini Custom Gem ထံ အဆင့်လိုက် တိုင်ပင်နိုင်ပါသည်</p>
+                    </div>
+                  </div>
+                  <a
+                    href={GEMINI_ASSISTANT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-400/50 bg-[#4f46e5] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#4338ca]"
+                  >
+                    <span>Gemini Gem ဖွင့်မည်</span>
+                    <ExternalLink className="size-3.5" />
+                  </a>
                 </div>
               </div>
             </div>
