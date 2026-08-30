@@ -18,12 +18,11 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Problem Validation",
     title: "Customer ရဲ့ တကယ့်ပြဿနာကို ရှာခြင်း",
     paragraphs: [
-      "Ko Moe မှာ Idea တစ်ခုရှိတယ် — “AI ကိုသုံးပြီး Small Business တွေအတွက် Facebook Content ရေးပေးတဲ့ Service တစ်ခုလုပ်မယ်။”",
-      "အစမှာ Logo လုပ်ချင်တယ်၊ Website တည်ဆောက်ချင်တယ်၊ AI App တောင် Coding စလုပ်ချင်တယ်။ ဒါပေမယ့် Roadmap က မေးတယ် —"
+      "Ko Moe မှာ AI ကိုသုံးပြီး Small Business တွေအတွက် Facebook Content Service တစ်ခုလုပ်မယ့် Idea ရှိတယ်။ ဒါပေမယ့် Website တည်ဆောက်တာကနေ မစဘူး။ Customer Problem ကို နားလည်တာကနေ စတယ်။",
+      "Ko Moe က ဆိုင်ရှင် 10 ယောက်နဲ့ စကားပြောပြီး သူတို့ရဲ့ တကယ့် Problem က AI မရှိတာမဟုတ်ဘဲ Content လုပ်ဖို့ အချိန်နဲ့ Idea မရှိတာဆိုတာ သိလာတယ်."
     ],
     quote: "“မင်းမှာ Idea ရှိတာမှန်တယ်။ ဒါပေမယ့် Customer မှာ တကယ် Problem ရှိလား?”",
-    lesson: "ကိုယ့် Idea ကို ချစ်တာထက် Customer ရဲ့ Problem ကို နားလည်တာ ပိုအရေးကြီးတယ်။",
-    flow: undefined
+    lesson: "ကိုယ့် Idea ကိုချစ်တာထက် Customer Problem ကို နားလည်ပါ။"
   },
   {
     id: "customer",
@@ -32,8 +31,7 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Customer & Positioning",
     title: "ဘယ်သူ့အတွက်လုပ်မှာလဲ?",
     paragraphs: [
-      "အစမှာ Ko Moe က “Business အားလုံးကို ရောင်းမယ်” လို့စဉ်းစားတယ်။ ဒါပေမယ့် Target က အရမ်းကျယ်တယ်။",
-      "ဒါကြောင့် Facebook ကို အသုံးပြုပြီး ရောင်းနေတဲ့ Myanmar Restaurant နဲ့ Small Retail Shop Owner တွေကို Focus လုပ်တယ်။"
+      "Ko Moe က “Business အားလုံး” ကို Target မလုပ်တော့ဘဲ Facebook အသုံးပြုနေတဲ့ Myanmar Restaurant နဲ့ Small Retail Shop Owner တွေကို Focus လုပ်တယ်."
     ],
     lesson: "လူတိုင်းကို ရောင်းချင်ရင် ဘယ်သူ့ကိုမှ တိတိကျကျ မပြောနိုင်ဘူး။"
   },
@@ -44,10 +42,11 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Offer & MVP",
     title: "Customer က ဘာကိုဝယ်မှာလဲ?",
     paragraphs: [
-      "Ko Moe က အစမှာ “AI Powered Digital Marketing Solution” လို့ရေးတယ်။ ဒါပေမယ့် Customer က “အဲဒါက ကျွန်တော့်အတွက် ဘာလုပ်ပေးမှာလဲ?” လို့မေးတယ်။"
+      "“AI Powered Marketing Solution” လို့မပြောတော့ဘဲ —",
+      "“သင့် Product Information ပို့ပေးပါ။ တစ်လအတွက် Facebook Post Idea 30 ခုနဲ့ Caption 30 ခု ပြင်ဆင်ပေးမယ်။” လို့ တိကျတဲ့ Offer ပေးတယ်။"
     ],
     quote: "“သင့် Product Information ပို့ပေးပါ။ တစ်လအတွက် Facebook Post Idea 30 ခုနဲ့ Caption 30 ခု ပြင်ဆင်ပေးမယ်။”",
-    lesson: "Customer က Technology ကို မဝယ်ဘူး။ Customer က Result ကို ဝယ်တယ်။"
+    lesson: "Customer က Technology ကို မဝယ်ဘူး။ Result ကို ဝယ်တယ်။"
   },
   {
     id: "leads",
@@ -56,7 +55,7 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Lead Generation",
     title: "Customer တွေကို ခေါ်လာခြင်း",
     paragraphs: [
-      "Ko Moe က Facebook Post, Short Video, Free Template, Referral နဲ့ Simple Website ကိုသုံးပြီး လူတွေကို ကိုယ့် Service ဆီ ခေါ်လာတယ်။"
+      "Ko Moe က Facebook Post, Short Video, Free Template, Referral နဲ့ Website ကနေ Potential Customers ကို ခေါ်လာတယ်."
     ],
     lesson: "Lead Generation = မှန်ကန်တဲ့လူတွေကို ကိုယ့်ဆီ ခေါ်လာခြင်း။"
   },
@@ -67,9 +66,9 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Sales",
     title: "ဝယ်ယူဖို့ ကူညီခြင်း",
     paragraphs: [
-      "Restaurant Owner တစ်ယောက်က “Service ဘယ်လောက်လဲ?” လို့မေးတယ်။ Ko Moe က စျေးပဲမပြောဘဲ Customer ရဲ့ Problem ကိုမေးတယ်၊ Sample Result ပြတယ်၊ သင့်တော်တဲ့ Package အကြံပြုတယ်။"
+      "Customer က “စျေးဘယ်လောက်လဲ?” လို့မေးတဲ့အခါ Ko Moe က စျေးပဲမပြောဘဲ Problem ကိုမေးတယ်, Sample ပြတယ်, သင့်တော်တဲ့ Package ကို အကြံပြုတယ်."
     ],
-    lesson: "Lead Generation က လူတွေကို ခေါ်လာတယ်။ Sales က သင့်တော်တဲ့ Customer ကို ဝယ်ယူဖို့ ကူညီတယ်။"
+    lesson: "Sales = သင့်တော်တဲ့ Customer ကို ဝယ်ယူဖို့ ကူညီခြင်း။"
   },
   {
     id: "delivery",
@@ -78,9 +77,9 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Delivery & Success",
     title: "ကတိပေးထားတဲ့ Result ကို ပေးခြင်း",
     paragraphs: [
-      "Customer က ပိုက်ဆံပေးပြီ။ ဒါပေမယ့် Finish Line မဟုတ်ဘူး။ Ko Moe က Post Idea 30 ခု၊ Caption 30 ခု၊ Promotion Idea နဲ့ Monthly Content Plan ကို Quality ကောင်းကောင်းနဲ့ ပေးရမယ်။"
+      "Customer ဝယ်ပြီးတာနဲ့ အလုပ်မပြီးသေးဘူး. Ko Moe က ကတိပေးထားတဲ့ Content နဲ့ Result ကို Quality ကောင်းကောင်းနဲ့ ပေးရတယ်."
     ],
-    lesson: "Sales က Promise ပေးတယ်။ Delivery က Promise ကို အကောင်အထည်ဖော်တယ်။"
+    lesson: "Sales က Promise ပေးတယ်။ Delivery က Promise ကို ပြည့်စုံစေတယ်။"
   },
   {
     id: "operations",
@@ -89,8 +88,7 @@ export const STORY_STAGES: StoryStage[] = [
     stageName: "Operations & Scale",
     title: "Quality ကို ထပ်ခါတလဲလဲ ပေးနိုင်အောင် System တည်ဆောက်ခြင်း",
     paragraphs: [
-      "Customer 10 ယောက်ရှိလာတော့ Ko Moe တစ်ယောက်တည်း မှတ်ထားလို့ မရတော့ဘူး။ ဒါကြောင့် Workflow တည်ဆောက်တယ်။",
-      "Template, Checklist, Folder Structure, SOP နဲ့ Automation ကို ထည့်တယ်။"
+      "Customer 10 ယောက်ဖြစ်လာတော့ Ko Moe က Template, Checklist, SOP, Folder Structure နဲ့ Automation တည်ဆောက်တယ်."
     ],
     flow: [
       "Customer Information",
@@ -100,23 +98,23 @@ export const STORY_STAGES: StoryStage[] = [
       "Customer Approval",
       "Final Delivery"
     ],
-    lesson: "Operations က Result ကို တူညီတဲ့ Quality နဲ့ ထပ်ခါတလဲလဲ ပေးနိုင်စေတယ်။"
+    lesson: "Operations က Quality တူတူနဲ့ Result ကို ထပ်ခါတလဲလဲ ပေးနိုင်စေတယ်။"
   },
   {
     id: "retention",
     number: 8,
     stageBadge: "Stage 8 — 🚀 Growth",
-    stageName: "Retention, Referral & Growth",
+    stageName: "Retention & Growth",
     title: "အလုပ်ဖြစ်ပြီးသား System ကို ချဲ့ထွင်ခြင်း",
     paragraphs: [
-      "Ko Moe က ဘယ် Customer ကအကောင်းဆုံးလဲ၊ Lead ဘယ်ကလာလဲ၊ Conversion ဘယ်လောက်လဲ၊ Delivery Cost ဘယ်လောက်လဲ၊ Customer ဘာကြောင့် ဆက်သုံးလဲဆိုတဲ့ Data ကို သိလာတယ်။",
-      "အခုတော့ Guess လုပ်နေတဲ့ Founder မဟုတ်တော့ဘူး။ System တစ်ခုကို စီမံနေတဲ့ Business Owner ဖြစ်လာပြီ။"
+      "Ko Moe က Customer, Lead, Conversion, Cost နဲ့ Retention Data ကို သိလာပြီ. အခုတော့ Guess လုပ်နေတဲ့ Founder မဟုတ်တော့ဘဲ System တစ်ခုကို စီမံနေတဲ့ Business Owner ဖြစ်လာတယ်."
     ],
     lesson: "Growth ဆိုတာ အလုပ်မဖြစ်သေးတာကို ကြီးအောင်လုပ်တာမဟုတ်ဘူး။ အလုပ်ဖြစ်ပြီးသား System ကို ချဲ့တာ။"
   }
 ];
 
 export const STORY_SUMMARY = {
+  intro: "Ko Moe မှာ AI ကိုသုံးပြီး Small Business တွေအတွက် Facebook Content Service တစ်ခုလုပ်မယ့် Idea ရှိတယ်။ ဒါပေမယ့် Website တည်ဆောက်တာကနေ မစဘူး။ Customer Problem ကို နားလည်တာကနေ စတယ်။",
   quote: "“Startup ဆိုတာ App တစ်ခုတည်ဆောက်တာမဟုတ်ဘူး။ Customer ရဲ့ Problem ကို ဖြေရှင်းပြီး အဲဒီ Result ကို ထပ်ခါတလဲလဲ ပေးနိုင်တဲ့ System တစ်ခု တည်ဆောက်တာဖြစ်တယ်။”",
   flowSteps: [
     "IDEA",
@@ -129,5 +127,5 @@ export const STORY_SUMMARY = {
     "OPERATIONS",
     "GROWTH"
   ],
-  oneLiner: "Problem ကိုရှာ → Customer ကိုရွေး → Offer ဖန်တီး → လူတွေကိုခေါ်လာ → ဝယ်ဖို့ကူညီ → Result ပေး → System တည်ဆောက် → အလုပ်ဖြစ်တာကိုချဲ့ထွင်"
+  oneLiner: "Problem ကိုရှာ → Customer ကိုရွေး → Offer ဖန်တီး → လူတွေကိုခေါ်လာ → ဝယ်ဖို့ကူညီ → Result ပေး → System တည်ဆောက် → အလုပ်ဖြစ်တာကို ချဲ့ထွင်"
 };

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
-  ClipboardCheck, Compass, ExternalLink, Gauge, Handshake, Lightbulb, Megaphone, RefreshCw,
-  Rocket, Scale, Search, Settings2, ShieldCheck, Sparkles, Target, Users, Workflow,
+  ClipboardCheck, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Megaphone, RefreshCw,
+  Rocket, Scale, Search, Settings2, ShieldAlert, ShieldCheck, Sparkles, Target, Users, Workflow, Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,6 +10,8 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StoryModal } from "@/components/StoryModal";
 import { GeminiGemIcon } from "@/components/GeminiGemIcon";
+import { StartHereIntro } from "@/components/StartHereIntro";
+import { WelcomeModal } from "@/components/WelcomeModal";
 import { STORY_STAGES } from "@/data/storyData";
 
 export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
@@ -115,219 +117,949 @@ const finderQuestions = [
 ] as const;
 
 export default function Home() {
-  const [activeId,setActiveId]=useState("problem");
-  const [done,setDone]=useState<Record<string,boolean>>({});
-  const [finder,setFinder]=useState<Record<string,"yes"|"no">>({});
-  const [finderOpen,setFinderOpen]=useState(true);
-  const [storyOpen,setStoryOpen]=useState(false);
-  const active=stages.find(s=>s.id===activeId)??stages[0];
-  const activeStory=STORY_STAGES.find(s=>s.id===active.id)??STORY_STAGES[0];
-  useEffect(()=>{try{const a=localStorage.getItem("startup-roadmap-progress"),b=localStorage.getItem("startup-roadmap-stage");if(a)setDone(JSON.parse(a));if(b)setActiveId(b)}catch{}},[]);
-  const setStage=(id:string)=>{setActiveId(id);localStorage.setItem("startup-roadmap-stage",id)};
-  const toggle=(key:string,value:boolean)=>{const next={...done,[key]:value};setDone(next);localStorage.setItem("startup-roadmap-progress",JSON.stringify(next))};
-  const doneCount=Object.values(done).filter(Boolean).length,total=stages.reduce((n,s)=>n+s.actions.length,0),percent=Math.round(doneCount/total*100);
-  const focus=useMemo(()=>stages.find(s=>finder[s.id]==="no")??(Object.keys(finder).length===8?stages[7]:null),[finder]);
-  const idx=stages.findIndex(s=>s.id===activeId);
-  return <main className="min-h-screen bg-[#f3f1eb] text-[#14213d]">
-    <header className="sticky top-0 z-40 border-b border-[#d9d5ca] bg-[#f3f1eb]/92 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3.5 sm:px-7">
-        <div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg"><Rocket className="size-5"/></span><div><p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#687085]">Founder Learning OS</p><h1 className="text-base font-extrabold sm:text-lg">AI Startup Roadmap</h1></div></div>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden w-36 lg:block"><div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]"><span>ACTION PROGRESS</span><span>{percent}%</span></div><Progress value={percent} className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/></div>
-          <a
-            href={GEMINI_ASSISTANT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Ask Gemini Custom Gem - Startup Mentor"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm"
-          >
-            <GeminiGemIcon className="size-4" />
-            <span className="hidden sm:inline">AI Gem Mentor</span>
-            <span className="sm:hidden">Gemini</span>
-            <ExternalLink className="size-3 opacity-60" />
-          </a>
-          <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white" onClick={()=>setStoryOpen(true)}><BookOpen className="size-4 text-[#4f7cff]"/> Story Mode</Button>
-          <Button variant="outline" size="sm" className="rounded-xl border-[#ccc7bb] bg-white/60 font-bold" onClick={()=>setFinderOpen(v=>!v)}><Gauge className="size-4"/> Focus Finder</Button>
-        </div>
-      </div>
-    </header>
+  const [activeId, setActiveId] = useState("problem");
+  const [done, setDone] = useState<Record<string, boolean>>({});
+  const [finder, setFinder] = useState<Record<string, "yes" | "no">>({});
+  const [finderOpen, setFinderOpen] = useState(true);
+  const [storyOpen, setStoryOpen] = useState(false);
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
 
-    <section className="mx-auto max-w-[1500px] px-4 py-5 sm:px-7 sm:py-7">
-      <div className="overflow-hidden rounded-[28px] bg-[#14213d] text-white shadow-[0_24px_70px_rgba(20,33,61,.18)]">
-        <div className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-end lg:p-8">
-          <div>
-            <p className="mb-3 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#91a2c7]"><Sparkles className="size-4 text-[#f6c85f]"/> Idea မှ Scale အထိ</p>
-            <h2 className="max-w-4xl text-2xl font-black leading-tight sm:text-4xl">Startup ကို မှတ်သားဖို့မလိုဘဲ<br className="hidden sm:block"/> အဆင့်လိုက် နားလည်ပြီး လုပ်ကြည့်ပါ</h2>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-[#c7d0e4]">အဆင့် ၈ ခုကို တစ်ခါတည်းမလုပ်ပါနဲ့။ လက်ရှိ Bottleneck ကိုရှာ၊ Action ကိုစမ်း၊ Evidence ရမှ နောက် Gate ကိုဖြတ်ပါ။</p>
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <button onClick={()=>setStoryOpen(true)} className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white">
-                <BookOpen className="size-4 text-[#f6c85f]"/> Ko Moe ရဲ့ AI Startup Journey ဖတ်ရန် <ArrowRight className="size-3.5"/>
-              </button>
-              <a
-                href={GEMINI_ASSISTANT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80"
-              >
-                <GeminiGemIcon className="size-4" />
-                <span>Gemini Custom Gem ဖြင့် ဆွေးနွေးမေးမြန်းရန်</span>
-                <ExternalLink className="size-3.5 opacity-80" />
-              </a>
+  const active = stages.find((s) => s.id === activeId) ?? stages[0];
+  const activeStory = STORY_STAGES.find((s) => s.id === active.id) ?? STORY_STAGES[0];
+
+  useEffect(() => {
+    try {
+      const a = localStorage.getItem("startup-roadmap-progress");
+      const b = localStorage.getItem("startup-roadmap-stage");
+      const dismissed = localStorage.getItem("startup-onboarding-dismissed");
+
+      if (a) setDone(JSON.parse(a));
+      if (b) setActiveId(b);
+      if (!dismissed) {
+        setWelcomeOpen(true);
+      }
+    } catch {}
+  }, []);
+
+  const setStage = (id: string) => {
+    setActiveId(id);
+    try {
+      localStorage.setItem("startup-roadmap-stage", id);
+    } catch {}
+  };
+
+  const toggle = (key: string, value: boolean) => {
+    const next = { ...done, [key]: value };
+    setDone(next);
+    try {
+      localStorage.setItem("startup-roadmap-progress", JSON.stringify(next));
+    } catch {}
+  };
+
+  const scrollToRoadmap = () => {
+    const el = document.getElementById("roadmap-section");
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToStartHere = () => {
+    const el = document.getElementById("start-here-section");
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const doneCount = Object.values(done).filter(Boolean).length;
+  const total = stages.reduce((n, s) => n + s.actions.length, 0);
+  const percent = Math.round((doneCount / total) * 100);
+  const focus = useMemo(
+    () => stages.find((s) => finder[s.id] === "no") ?? (Object.keys(finder).length === 8 ? stages[7] : null),
+    [finder]
+  );
+  const idx = stages.findIndex((s) => s.id === activeId);
+
+  return (
+    <main className="min-h-screen bg-[#f3f1eb] text-[#14213d]">
+      {/* Welcome / Onboarding Modal for First Time Visitors */}
+      <WelcomeModal
+        isOpen={welcomeOpen}
+        onClose={() => setWelcomeOpen(false)}
+        onStartIntroduction={() => {
+          setWelcomeOpen(false);
+          setTimeout(scrollToStartHere, 100);
+        }}
+        onStartStage1={() => {
+          setStage("problem");
+          setWelcomeOpen(false);
+          setTimeout(scrollToRoadmap, 100);
+        }}
+        onReadStory={() => {
+          setWelcomeOpen(false);
+          setStoryOpen(true);
+        }}
+      />
+
+      {/* Sticky Top Header */}
+      <header className="sticky top-0 z-40 border-b border-[#d9d5ca] bg-[#f3f1eb]/92 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3.5 sm:px-7">
+          <div className="flex items-center gap-3">
+            <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg">
+              <Rocket className="size-5" />
+            </span>
+            <div>
+              <p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#687085]">
+                Founder Learning OS
+              </p>
+              <h1 className="text-base font-extrabold sm:text-lg">
+                AI Startup Roadmap
+              </h1>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center"><MiniStat n="8" label="Stages"/><MiniStat n="32" label="Actions"/><MiniStat n="1" label="Next focus"/></div>
-        </div>
-        <div className="border-t border-white/10 bg-white/[.04] p-3 sm:p-5">
-          <div className="grid grid-cols-4 gap-2 lg:grid-cols-8">{stages.map((s,i)=>{const Icon=s.icon,selected=s.id===activeId;return <button key={s.id} onClick={()=>setStage(s.id)} className={`group relative rounded-2xl border p-3 text-left transition-all ${selected?"border-white bg-white text-[#14213d] shadow-xl":"border-white/10 bg-white/[.04] hover:bg-white/[.09]"}`}><div className="flex items-center justify-between"><span className="text-[9px] font-black tracking-widest opacity-50">{s.number}</span><Icon className="size-4" style={{color:selected?s.color:undefined}}/></div><p className="mt-3 truncate text-[11px] font-extrabold sm:text-xs">{s.title}</p><p className={`mt-1 hidden text-[9px] font-bold tracking-wider lg:block ${selected?"text-[#687085]":"text-[#8fa0c2]"}`}>{s.phase}</p>{i<7&&<ChevronRight className="absolute -right-2 top-1/2 z-10 hidden size-4 -translate-y-1/2 text-white/30 lg:block"/>}</button>})}</div>
-        </div>
-      </div>
 
-      {finderOpen&&<section className="mt-5 grid gap-5 rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 shadow-sm lg:grid-cols-[1.35fr_.65fr] lg:p-7">
-        <div><div className="flex items-center gap-2"><Gauge className="size-5 text-[#8c70db]"/><h3 className="font-extrabold">60-Second Startup Focus Finder</h3></div><p className="mt-2 text-sm leading-6 text-[#687085]">အပေါ်ကနေ အစဉ်လိုက်ဖြေပါ။ ပထမဆုံး “မရသေး” က သင့်လက်ရှိ Bottleneck ဖြစ်နိုင်ပါတယ်။</p>
-          <div className="mt-4 grid gap-2 md:grid-cols-2">{finderQuestions.map(([id,q],i)=><div key={id} className="flex items-center gap-3 rounded-2xl border border-[#dfdcd3] bg-white p-3"><span className="grid size-7 shrink-0 place-items-center rounded-lg bg-[#f0eee8] text-[10px] font-black">{i+1}</span><p className="min-w-0 flex-1 text-xs font-semibold leading-5">{q}</p><div className="flex gap-1"><button aria-label="ရပြီ" onClick={()=>setFinder({...finder,[id]:"yes"})} className={`grid size-8 place-items-center rounded-lg border text-xs transition ${finder[id]==="yes"?"border-[#1da98a] bg-[#1da98a] text-white":"border-[#ddd8cc] bg-white"}`}><Check className="size-4"/></button><button aria-label="မရသေး" onClick={()=>setFinder({...finder,[id]:"no"})} className={`rounded-lg border px-2 text-[10px] font-bold transition ${finder[id]==="no"?"border-[#e8693e] bg-[#e8693e] text-white":"border-[#ddd8cc] bg-white"}`}>မရသေး</button></div></div>)}</div>
-        </div>
-        <div className="rounded-2xl p-5" style={{background:focus?.pale??"#f0eee8"}}><p className="text-[10px] font-black uppercase tracking-[.18em] text-[#687085]">Your next focus</p>{focus?<><div className="mt-4 flex items-center gap-3"><span className="grid size-11 place-items-center rounded-xl text-white" style={{background:focus.color}}>{focus.number}</span><div><p className="font-extrabold">{focus.title}</p><p className="text-xs text-[#687085]">{focus.mm}</p></div></div><p className="mt-4 text-sm leading-6">{focus.question}</p><Button className="mt-5 w-full rounded-xl bg-[#14213d]" onClick={()=>{setStage(focus.id);setFinderOpen(false)}}>ဒီ Stage ကိုစမယ် <ArrowRight className="size-4"/></Button></>:<p className="mt-4 text-sm leading-7 text-[#687085]">မေးခွန်းတွေဖြေပြီးရင် အခုအရင်လုပ်သင့်တဲ့ Startup Stage ကို ပြပေးပါမယ်။</p>}</div>
-      </section>}
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="h-fit rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-3 lg:sticky lg:top-24">
-          <p className="px-3 pb-2 pt-2 text-[10px] font-black uppercase tracking-[.2em] text-[#8a8f9b]">The 8-stage map</p>
-          <nav className="space-y-1">{stages.map(s=>{const Icon=s.icon,selected=s.id===activeId,n=s.actions.filter((_,i)=>done[`${s.id}-${i}`]).length;return <button key={s.id} onClick={()=>setStage(s.id)} className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition ${selected?"bg-[#14213d] text-white shadow-lg":"hover:bg-[#f0eee8]"}`}><span className="grid size-8 shrink-0 place-items-center rounded-lg" style={{background:selected?s.color:s.pale,color:selected?"white":s.color}}><Icon className="size-4"/></span><span className="min-w-0 flex-1"><span className="block truncate text-xs font-extrabold">{s.title}</span><span className={`text-[9px] font-bold tracking-wider ${selected?"text-white/55":"text-[#9498a2]"}`}>{s.phase}</span></span><span className="text-[9px] font-black opacity-60">{n}/4</span></button>})}</nav>
-          <div className="m-2 mt-4 rounded-2xl bg-[#f0eee8] p-4"><div className="flex justify-between text-xs font-extrabold"><span>Progress</span><span>{doneCount}/{total}</span></div><Progress value={percent} className="mt-3 h-2 bg-[#d8d3c7] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"/><Button variant="ghost" size="sm" className="mt-2 h-8 w-full rounded-lg text-[10px] text-[#687085]" onClick={()=>{setDone({});localStorage.removeItem("startup-roadmap-progress")}}><RefreshCw className="size-3"/> Reset</Button></div>
-        </aside>
-
-        <article className="min-w-0 space-y-5">
-          <section className="overflow-hidden rounded-[28px] border border-[#d9d5ca] bg-[#fbfaf7] shadow-sm">
-            <div className="relative p-6 sm:p-8" style={{background:`linear-gradient(120deg,${active.pale},#fbfaf7 72%)`}}>
-              <span className="absolute right-7 top-2 text-8xl font-black opacity-[.045]">{active.number}</span>
-              <div className="relative flex flex-wrap items-start justify-between gap-4"><div><p className="text-[10px] font-black uppercase tracking-[.2em]" style={{color:active.color}}>{active.phase} · STAGE {active.number}</p><h2 className="mt-2 text-3xl font-black sm:text-4xl">{active.title}</h2><p className="mt-2 text-sm font-semibold text-[#687085]">{active.mm}</p></div><span className="rounded-full border border-[#d9d5ca] bg-white/75 px-3 py-1.5 text-[10px] font-bold">Stage {idx+1} of 8</span></div>
-              <div className="relative mt-6 flex gap-3 rounded-2xl border border-white bg-white/70 p-4 shadow-sm"><Compass className="mt-0.5 size-5 shrink-0" style={{color:active.color}}/><div><p className="text-[9px] font-black uppercase tracking-[.18em] text-[#8a8f9b]">Question that matters</p><p className="mt-1 text-sm font-bold leading-6">{active.question}</p></div></div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden w-36 lg:block">
+              <div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]">
+                <span>ACTION PROGRESS</span>
+                <span>{percent}%</span>
+              </div>
+              <Progress
+                value={percent}
+                className="h-1.5 bg-[#dcd8ce] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"
+              />
             </div>
 
-            <Tabs key={active.id} defaultValue="understand" className="p-5 sm:p-8">
-              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-[#ece9e1] p-1.5 sm:grid-cols-4 sm:gap-0">
-                <TabsTrigger value="understand" className="h-11 rounded-xl text-xs">Understand</TabsTrigger>
-                <TabsTrigger value="story" className="flex h-11 items-center gap-1.5 rounded-xl text-xs"><BookOpen className="size-3.5 text-[#4f7cff]"/> Story (Ko Moe)</TabsTrigger>
-                <TabsTrigger value="do" className="h-11 rounded-xl text-xs">Do it</TabsTrigger>
-                <TabsTrigger value="gate" className="h-11 rounded-xl text-xs">Pass the Gate</TabsTrigger>
-              </TabsList>
-              <TabsContent value="understand" className="mt-6">
-                <div className="grid gap-4 xl:grid-cols-[1.1fr_.9fr]">
-                  <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
-                    <p className="flex items-center gap-2 text-xs font-black" style={{color:active.color}}><Lightbulb className="size-4"/> WHAT IS IT?</p>
-                    <p className="mt-4 text-sm leading-7 text-[#4d566b]">{active.what}</p>
-                    <div className="mt-5 rounded-xl p-4" style={{background:active.pale}}><p className="text-[9px] font-black uppercase tracking-widest" style={{color:active.color}}>Example</p><p className="mt-2 text-xs font-semibold leading-6">{active.example}</p></div>
-                  </div>
-                  <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
-                    <p className="flex items-center gap-2 text-xs font-black text-[#3156a3]"><ShieldCheck className="size-4"/> WHY IT MATTERS</p>
-                    <ul className="mt-4 space-y-3">{active.why.map(v=><li key={v} className="flex gap-3 text-xs leading-6 text-[#4d566b]"><CheckCircle2 className="mt-1 size-4 shrink-0 text-[#1da98a]"/>{v}</li>)}</ul>
-                    <div className="mt-5 rounded-xl bg-[#fff0e9] p-4"><p className="text-[9px] font-black uppercase tracking-widest text-[#e8693e]">Common mistake</p><p className="mt-2 text-xs font-semibold leading-6">{active.mistake}</p></div>
-                  </div>
-                </div>
-              </TabsContent>
-              <TabsContent value="story" className="mt-6">
-                <div className="rounded-2xl border border-[#26304a] bg-[#0b1020] p-6 text-[#eef3ff] shadow-sm sm:p-7">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="inline-block rounded-full bg-[#1b2b4a] px-3.5 py-1 text-xs font-extrabold text-[#bcd3ff]">
-                      {activeStory.stageBadge}
-                    </span>
-                    <Button size="sm" variant="ghost" className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#8ea8df] hover:bg-[#253250] hover:text-white" onClick={()=>setStoryOpen(true)}>
-                      Story Mode အပြည့်ဖွင့်မည် <ArrowRight className="size-3.5"/>
-                    </Button>
-                  </div>
-                  <h3 className="mt-4 text-xl font-black text-white sm:text-2xl">{activeStory.title}</h3>
-                  <div className="mt-4 space-y-3 text-sm leading-relaxed text-[#c7d0e4]">
-                    {activeStory.paragraphs.map((p,i)=><p key={i}>{p}</p>)}
-                  </div>
-                  {activeStory.quote && (
-                    <div className="mt-5 rounded-xl border-l-4 border-[#6ea8fe] bg-[#18223b] p-4 text-xs font-semibold leading-6 text-[#eef3ff]">
-                      {activeStory.quote}
-                    </div>
-                  )}
-                  {activeStory.flow && (
-                    <div className="mt-5 rounded-xl border border-[#26304a] bg-[#090e1a] p-4 font-mono text-xs leading-6 text-[#8ea8df]">
-                      <p className="mb-2 font-sans text-[10px] font-black uppercase tracking-widest text-[#6ea8fe]">Operating Workflow</p>
-                      <div className="space-y-1">
-                        {activeStory.flow.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
-                            <span className="text-[#4f7cff]">{idx + 1 < activeStory.flow!.length ? "↓" : "✓"}</span>
-                            <span className="font-bold text-white">{step}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#245b41] bg-[#123626] p-4 text-xs font-semibold leading-relaxed text-[#a3f0c4]">
-                    <Lightbulb className="mt-0.5 size-4 shrink-0 text-[#f6c85f]"/>
-                    <div><span className="font-black text-white">💡 Lesson: </span>{activeStory.lesson}</div>
-                  </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden sm:inline-flex rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white"
+              onClick={scrollToStartHere}
+            >
+              <Rocket className="size-3.5 text-[#e8693e]" /> Start Here
+            </Button>
 
-                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#26304a] bg-[#121a2f] p-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <GeminiGemIcon className="size-4 shrink-0" />
-                      <p className="text-xs text-[#c7d0e4]">
-                        ဒီ <span className="font-bold text-white">{active.title}</span> အဆင့်ကို သင့်ရဲ့ကိုယ်ပိုင် Idea နဲ့ Gemini Custom Gem ဆီမှာ မေးမြန်းတိုင်ပင်ပါ။
-                      </p>
-                    </div>
-                    <a
-                      href={GEMINI_ASSISTANT_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#4f7cff]/40 bg-[#4f7cff]/20 px-3 py-1 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#4f7cff] hover:text-white"
-                    >
-                      <span>Gemini Gem မေးမယ်</span>
-                      <ExternalLink className="size-3" />
-                    </a>
-                  </div>
-                </div>
-              </TabsContent>
-              <TabsContent value="do" className="mt-6"><div className="space-y-3">{active.actions.map((a,i)=>{const key=`${active.id}-${i}`,checked=!!done[key];return <label key={a.title} className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${checked?"border-transparent bg-[#eeeee9] opacity-65":"border-[#dfdcd3] bg-white hover:shadow-sm"}`}><Checkbox checked={checked} onCheckedChange={v=>toggle(key,v===true)} className="mt-1 size-5"/><span className="grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black" style={{background:active.pale,color:active.color}}>{i+1}</span><span><span className={`block text-sm font-extrabold ${checked?"line-through":""}`}>{a.title}</span><span className="mt-1 block text-xs leading-6 text-[#687085]">{a.detail}</span></span></label>})}</div></TabsContent>
-              <TabsContent value="gate" className="mt-6"><div className="grid gap-5 xl:grid-cols-[1fr_.7fr]"><div className="rounded-2xl border border-[#dfdcd3] bg-white p-5"><p className="flex items-center gap-2 text-xs font-black"><Scale className="size-4" style={{color:active.color}}/> BEFORE MOVING ON</p><div className="mt-4 space-y-3">{active.gate.map(g=><div key={g} className="flex gap-3 rounded-xl bg-[#f7f6f2] p-3 text-xs font-semibold leading-5"><Check className="mt-0.5 size-4 shrink-0 text-[#1da98a]"/>{g}</div>)}</div></div><div className="rounded-2xl p-5" style={{background:active.pale}}><p className="text-[10px] font-black uppercase tracking-[.18em]" style={{color:active.color}}>Evidence over opinion</p><p className="mt-3 text-sm font-extrabold leading-6">Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။</p><Button className="mt-5 w-full rounded-xl bg-[#14213d]" onClick={()=>setStage(stages[(idx+1)%8].id)}>နောက် Stage ကိုကြည့်မယ် <ArrowRight className="size-4"/></Button></div></div></TabsContent>
-            </Tabs>
-          </section>
+            <a
+              href={GEMINI_ASSISTANT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Ask Gemini Custom Gem - Startup Mentor"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm"
+            >
+              <GeminiGemIcon className="size-4" />
+              <span className="hidden sm:inline">AI Gem Mentor</span>
+              <span className="sm:hidden">Gemini</span>
+              <ExternalLink className="size-3 opacity-60" />
+            </a>
 
-          <section className="grid gap-5 xl:grid-cols-2">
-            <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white"><Bot className="size-5"/></span>
-                  <div><p className="text-sm font-extrabold">AI + Human Team</p><p className="text-[10px] text-[#687085]">Speed + judgment</p></div>
-                </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white"
+              onClick={() => setStoryOpen(true)}
+            >
+              <BookOpen className="size-4 text-[#4f7cff]" /> Story Mode
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl border-[#ccc7bb] bg-white/60 font-bold"
+              onClick={() => setFinderOpen((v) => !v)}
+            >
+              <Gauge className="size-4" /> Focus Finder
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-7 sm:py-7 space-y-6">
+        {/* Hero Section */}
+        <section className="overflow-hidden rounded-[28px] bg-[#14213d] text-white shadow-[0_24px_70px_rgba(20,33,61,.18)]">
+          <div className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-end lg:p-8">
+            <div>
+              <p className="mb-3 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#91a2c7]">
+                <Sparkles className="size-4 text-[#f6c85f]" /> Idea မှ Scale အထိ
+              </p>
+              <h2 className="max-w-4xl text-2xl font-black leading-tight sm:text-4xl">
+                Startup ကို မှတ်သားဖို့မလိုဘဲ
+                <br className="hidden sm:block" /> အဆင့်လိုက် နားလည်ပြီး လုပ်ကြည့်ပါ
+              </h2>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#c7d0e4]">
+                အဆင့် ၈ ခုကို တစ်ခါတည်းမလုပ်ပါနဲ့။ လက်ရှိ Bottleneck ကိုရှာ၊ Action ကိုစမ်း၊ Evidence ရမှ နောက် Gate ကိုဖြတ်ပါ။
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <Button
+                  onClick={scrollToStartHere}
+                  className="rounded-xl bg-[#f6c85f] px-4 py-2 text-xs font-black text-[#14213d] hover:bg-[#e0b347]"
+                >
+                  <Rocket className="size-3.5" /> Start Here (စတင်ဖတ်ရန်)
+                </Button>
+
+                <button
+                  onClick={() => setStoryOpen(true)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white"
+                >
+                  <BookOpen className="size-4 text-[#f6c85f]" /> Ko Moe ရဲ့ Story ဖတ်ရန်{" "}
+                  <ArrowRight className="size-3.5" />
+                </button>
+
+                <Button
+                  variant="outline"
+                  onClick={scrollToRoadmap}
+                  className="rounded-xl border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/15"
+                >
+                  <Layers className="size-3.5 text-[#1da98a]" /> Explore 8 Stages
+                </Button>
+
                 <a
                   href={GEMINI_ASSISTANT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff]"
-                  title="Ask Gemini Custom Gem"
+                  className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80"
                 >
-                  <GeminiGemIcon className="size-3.5" />
-                  <span>Gemini Gem</span>
-                  <ExternalLink className="size-2.5 opacity-60" />
+                  <GeminiGemIcon className="size-4" />
+                  <span>Gemini Custom Gem ဖြင့် တိုင်ပင်ရန်</span>
+                  <ExternalLink className="size-3.5 opacity-80" />
                 </a>
               </div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2"><Role title="AI က ကူညီမယ်" values={active.ai} color="#8c70db"/><Role title="လူက တာဝန်ယူမယ်" values={active.human} color="#1da98a"/></div>
             </div>
-            <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-xl" style={{background:active.pale,color:active.color}}><Gauge className="size-5"/></span><div><p className="text-sm font-extrabold">Startup Health Metrics</p><p className="text-[10px] text-[#687085]">Activity မဟုတ်ဘဲ Evidence ကိုတိုင်းပါ</p></div></div><div className="mt-5 grid grid-cols-2 gap-2">{active.kpis.map(k=><div key={k} className="rounded-xl border border-[#dfdcd3] bg-white p-3"><span className="mb-2 block h-1 w-8 rounded-full" style={{background:active.color}}/><p className="text-xs font-extrabold">{k}</p></div>)}</div></div>
-          </section>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <MiniStat n="8" label="Stages" />
+              <MiniStat n="32" label="Actions" />
+              <MiniStat n="1" label="Next focus" />
+            </div>
+          </div>
 
-          <section className="rounded-[24px] bg-[#14213d] p-6 text-white">
-            <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-[#91a2c7]">The founder rule</p><p className="mt-2 max-w-3xl text-lg font-black leading-7">Problem ကို သက်သေပြ၊ အနည်းဆုံး Offer ကို ရောင်း၊ Result ကို ကိုယ်တိုင်ပေး၊ ပြီးမှ System နဲ့ Scale လုပ်ပါ။</p></div><Button className="shrink-0 rounded-xl bg-white text-[#14213d] hover:bg-[#f3f1eb]" onClick={()=>setStage(stages[(idx+1)%8].id)}>Next stage <ArrowRight className="size-4"/></Button></div>
-          </section>
+          {/* Quick Stage Bar */}
+          <div className="border-t border-white/10 bg-white/[.04] p-3 sm:p-5">
+            <div className="grid grid-cols-4 gap-2 lg:grid-cols-8">
+              {stages.map((s, i) => {
+                const Icon = s.icon;
+                const selected = s.id === activeId;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => {
+                      setStage(s.id);
+                      scrollToRoadmap();
+                    }}
+                    className={`group relative rounded-2xl border p-3 text-left transition-all ${
+                      selected
+                        ? "border-white bg-white text-[#14213d] shadow-xl"
+                        : "border-white/10 bg-white/[.04] hover:bg-white/[.09]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-black tracking-widest opacity-50">
+                        {s.number}
+                      </span>
+                      <Icon
+                        className="size-4"
+                        style={{ color: selected ? s.color : undefined }}
+                      />
+                    </div>
+                    <p className="mt-3 truncate text-[11px] font-extrabold sm:text-xs">
+                      {s.title}
+                    </p>
+                    <p
+                      className={`mt-1 hidden text-[9px] font-bold tracking-wider lg:block ${
+                        selected ? "text-[#687085]" : "text-[#8fa0c2]"
+                      }`}
+                    >
+                      {s.phase}
+                    </p>
+                    {i < 7 && (
+                      <ChevronRight className="absolute -right-2 top-1/2 z-10 hidden size-4 -translate-y-1/2 text-white/30 lg:block" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
-          <section className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 sm:p-6"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm font-extrabold">30-Day Quick Start</p><p className="mt-1 text-xs text-[#687085]">ပထမဆုံး Customer Evidence ရဖို့ ရိုးရှင်းတဲ့လမ်းကြောင်း</p></div><Workflow className="size-5 text-[#8c70db]"/></div><div className="mt-5 grid gap-3 md:grid-cols-4"><Week n="1" title="Validate" body="Customer 10 ယောက်နဲ့ Problem Interview"/><Week n="2" title="Offer" body="Paid Pilot နဲ့ Result/Scope သတ်မှတ်"/><Week n="3" title="Sell" body="20 Prospects၊ Meetings၊ Offer Decisions"/><Week n="4" title="Deliver" body="Quick Win၊ Feedback၊ SOP Draft"/></div></section>
-        </article>
+        {/* 1-6. NEW BEGINNER START HERE INTRODUCTION SECTION */}
+        <StartHereIntro
+          onSelectStage={(id) => setStage(id)}
+          onOpenStory={() => setStoryOpen(true)}
+          onScrollToRoadmap={scrollToRoadmap}
+        />
+
+        {/* Focus Finder Widget */}
+        {finderOpen && (
+          <section className="grid gap-5 rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 shadow-sm lg:grid-cols-[1.35fr_.65fr] lg:p-7">
+            <div>
+              <div className="flex items-center gap-2">
+                <Gauge className="size-5 text-[#8c70db]" />
+                <h3 className="font-extrabold">60-Second Startup Focus Finder</h3>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-[#687085]">
+                အပေါ်ကနေ အစဉ်လိုက်ဖြေပါ။ ပထမဆုံး “မရသေး” က သင့်လက်ရှိ Bottleneck ဖြစ်နိုင်ပါတယ်။
+              </p>
+              <div className="mt-4 grid gap-2 md:grid-cols-2">
+                {finderQuestions.map(([id, q], i) => (
+                  <div
+                    key={id}
+                    className="flex items-center gap-3 rounded-2xl border border-[#dfdcd3] bg-white p-3"
+                  >
+                    <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-[#f0eee8] text-[10px] font-black">
+                      {i + 1}
+                    </span>
+                    <p className="min-w-0 flex-1 text-xs font-semibold leading-5">
+                      {q}
+                    </p>
+                    <div className="flex gap-1">
+                      <button
+                        aria-label="ရပြီ"
+                        onClick={() => setFinder({ ...finder, [id]: "yes" })}
+                        className={`grid size-8 place-items-center rounded-lg border text-xs transition ${
+                          finder[id] === "yes"
+                            ? "border-[#1da98a] bg-[#1da98a] text-white"
+                            : "border-[#ddd8cc] bg-white"
+                        }`}
+                      >
+                        <Check className="size-4" />
+                      </button>
+                      <button
+                        aria-label="မရသေး"
+                        onClick={() => setFinder({ ...finder, [id]: "no" })}
+                        className={`rounded-lg border px-2 text-[10px] font-bold transition ${
+                          finder[id] === "no"
+                            ? "border-[#e8693e] bg-[#e8693e] text-white"
+                            : "border-[#ddd8cc] bg-white"
+                        }`}
+                      >
+                        မရသေး
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div
+              className="rounded-2xl p-5"
+              style={{ background: focus?.pale ?? "#f0eee8" }}
+            >
+              <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#687085]">
+                Your next focus
+              </p>
+              {focus ? (
+                <>
+                  <div className="mt-4 flex items-center gap-3">
+                    <span
+                      className="grid size-11 place-items-center rounded-xl text-white"
+                      style={{ background: focus.color }}
+                    >
+                      {focus.number}
+                    </span>
+                    <div>
+                      <p className="font-extrabold">{focus.title}</p>
+                      <p className="text-xs text-[#687085]">{focus.mm}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-6">{focus.question}</p>
+                  <Button
+                    className="mt-5 w-full rounded-xl bg-[#14213d]"
+                    onClick={() => {
+                      setStage(focus.id);
+                      setFinderOpen(false);
+                      scrollToRoadmap();
+                    }}
+                  >
+                    ဒီ Stage ကိုစမယ် <ArrowRight className="size-4" />
+                  </Button>
+                </>
+              ) : (
+                <p className="mt-4 text-sm leading-7 text-[#687085]">
+                  မေးခွန်းတွေဖြေပြီးရင် အခုအရင်လုပ်သင့်တဲ့ Startup Stage ကို ပြပေးပါမယ်။
+                </p>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 8-Stage Roadmap Explorer Layout */}
+        <div
+          id="roadmap-section"
+          className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)]"
+        >
+          {/* Aside Navigator */}
+          <aside className="h-fit rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-3 lg:sticky lg:top-24">
+            <p className="px-3 pb-2 pt-2 text-[10px] font-black uppercase tracking-[.2em] text-[#8a8f9b]">
+              The 8-stage map
+            </p>
+            <nav className="space-y-1">
+              {stages.map((s) => {
+                const Icon = s.icon;
+                const selected = s.id === activeId;
+                const n = s.actions.filter((_, i) => done[`${s.id}-${i}`]).length;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setStage(s.id)}
+                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition ${
+                      selected
+                        ? "bg-[#14213d] text-white shadow-lg"
+                        : "hover:bg-[#f0eee8]"
+                    }`}
+                  >
+                    <span
+                      className="grid size-8 shrink-0 place-items-center rounded-lg"
+                      style={{
+                        background: selected ? s.color : s.pale,
+                        color: selected ? "white" : s.color,
+                      }}
+                    >
+                      <Icon className="size-4" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-xs font-extrabold">
+                        {s.title}
+                      </span>
+                      <span
+                        className={`text-[9px] font-bold tracking-wider ${
+                          selected ? "text-white/55" : "text-[#9498a2]"
+                        }`}
+                      >
+                        {s.phase}
+                      </span>
+                    </span>
+                    <span className="text-[9px] font-black opacity-60">
+                      {n}/4
+                    </span>
+                  </button>
+                );
+              })}
+            </nav>
+            <div className="m-2 mt-4 rounded-2xl bg-[#f0eee8] p-4">
+              <div className="flex justify-between text-xs font-extrabold">
+                <span>Progress</span>
+                <span>
+                  {doneCount}/{total}
+                </span>
+              </div>
+              <Progress
+                value={percent}
+                className="mt-3 h-2 bg-[#d8d3c7] [&_[data-slot=progress-indicator]]:bg-[#1da98a]"
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-2 h-8 w-full rounded-lg text-[10px] text-[#687085]"
+                onClick={() => {
+                  setDone({});
+                  try {
+                    localStorage.removeItem("startup-roadmap-progress");
+                  } catch {}
+                }}
+              >
+                <RefreshCw className="size-3" /> Reset
+              </Button>
+            </div>
+          </aside>
+
+          {/* Main Stage Detail Article */}
+          <article className="min-w-0 space-y-5">
+            <section className="overflow-hidden rounded-[28px] border border-[#d9d5ca] bg-[#fbfaf7] shadow-sm">
+              <div
+                className="relative p-6 sm:p-8"
+                style={{
+                  background: `linear-gradient(120deg,${active.pale},#fbfaf7 72%)`,
+                }}
+              >
+                <span className="absolute right-7 top-2 text-8xl font-black opacity-[.045]">
+                  {active.number}
+                </span>
+                <div className="relative flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p
+                      className="text-[10px] font-black uppercase tracking-[.2em]"
+                      style={{ color: active.color }}
+                    >
+                      {active.phase} · STAGE {active.number}
+                    </p>
+                    <h2 className="mt-2 text-3xl font-black sm:text-4xl">
+                      {active.title}
+                    </h2>
+                    <p className="mt-2 text-sm font-semibold text-[#687085]">
+                      {active.mm}
+                    </p>
+                  </div>
+                  <span className="rounded-full border border-[#d9d5ca] bg-white/75 px-3 py-1.5 text-[10px] font-bold">
+                    Stage {idx + 1} of 8
+                  </span>
+                </div>
+                <div className="relative mt-6 flex gap-3 rounded-2xl border border-white bg-white/70 p-4 shadow-sm">
+                  <Compass
+                    className="mt-0.5 size-5 shrink-0"
+                    style={{ color: active.color }}
+                  />
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[.18em] text-[#8a8f9b]">
+                      Question that matters
+                    </p>
+                    <p className="mt-1 text-sm font-bold leading-6">
+                      {active.question}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <Tabs
+                key={active.id}
+                defaultValue="understand"
+                className="p-5 sm:p-8"
+              >
+                <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-[#ece9e1] p-1.5 sm:grid-cols-4 sm:gap-0">
+                  <TabsTrigger value="understand" className="h-11 rounded-xl text-xs">
+                    📖 Understand
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="story"
+                    className="flex h-11 items-center gap-1.5 rounded-xl text-xs"
+                  >
+                    <BookOpen className="size-3.5 text-[#4f7cff]" /> 📖 Story (Ko Moe)
+                  </TabsTrigger>
+                  <TabsTrigger value="do" className="h-11 rounded-xl text-xs">
+                    ✅ Do it ({active.actions.filter((_, i) => done[`${active.id}-${i}`]).length}/4)
+                  </TabsTrigger>
+                  <TabsTrigger value="gate" className="h-11 rounded-xl text-xs">
+                    ⚖️ Pass the Gate
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* 7. BEGINNER GUIDANCE ORGANIZED WITH EXPLICIT LABELS */}
+                <TabsContent value="understand" className="mt-6">
+                  <div className="grid gap-4 xl:grid-cols-[1.1fr_.9fr]">
+                    <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
+                      <p
+                        className="flex items-center gap-2 text-xs font-black"
+                        style={{ color: active.color }}
+                      >
+                        <Lightbulb className="size-4" /> 📖 WHAT IS THIS?
+                      </p>
+                      <p className="mt-4 text-sm leading-7 text-[#4d566b]">
+                        {active.what}
+                      </p>
+                      <div
+                        className="mt-5 rounded-xl p-4"
+                        style={{ background: active.pale }}
+                      >
+                        <p
+                          className="text-[9px] font-black uppercase tracking-widest"
+                          style={{ color: active.color }}
+                        >
+                          💡 EXAMPLE
+                        </p>
+                        <p className="mt-2 text-xs font-semibold leading-6">
+                          {active.example}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
+                      <p className="flex items-center gap-2 text-xs font-black text-[#3156a3]">
+                        <ShieldCheck className="size-4" /> 🧠 WHY IT MATTERS
+                      </p>
+                      <ul className="mt-4 space-y-3">
+                        {active.why.map((v) => (
+                          <li
+                            key={v}
+                            className="flex gap-3 text-xs leading-6 text-[#4d566b]"
+                          >
+                            <CheckCircle2 className="mt-1 size-4 shrink-0 text-[#1da98a]" />
+                            {v}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="mt-5 rounded-xl bg-[#fff0e9] p-4">
+                        <p className="text-[9px] font-black uppercase tracking-widest text-[#e8693e]">
+                          ❌ COMMON MISTAKE
+                        </p>
+                        <p className="mt-2 text-xs font-semibold leading-6 text-[#7a3b22]">
+                          {active.mistake}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Ko Moe Story Tab */}
+                <TabsContent value="story" className="mt-6">
+                  <div className="rounded-2xl border border-[#26304a] bg-[#0b1020] p-6 text-[#eef3ff] shadow-sm sm:p-7">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <span className="inline-block rounded-full bg-[#1b2b4a] px-3.5 py-1 text-xs font-extrabold text-[#bcd3ff]">
+                        {activeStory.stageBadge}
+                      </span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#8ea8df] hover:bg-[#253250] hover:text-white"
+                        onClick={() => setStoryOpen(true)}
+                      >
+                        Story Mode အပြည့်ဖွင့်မည် <ArrowRight className="size-3.5" />
+                      </Button>
+                    </div>
+                    <h3 className="mt-4 text-xl font-black text-white sm:text-2xl">
+                      {activeStory.title}
+                    </h3>
+                    <div className="mt-4 space-y-3 text-sm leading-relaxed text-[#c7d0e4]">
+                      {activeStory.paragraphs.map((p, i) => (
+                        <p key={i}>{p}</p>
+                      ))}
+                    </div>
+                    {activeStory.quote && (
+                      <div className="mt-5 rounded-xl border-l-4 border-[#6ea8fe] bg-[#18223b] p-4 text-xs font-semibold leading-6 text-[#eef3ff]">
+                        {activeStory.quote}
+                      </div>
+                    )}
+                    {activeStory.flow && (
+                      <div className="mt-5 rounded-xl border border-[#26304a] bg-[#090e1a] p-4 font-mono text-xs leading-6 text-[#8ea8df]">
+                        <p className="mb-2 font-sans text-[10px] font-black uppercase tracking-widest text-[#6ea8fe]">
+                          Operating Workflow
+                        </p>
+                        <div className="space-y-1">
+                          {activeStory.flow.map((step, idx) => (
+                            <div key={idx} className="flex items-center gap-2">
+                              <span className="text-[#4f7cff]">
+                                {idx + 1 < activeStory.flow!.length ? "↓" : "✓"}
+                              </span>
+                              <span className="font-bold text-white">{step}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <div className="mt-5 flex items-start gap-3 rounded-xl border border-[#245b41] bg-[#123626] p-4 text-xs font-semibold leading-relaxed text-[#a3f0c4]">
+                      <Lightbulb className="mt-0.5 size-4 shrink-0 text-[#f6c85f]" />
+                      <div>
+                        <span className="font-black text-white">💡 Lesson: </span>
+                        {activeStory.lesson}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#26304a] bg-[#121a2f] p-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <GeminiGemIcon className="size-4 shrink-0" />
+                        <p className="text-xs text-[#c7d0e4]">
+                          ဒီ <span className="font-bold text-white">{active.title}</span> အဆင့်ကို သင့်ရဲ့ကိုယ်ပိုင် Idea နဲ့ Gemini Custom Gem ဆီမှာ မေးမြန်းတိုင်ပင်ပါ။
+                        </p>
+                      </div>
+                      <a
+                        href={GEMINI_ASSISTANT_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#4f7cff]/40 bg-[#4f7cff]/20 px-3 py-1 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#4f7cff] hover:text-white"
+                      >
+                        <span>Gemini Gem မေးမယ်</span>
+                        <ExternalLink className="size-3" />
+                      </a>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Do It Tab */}
+                <TabsContent value="do" className="mt-6">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-xs font-black uppercase tracking-wider text-[#687085]">
+                      ✅ WHAT TO DO — STAGE ACTION ITEMS
+                    </p>
+                    <span className="text-xs font-bold text-[#1da98a]">
+                      အမှန်ခြစ်ပြီး Progress သိမ်းပါ
+                    </span>
+                  </div>
+                  <div className="space-y-3">
+                    {active.actions.map((a, i) => {
+                      const key = `${active.id}-${i}`;
+                      const checked = !!done[key];
+                      return (
+                        <label
+                          key={a.title}
+                          className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${
+                            checked
+                              ? "border-transparent bg-[#eeeee9] opacity-65"
+                              : "border-[#dfdcd3] bg-white hover:shadow-sm"
+                          }`}
+                        >
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={(v) => toggle(key, v === true)}
+                            className="mt-1 size-5"
+                          />
+                          <span
+                            className="grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black"
+                            style={{ background: active.pale, color: active.color }}
+                          >
+                            {i + 1}
+                          </span>
+                          <span>
+                            <span
+                              className={`block text-sm font-extrabold ${
+                                checked ? "line-through" : ""
+                              }`}
+                            >
+                              {a.title}
+                            </span>
+                            <span className="mt-1 block text-xs leading-6 text-[#687085]">
+                              {a.detail}
+                            </span>
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </TabsContent>
+
+                {/* Pass The Gate Tab */}
+                <TabsContent value="gate" className="mt-6">
+                  <div className="grid gap-5 xl:grid-cols-[1fr_.7fr]">
+                    <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
+                      <p className="flex items-center gap-2 text-xs font-black">
+                        <Scale className="size-4" style={{ color: active.color }} />
+                        ⚖️ PASS THE GATE CRITERIA (BEFORE MOVING ON)
+                      </p>
+                      <div className="mt-4 space-y-3">
+                        {active.gate.map((g) => (
+                          <div
+                            key={g}
+                            className="flex gap-3 rounded-xl bg-[#f7f6f2] p-3 text-xs font-semibold leading-5"
+                          >
+                            <Check className="mt-0.5 size-4 shrink-0 text-[#1da98a]" />
+                            {g}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div
+                      className="rounded-2xl p-5"
+                      style={{ background: active.pale }}
+                    >
+                      <p
+                        className="text-[10px] font-black uppercase tracking-[.18em]"
+                        style={{ color: active.color }}
+                      >
+                        Evidence over opinion
+                      </p>
+                      <p className="mt-3 text-sm font-extrabold leading-6">
+                        Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။
+                      </p>
+                      <Button
+                        className="mt-5 w-full rounded-xl bg-[#14213d]"
+                        onClick={() => {
+                          setStage(stages[(idx + 1) % 8].id);
+                          scrollToRoadmap();
+                        }}
+                      >
+                        နောက် Stage ကိုကြည့်မယ် <ArrowRight className="size-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </section>
+
+            {/* AI + Human Team & Metrics */}
+            <section className="grid gap-5 xl:grid-cols-2">
+              <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white">
+                      <Bot className="size-5" />
+                    </span>
+                    <div>
+                      <p className="text-sm font-extrabold">AI + Human Team</p>
+                      <p className="text-[10px] text-[#687085]">
+                        Speed + judgment
+                      </p>
+                    </div>
+                  </div>
+                  <a
+                    href={GEMINI_ASSISTANT_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff]"
+                    title="Ask Gemini Custom Gem"
+                  >
+                    <GeminiGemIcon className="size-3.5" />
+                    <span>Gemini Gem</span>
+                    <ExternalLink className="size-2.5 opacity-60" />
+                  </a>
+                </div>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <Role
+                    title="AI က ကူညီမယ်"
+                    values={active.ai}
+                    color="#8c70db"
+                  />
+                  <Role
+                    title="လူက တာဝန်ယူမယ်"
+                    values={active.human}
+                    color="#1da98a"
+                  />
+                </div>
+              </div>
+              <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="grid size-10 place-items-center rounded-xl"
+                    style={{ background: active.pale, color: active.color }}
+                  >
+                    <Gauge className="size-5" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-extrabold">Startup Health Metrics</p>
+                    <p className="text-[10px] text-[#687085]">
+                      Activity မဟုတ်ဘဲ Evidence ကိုတိုင်းပါ
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-5 grid grid-cols-2 gap-2">
+                  {active.kpis.map((k) => (
+                    <div
+                      key={k}
+                      className="rounded-xl border border-[#dfdcd3] bg-white p-3"
+                    >
+                      <span
+                        className="mb-2 block h-1 w-8 rounded-full"
+                        style={{ background: active.color }}
+                      />
+                      <p className="text-xs font-extrabold">{k}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* The Founder Rule */}
+            <section className="rounded-[24px] bg-[#14213d] p-6 text-white">
+              <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#91a2c7]">
+                    The founder rule
+                  </p>
+                  <p className="mt-2 max-w-3xl text-lg font-black leading-7">
+                    Problem ကို သက်သေပြ၊ အနည်းဆုံး Offer ကို ရောင်း၊ Result ကို ကိုယ်တိုင်ပေး၊ ပြီးမှ System နဲ့ Scale လုပ်ပါ။
+                  </p>
+                </div>
+                <Button
+                  className="shrink-0 rounded-xl bg-white text-[#14213d] hover:bg-[#f3f1eb]"
+                  onClick={() => {
+                    setStage(stages[(idx + 1) % 8].id);
+                    scrollToRoadmap();
+                  }}
+                >
+                  Next stage <ArrowRight className="size-4" />
+                </Button>
+              </div>
+            </section>
+
+            {/* 30-Day Quick Start */}
+            <section className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-extrabold">30-Day Quick Start</p>
+                  <p className="mt-1 text-xs text-[#687085]">
+                    ပထမဆုံး Customer Evidence ရဖို့ ရိုးရှင်းတဲ့လမ်းကြောင်း
+                  </p>
+                </div>
+                <Workflow className="size-5 text-[#8c70db]" />
+              </div>
+              <div className="mt-5 grid gap-3 md:grid-cols-4">
+                <Week
+                  n="1"
+                  title="Validate"
+                  body="Customer 10 ယောက်နဲ့ Problem Interview"
+                />
+                <Week
+                  n="2"
+                  title="Offer"
+                  body="Paid Pilot နဲ့ Result/Scope သတ်မှတ်"
+                />
+                <Week
+                  n="3"
+                  title="Sell"
+                  body="20 Prospects၊ Meetings၊ Offer Decisions"
+                />
+                <Week
+                  n="4"
+                  title="Deliver"
+                  body="Quick Win၊ Feedback၊ SOP Draft"
+                />
+              </div>
+            </section>
+          </article>
+        </div>
       </div>
-    </section>
 
-    <StoryModal
-      isOpen={storyOpen}
-      onClose={()=>setStoryOpen(false)}
-      onSelectStage={(id)=>setStage(id)}
-      initialStageId={activeId}
-    />
-  </main>
+      {/* Full Screen Interactive Story Modal */}
+      <StoryModal
+        isOpen={storyOpen}
+        onClose={() => setStoryOpen(false)}
+        onSelectStage={(id) => {
+          setStage(id);
+          scrollToRoadmap();
+        }}
+        initialStageId={activeId}
+      />
+    </main>
+  );
 }
 
-function MiniStat({n,label}:{n:string;label:string}){return <div className="rounded-xl border border-white/10 bg-white/[.06] px-3 py-3"><p className="text-xl font-black">{n}</p><p className="text-[9px] font-bold uppercase tracking-wider text-[#91a2c7]">{label}</p></div>}
-function Role({title,values,color}:{title:string;values:string[];color:string}){return <div><p className="text-[10px] font-black" style={{color}}>{title}</p><ul className="mt-3 space-y-2">{values.map(v=><li key={v} className="flex gap-2 text-[11px] leading-5 text-[#687085]"><span className="mt-1 grid size-3.5 shrink-0 place-items-center rounded-full text-white" style={{background:color}}><Check className="size-2"/></span>{v}</li>)}</ul></div>}
-function Week({n,title,body}:{n:string;title:string;body:string}){return <div className="rounded-2xl border border-[#dfdcd3] bg-white p-4"><p className="text-[9px] font-black uppercase tracking-widest text-[#8c70db]">Week {n}</p><p className="mt-2 text-sm font-extrabold">{title}</p><p className="mt-2 text-[11px] leading-5 text-[#687085]">{body}</p></div>}
+function MiniStat({ n, label }: { n: string; label: string }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[.06] px-3 py-3">
+      <p className="text-xl font-black">{n}</p>
+      <p className="text-[9px] font-bold uppercase tracking-wider text-[#91a2c7]">
+        {label}
+      </p>
+    </div>
+  );
+}
+
+function Role({
+  title,
+  values,
+  color,
+}: {
+  title: string;
+  values: string[];
+  color: string;
+}) {
+  return (
+    <div>
+      <p className="text-[10px] font-black" style={{ color }}>
+        {title}
+      </p>
+      <ul className="mt-3 space-y-2">
+        {values.map((v) => (
+          <li key={v} className="flex gap-2 text-[11px] leading-5 text-[#687085]">
+            <span
+              className="mt-1 grid size-3.5 shrink-0 place-items-center rounded-full text-white"
+              style={{ background: color }}
+            >
+              <Check className="size-2" />
+            </span>
+            {v}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Week({
+  n,
+  title,
+  body,
+}: {
+  n: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-[#dfdcd3] bg-white p-4">
+      <p className="text-[9px] font-black uppercase tracking-widest text-[#8c70db]">
+        Week {n}
+      </p>
+      <p className="mt-2 text-sm font-extrabold">{title}</p>
+      <p className="mt-2 text-[11px] leading-5 text-[#687085]">{body}</p>
+    </div>
+  );
+}
