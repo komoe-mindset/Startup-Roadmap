@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { User, LogIn, LogOut, Sparkles, CheckCircle2, ShieldAlert, X, AlertCircle } from "lucide-react";
+import {
+  User, LogIn, LogOut, Sparkles, CheckCircle2, ShieldAlert, X, AlertCircle,
+  CloudCheck, CloudOff, Loader2
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
+  lastSavedTimestamp?: number | null;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, lastSavedTimestamp }) => {
   const {
     user,
     loading,
@@ -170,8 +174,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 )}
               </div>
 
+              {/* Cloud Sync Status info */}
+              <div className="mt-3 flex items-center justify-between border-t border-[#e4e1d7] pt-2.5 text-xs">
+                <span className="font-bold text-[#687085]">Cloud Sync</span>
+                <span className="inline-flex items-center gap-1.5 font-bold">
+                  {isConfigured ? (
+                    <>
+                      <CloudCheck className="size-4 text-[#1da98a]" />
+                      <span className="text-[#1da98a]">Synced to Firestore</span>
+                    </>
+                  ) : (
+                    <>
+                      <CloudOff className="size-4 text-[#8a8f9b]" />
+                      <span className="text-[#687085]">Local Mode (Offline)</span>
+                    </>
+                  )}
+                </span>
+              </div>
+              {lastSavedTimestamp && (
+                <div className="mt-1 text-right text-[10px] text-[#8a8f9b]">
+                  Last saved: {new Date(lastSavedTimestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                </div>
+              )}
+
               {/* UID info */}
-              <div className="mt-3 border-t border-[#e4e1d7] pt-2 text-[10px] text-[#8a8f9b]">
+              <div className="mt-2 text-[10px] text-[#8a8f9b]">
                 <span className="font-semibold">User ID:</span> {user.uid}
               </div>
             </div>

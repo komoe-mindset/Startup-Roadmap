@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
-  ClipboardCheck, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Megaphone, RefreshCw,
-  Rocket, Scale, Search, Settings2, ShieldAlert, ShieldCheck, Sparkles, Target, Users, Workflow, Zap,
+  ClipboardCheck, Cloud, CloudCheck, CloudOff, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Loader2,
+  Megaphone, RefreshCw, Rocket, Scale, Search, Settings2, ShieldAlert, ShieldCheck, Sparkles, Target, Users, Workflow, Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,7 +18,12 @@ const WelcomeModal = lazy(() => import("@/components/WelcomeModal"));
 const AuthModal = lazy(() => import("@/components/AuthModal").then((m) => ({ default: m.AuthModal })));
 
 import { useAuth } from "@/context/AuthContext";
-import { saveUserProgress, subscribeToUserProgress } from "@/lib/firestoreSync";
+import {
+  saveUserProgress,
+  subscribeToUserProgress,
+  getLocalLastSavedTimestamp,
+  type SyncStatus,
+} from "@/lib/firestoreSync";
 
 export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
 
@@ -131,6 +136,8 @@ export default function Home() {
   const [storyOpen, setStoryOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>("idle");
+  const [lastSavedTimestamp, setLastSavedTimestamp] = useState<number | null>(() => getLocalLastSavedTimestamp());
 
   const active = stages.find((s) => s.id === activeId) ?? stages[0];
   const activeStory = STORY_STAGES.find((s) => s.id === active.id) ?? STORY_STAGES[0];
@@ -151,7 +158,11 @@ export default function Home() {
 
   // Sync with Firestore in real-time when user is authenticated
   useEffect(() => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      setSyncStatus("offline");
+      return;
+    }
+    setSyncStatus(isConfigured ? "synced" : "offline");
     const unsubscribe = subscribeToUserProgress(user.uid, (data) => {
       if (data.doneTasks) {
         setDone((prev) => ({ ...prev, ...data.doneTasks }));
@@ -162,9 +173,25 @@ export default function Home() {
       if (data.finderAnswers) {
         setFinder((prev) => ({ ...prev, ...data.finderAnswers }));
       }
+      if (data.updatedAt) {
+        setLastSavedTimestamp(data.updatedAt);
+        setSyncStatus("synced");
+      }
     });
     return () => unsubscribe();
-  }, [user?.uid]);
+  }, [user?.uid, isConfigured]);
+
+  const handleStatusChange = (status: SyncStatus, timestamp?: number) => {
+    setSyncStatus(status);
+    if (timestamp) {
+      setLastSavedTimestamp(timestamp);
+    }
+    if (status === "synced") {
+      setTimeout(() => {
+        setSyncStatus((s) => (s === "synced" ? "idle" : s));
+      }, 3000);
+    }
+  };
 
   const setStage = (id: string) => {
     setActiveId(id);
@@ -172,11 +199,15 @@ export default function Home() {
       localStorage.setItem("startup-roadmap-stage", id);
     } catch {}
     if (user?.uid) {
-      saveUserProgress(user.uid, {
-        doneTasks: done,
-        activeStageId: id,
-        finderAnswers: finder,
-      });
+      saveUserProgress(
+        user.uid,
+        {
+          doneTasks: done,
+          activeStageId: id,
+          finderAnswers: finder,
+        },
+        handleStatusChange
+      );
     }
   };
 
@@ -187,11 +218,31 @@ export default function Home() {
       localStorage.setItem("startup-roadmap-progress", JSON.stringify(next));
     } catch {}
     if (user?.uid) {
-      saveUserProgress(user.uid, {
-        doneTasks: next,
-        activeStageId: activeId,
-        finderAnswers: finder,
-      });
+      saveUserProgress(
+        user.uid,
+        {
+          doneTasks: next,
+          activeStageId: activeId,
+          finderAnswers: finder,
+        },
+        handleStatusChange
+      );
+    }
+  };
+
+  const handleFinderAnswer = (id: string, answer: "yes" | "no") => {
+    const next = { ...finder, [id]: answer };
+    setFinder(next);
+    if (user?.uid) {
+      saveUserProgress(
+        user.uid,
+        {
+          doneTasks: done,
+          activeStageId: activeId,
+          finderAnswers: next,
+        },
+        handleStatusChange
+      );
     }
   };
 
@@ -313,26 +364,72 @@ export default function Home() {
             </Button>
 
             {/* Founder Auth / Profile Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              aria-label={user ? `Founder Profile: ${user.displayName}` : "Founder အကောင့် ချိတ်ဆက်ရန်"}
-              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-1.5"
-              onClick={() => setAuthOpen(true)}
-            >
-              <Users className="size-4 text-[#1da98a]" />
-              <span className="max-w-[90px] truncate text-xs sm:max-w-[140px]">
-                {user ? user.displayName : "Sign In / Join"}
-              </span>
+            <div className="relative group">
+              <Button
+                variant="outline"
+                size="sm"
+                aria-label={user ? `Founder Profile: ${user.displayName}` : "Founder အကောင့် ချိတ်ဆက်ရန်"}
+                className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-2 transition"
+                onClick={() => setAuthOpen(true)}
+              >
+                <Users className="size-4 text-[#1da98a]" />
+                <span className="max-w-[85px] truncate text-xs sm:max-w-[130px]">
+                  {user ? user.displayName : "Sign In / Join"}
+                </span>
+
+                {/* Cloud Sync Status Icon */}
+                {syncStatus === "saving" ? (
+                  <span className="inline-flex items-center text-blue-600" title="Saving changes to Cloud...">
+                    <Loader2 className="size-3.5 animate-spin" />
+                  </span>
+                ) : user && isConfigured ? (
+                  <span
+                    className="inline-flex items-center text-[#1da98a]"
+                    title={
+                      lastSavedTimestamp
+                        ? `Data saved to Cloud • ${new Date(lastSavedTimestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`
+                        : "Data saved to Cloud"
+                    }
+                  >
+                    <CloudCheck className="size-3.5" />
+                  </span>
+                ) : user && !isConfigured ? (
+                  <span
+                    className="inline-flex items-center text-[#8a8f9b]"
+                    title="Local Offline Mode (Saved on this device)"
+                  >
+                    <CloudOff className="size-3.5" />
+                  </span>
+                ) : null}
+              </Button>
+
+              {/* Floating Tooltip showing sync state */}
               {user && (
-                <span
-                  className={`size-2 rounded-full ${
-                    isConfigured ? "bg-[#1da98a]" : "bg-[#f6c85f]"
-                  }`}
-                  title={isConfigured ? "Firebase Synced" : "Local / Offline Mode"}
-                />
+                <div className="pointer-events-none absolute right-0 top-full mt-1.5 hidden whitespace-nowrap rounded-lg border border-[#14213d]/10 bg-[#14213d] px-2.5 py-1 text-[10px] font-semibold text-white shadow-md group-hover:block z-50">
+                  {syncStatus === "saving" ? (
+                    <span className="flex items-center gap-1">
+                      <Loader2 className="size-3 animate-spin text-blue-300" />
+                      Syncing to Cloud...
+                    </span>
+                  ) : isConfigured ? (
+                    <span className="flex items-center gap-1">
+                      <CloudCheck className="size-3 text-[#1da98a]" />
+                      Data saved to Cloud
+                      {lastSavedTimestamp && (
+                        <span className="text-white/70">
+                          ({new Date(lastSavedTimestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })})
+                        </span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1">
+                      <CloudOff className="size-3 text-[#f6c85f]" />
+                      Saved locally in browser
+                    </span>
+                  )}
+                </div>
               )}
-            </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -491,7 +588,7 @@ export default function Home() {
                       <button
                         type="button"
                         aria-label={`မေးခွန်း ${i + 1} အတွက် 'ရပြီ' ဟု ဖြေပါ`}
-                        onClick={() => setFinder({ ...finder, [id]: "yes" })}
+                        onClick={() => handleFinderAnswer(id, "yes")}
                         className={`grid size-8 place-items-center rounded-lg border text-xs transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a] cursor-pointer ${
                           finder[id] === "yes"
                             ? "border-[#1da98a] bg-[#1da98a] text-white"
@@ -503,7 +600,7 @@ export default function Home() {
                       <button
                         type="button"
                         aria-label={`မေးခွန်း ${i + 1} အတွက် 'မရသေး' ဟု ဖြေပါ`}
-                        onClick={() => setFinder({ ...finder, [id]: "no" })}
+                        onClick={() => handleFinderAnswer(id, "no")}
                         className={`rounded-lg border px-2 text-[10px] font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#e8693e] cursor-pointer ${
                           finder[id] === "no"
                             ? "border-[#e8693e] bg-[#e8693e] text-white"
@@ -1102,6 +1199,7 @@ export default function Home() {
         <AuthModal
           isOpen={authOpen}
           onClose={() => setAuthOpen(false)}
+          lastSavedTimestamp={lastSavedTimestamp}
         />
       </Suspense>
     </main>

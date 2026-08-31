@@ -9,30 +9,56 @@ export interface UserProgressData {
   displayName?: string;
 }
 
-const LOCAL_STORAGE_PROGRESS_KEY = "startup_roadmap_progress";
+export type SyncStatus = "idle" | "saving" | "synced" | "offline" | "error";
 
-export async function saveUserProgress(uid: string, data: UserProgressData): Promise<void> {
+const LOCAL_STORAGE_PROGRESS_KEY = "startup_roadmap_progress";
+const LOCAL_STORAGE_TIMESTAMP_KEY = "startup_roadmap_last_saved";
+
+export function getLocalLastSavedTimestamp(): number | null {
+  try {
+    const val = localStorage.getItem(LOCAL_STORAGE_TIMESTAMP_KEY);
+    return val ? parseInt(val, 10) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveUserProgress(
+  uid: string,
+  data: UserProgressData,
+  onStatusChange?: (status: SyncStatus, timestamp?: number) => void
+): Promise<void> {
+  const now = Date.now();
+  onStatusChange?.("saving");
+
   // Always update localStorage as fast cache / offline fallback
   try {
     localStorage.setItem(LOCAL_STORAGE_PROGRESS_KEY, JSON.stringify(data));
+    localStorage.setItem(LOCAL_STORAGE_TIMESTAMP_KEY, now.toString());
   } catch (e) {
     console.warn("Could not save to localStorage:", e);
   }
 
   if (!isFirebaseConfigured || !db || !uid) {
+    onStatusChange?.("offline", now);
     return;
   }
 
   const docPath = `users/${uid}/progress/current`;
   try {
     const docRef = doc(db, "users", uid, "progress", "current");
-    await setDoc(docRef, {
-      ...data,
-      updatedAt: Date.now(),
-    }, { merge: true });
+    await setDoc(
+      docRef,
+      {
+        ...data,
+        updatedAt: now,
+      },
+      { merge: true }
+    );
+    onStatusChange?.("synced", now);
   } catch (error) {
     console.warn("Firestore save progress error (non-fatal):", error);
-    // Don't crash the UI on background sync errors
+    onStatusChange?.("error", now);
   }
 }
 
@@ -74,24 +100,40 @@ export function subscribeToUserProgress(
     return () => {};
   }
 
-  const docPath = `users/${uid}/progress/current`;
+  let unsubscribeFn: (() => void) | null = null;
+  let isCancelled = false;
+
   try {
     const docRef = doc(db, "users", uid, "progress", "current");
-    const unsubscribe = onSnapshot(
+    unsubscribeFn = onSnapshot(
       docRef,
       (docSnap) => {
+        if (isCancelled) return;
         if (docSnap.exists()) {
           const data = docSnap.data() as UserProgressData;
           onUpdate(data);
         }
       },
       (error) => {
-        console.warn("Snapshot error:", error);
+        if (!isCancelled) {
+          console.warn("Firestore snapshot subscription error:", error);
+        }
       }
     );
-    return unsubscribe;
   } catch (e) {
     console.warn("Subscribe error:", e);
     return () => {};
   }
+
+  return () => {
+    isCancelled = true;
+    if (typeof unsubscribeFn === "function") {
+      try {
+        unsubscribeFn();
+      } catch (err) {
+        console.warn("Error during Firestore unsubscribe:", err);
+      }
+      unsubscribeFn = null;
+    }
+  };
 }
