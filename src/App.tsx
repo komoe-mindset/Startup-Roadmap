@@ -291,12 +291,12 @@ export default function Home() {
 
       {/* Sticky Top Header */}
       <header className="sticky top-0 z-40 border-b border-[#d9d5ca] bg-[#f3f1eb]/92 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3.5 sm:px-7">
-          <div className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg">
-              <Rocket className="size-5" />
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-7 sm:py-3.5">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <span className="grid size-9 sm:size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-lg shrink-0">
+              <Rocket className="size-4 sm:size-5" />
             </span>
-            <div>
+            <div className="hidden sm:block">
               <p className="text-[10px] font-extrabold uppercase tracking-[.22em] text-[#687085]">
                 Founder Learning OS
               </p>
@@ -306,7 +306,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <div className="hidden w-36 lg:block" aria-label="Action progress summary">
               <div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]">
                 <span>ACTION PROGRESS</span>
@@ -334,22 +334,23 @@ export default function Home() {
               rel="noopener noreferrer"
               aria-label="Ask Gemini Custom Gem - Startup Mentor in new tab"
               title="Ask Gemini Custom Gem - Startup Mentor"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-2.5 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm sm:px-3 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
             >
-              <GeminiGemIcon className="size-4" />
+              <GeminiGemIcon className="size-4 shrink-0" />
               <span className="hidden sm:inline">AI Gem Mentor</span>
-              <span className="sm:hidden">Gemini</span>
-              <ExternalLink className="size-3 opacity-60" />
+              <ExternalLink className="size-3 opacity-60 hidden sm:inline" />
             </a>
 
             <Button
               variant="outline"
               size="sm"
               aria-label="Open Story Mode modal"
-              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
+              title="Story Mode"
+              className="rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setStoryOpen(true)}
             >
-              <BookOpen className="size-4 text-[#4f7cff]" /> Story Mode
+              <BookOpen className="size-4 text-[#4f7cff] shrink-0" />
+              <span className="hidden sm:inline">Story Mode</span>
             </Button>
 
             <Button
@@ -357,24 +358,26 @@ export default function Home() {
               size="sm"
               aria-expanded={finderOpen}
               aria-label={finderOpen ? "Collapse 60-Second Focus Finder" : "Expand 60-Second Focus Finder"}
-              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
+              title="60-Second Focus Finder"
+              className="rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setFinderOpen((v) => !v)}
             >
-              <Gauge className="size-4" /> Focus Finder
+              <Gauge className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Focus Finder</span>
             </Button>
 
             {/* Founder Auth / Profile Button */}
-            <div className="relative group">
+            <div className="relative group shrink-0">
               <Button
                 variant="outline"
                 size="sm"
                 aria-label={user ? `Founder Profile: ${user.displayName}` : "Founder အကောင့် ချိတ်ဆက်ရန်"}
-                className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-2 transition"
+                className="max-w-[120px] sm:max-w-[180px] rounded-xl border-[#ccc7bb] bg-white/90 px-2 sm:px-3 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-1.5 sm:gap-2 transition"
                 onClick={() => setAuthOpen(true)}
               >
-                <Users className="size-4 text-[#1da98a]" />
-                <span className="max-w-[85px] truncate text-xs sm:max-w-[130px]">
-                  {user ? user.displayName : "Sign In / Join"}
+                <Users className="size-4 text-[#1da98a] shrink-0" />
+                <span className="max-w-[50px] truncate text-xs sm:max-w-[120px]">
+                  {user ? user.displayName : "Sign In"}
                 </span>
 
                 {/* Cloud Sync Status Icon */}
@@ -794,21 +797,33 @@ export default function Home() {
                 defaultValue="understand"
                 className="p-5 sm:p-8"
               >
-                <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-[#ece9e1] p-1.5 sm:grid-cols-4 sm:gap-0">
-                  <TabsTrigger value="understand" aria-label="Understand stage concepts tab" className="h-11 rounded-xl text-xs">
+                <TabsList className="flex overflow-x-auto no-scrollbar w-full justify-start items-center p-1 space-x-2 rounded-2xl bg-[#ece9e1]">
+                  <TabsTrigger
+                    value="understand"
+                    aria-label="Understand stage concepts tab"
+                    className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
+                  >
                     📖 Understand
                   </TabsTrigger>
                   <TabsTrigger
                     value="story"
                     aria-label="Ko Moe Story tab"
-                    className="flex h-11 items-center gap-1.5 rounded-xl text-xs"
+                    className="flex h-12 items-center gap-1.5 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
                   >
-                    <BookOpen className="size-3.5 text-[#4f7cff]" /> 📖 Story (Ko Moe)
+                    <BookOpen className="size-3.5 text-[#4f7cff] shrink-0" /> 📖 Story (Ko Moe)
                   </TabsTrigger>
-                  <TabsTrigger value="do" aria-label="Action items tab" className="h-11 rounded-xl text-xs">
+                  <TabsTrigger
+                    value="do"
+                    aria-label="Action items tab"
+                    className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
+                  >
                     ✅ Do it ({active.actions.filter((_, i) => done[`${active.id}-${i}`]).length}/4)
                   </TabsTrigger>
-                  <TabsTrigger value="gate" aria-label="Pass the Gate criteria tab" className="h-11 rounded-xl text-xs">
+                  <TabsTrigger
+                    value="gate"
+                    aria-label="Pass the Gate criteria tab"
+                    className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
+                  >
                     ⚖️ Pass the Gate
                   </TabsTrigger>
                 </TabsList>
@@ -947,11 +962,11 @@ export default function Home() {
 
                 {/* Do It Tab */}
                 <TabsContent value="do" className="mt-6">
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-xs font-black uppercase tracking-wider text-[#687085]">
+                  <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-xs font-black uppercase tracking-wider text-[#687085] whitespace-nowrap">
                       ✅ WHAT TO DO — STAGE ACTION ITEMS
                     </p>
-                    <span className="text-xs font-bold text-[#1da98a]">
+                    <span className="text-xs font-bold text-[#1da98a] whitespace-nowrap">
                       အမှန်ခြစ်ပြီး Progress သိမ်းပါ
                     </span>
                   </div>
