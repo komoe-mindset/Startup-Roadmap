@@ -329,3 +329,5 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, lastSaved
     </div>
   );
 };
+
+export default AuthModal;

@@ -15,7 +15,7 @@ import { STORY_STAGES } from "@/data/storyData";
 // Lazy-loaded modal components to reduce initial bundle size and boost LCP/FCP performance
 const StoryModal = lazy(() => import("@/components/StoryModal"));
 const WelcomeModal = lazy(() => import("@/components/WelcomeModal"));
-const AuthModal = lazy(() => import("@/components/AuthModal").then((m) => ({ default: m.AuthModal })));
+const AuthModal = lazy(() => import("@/components/AuthModal"));
 
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -322,7 +322,7 @@ export default function Home() {
               variant="outline"
               size="sm"
               aria-label="Scroll to Start Here Guide"
-              className="hidden sm:inline-flex rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
+              className="hidden sm:inline-flex min-h-[44px] rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
               onClick={scrollToStartHere}
             >
               <Rocket className="size-3.5 text-[#e8693e]" /> Start Here
@@ -334,7 +334,7 @@ export default function Home() {
               rel="noopener noreferrer"
               aria-label="Ask Gemini Custom Gem - Startup Mentor in new tab"
               title="Ask Gemini Custom Gem - Startup Mentor"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-2.5 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm sm:px-3 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-2.5 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm sm:px-3 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
             >
               <GeminiGemIcon className="size-4 shrink-0" />
               <span className="hidden sm:inline">AI Gem Mentor</span>
@@ -346,7 +346,7 @@ export default function Home() {
               size="sm"
               aria-label="Open Story Mode modal"
               title="Story Mode"
-              className="rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
+              className="min-h-[44px] rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setStoryOpen(true)}
             >
               <BookOpen className="size-4 text-[#4f7cff] shrink-0" />
@@ -359,7 +359,7 @@ export default function Home() {
               aria-expanded={finderOpen}
               aria-label={finderOpen ? "Collapse 60-Second Focus Finder" : "Expand 60-Second Focus Finder"}
               title="60-Second Focus Finder"
-              className="rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
+              className="min-h-[44px] rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setFinderOpen((v) => !v)}
             >
               <Gauge className="size-4 shrink-0" />
@@ -372,7 +372,7 @@ export default function Home() {
                 variant="outline"
                 size="sm"
                 aria-label={user ? `Founder Profile: ${user.displayName}` : "Founder အကောင့် ချိတ်ဆက်ရန်"}
-                className="max-w-[120px] sm:max-w-[180px] rounded-xl border-[#ccc7bb] bg-white/90 px-2 sm:px-3 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-1.5 sm:gap-2 transition"
+                className="min-h-[44px] max-w-[120px] sm:max-w-[180px] rounded-xl border-[#ccc7bb] bg-white/90 px-2 sm:px-3 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-1.5 sm:gap-2 transition"
                 onClick={() => setAuthOpen(true)}
               >
                 <Users className="size-4 text-[#1da98a] shrink-0" />
@@ -457,7 +457,7 @@ export default function Home() {
                 <Button
                   aria-label="Start Here Introduction"
                   onClick={scrollToStartHere}
-                  className="rounded-xl bg-[#f6c85f] px-4 py-2 text-xs font-black text-[#14213d] hover:bg-[#e0b347]"
+                  className="min-h-[44px] rounded-xl bg-[#f6c85f] px-4 py-2 text-xs font-black text-[#14213d] hover:bg-[#e0b347]"
                 >
                   <Rocket className="size-3.5" /> Start Here (စတင်ဖတ်ရန်)
                 </Button>
@@ -466,7 +466,7 @@ export default function Home() {
                   type="button"
                   aria-label="Ko Moe Story Modal ဖတ်ရန်"
                   onClick={() => setStoryOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#f6c85f] cursor-pointer"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#f6c85f] cursor-pointer"
                 >
                   <BookOpen className="size-4 text-[#f6c85f]" /> Ko Moe ရဲ့ Story ဖတ်ရန်{" "}
                   <ArrowRight className="size-3.5" />
@@ -476,7 +476,7 @@ export default function Home() {
                   variant="outline"
                   aria-label="Explore 8 Stages Roadmap"
                   onClick={scrollToRoadmap}
-                  className="rounded-xl border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/15"
+                  className="min-h-[44px] rounded-xl border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/15"
                 >
                   <Layers className="size-3.5 text-[#1da98a]" /> Explore 8 Stages
                 </Button>
@@ -486,7 +486,7 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Gemini Custom Gem ဖြင့် တိုင်ပင်ရန် in new tab"
-                  className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-400"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-400"
                 >
                   <GeminiGemIcon className="size-4" />
                   <span>Gemini Custom Gem ဖြင့် တိုင်ပင်ရန်</span>
@@ -592,10 +592,10 @@ export default function Home() {
                         type="button"
                         aria-label={`မေးခွန်း ${i + 1} အတွက် 'ရပြီ' ဟု ဖြေပါ`}
                         onClick={() => handleFinderAnswer(id, "yes")}
-                        className={`grid size-8 place-items-center rounded-lg border text-xs transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a] cursor-pointer ${
+                        className={`grid size-11 min-h-[44px] min-w-[44px] place-items-center rounded-lg border text-xs transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a] cursor-pointer ${
                           finder[id] === "yes"
                             ? "border-[#1da98a] bg-[#1da98a] text-white"
-                            : "border-[#ddd8cc] bg-white"
+                            : "border-[#ddd8cc] bg-white text-[#374151]"
                         }`}
                       >
                         <Check className="size-4" />
@@ -604,10 +604,10 @@ export default function Home() {
                         type="button"
                         aria-label={`မေးခွန်း ${i + 1} အတွက် 'မရသေး' ဟု ဖြေပါ`}
                         onClick={() => handleFinderAnswer(id, "no")}
-                        className={`rounded-lg border px-2 text-[10px] font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#e8693e] cursor-pointer ${
+                        className={`min-h-[44px] rounded-lg border px-2.5 text-xs font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#e8693e] cursor-pointer ${
                           finder[id] === "no"
                             ? "border-[#e8693e] bg-[#e8693e] text-white"
-                            : "border-[#ddd8cc] bg-white"
+                            : "border-[#ddd8cc] bg-white text-[#374151]"
                         }`}
                       >
                         မရသေး
@@ -621,27 +621,27 @@ export default function Home() {
               className="rounded-2xl p-5"
               style={{ background: focus?.pale ?? "#f0eee8" }}
             >
-              <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#687085]">
+              <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#374151]">
                 Your next focus
               </p>
               {focus ? (
                 <>
                   <div className="mt-4 flex items-center gap-3">
                     <span
-                      className="grid size-11 place-items-center rounded-xl text-white"
+                      className="grid size-11 place-items-center rounded-xl text-white font-black"
                       style={{ background: focus.color }}
                     >
                       {focus.number}
                     </span>
                     <div>
-                      <p className="font-extrabold">{focus.title}</p>
-                      <p className="text-xs text-[#687085]">{focus.mm}</p>
+                      <p className="font-extrabold text-[#14213d]">{focus.title}</p>
+                      <p className="text-xs font-semibold text-[#374151]">{focus.mm}</p>
                     </div>
                   </div>
-                  <p className="mt-4 text-sm leading-6">{focus.question}</p>
+                  <p className="mt-4 text-sm font-medium leading-6 text-[#14213d]">{focus.question}</p>
                   <Button
                     aria-label={`Start Stage ${focus.number}: ${focus.title}`}
-                    className="mt-5 w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
+                    className="mt-5 min-h-[48px] w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
                     onClick={() => {
                       setStage(focus.id);
                       setFinderOpen(false);
@@ -652,7 +652,7 @@ export default function Home() {
                   </Button>
                 </>
               ) : (
-                <p className="mt-4 text-sm leading-7 text-[#687085]">
+                <p className="mt-4 text-sm leading-7 text-[#374151]">
                   မေးခွန်းတွေဖြေပြီးရင် အခုအရင်လုပ်သင့်တဲ့ Startup Stage ကို ပြပေးပါမယ်။
                 </p>
               )}
@@ -667,7 +667,7 @@ export default function Home() {
         >
           {/* Aside Navigator */}
           <aside className="h-fit rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-3 lg:sticky lg:top-24">
-            <p className="px-3 pb-2 pt-2 text-[10px] font-black uppercase tracking-[.2em] text-[#8a8f9b]">
+            <p className="px-3 pb-2 pt-2 text-[10px] font-black uppercase tracking-[.2em] text-[#4b5563]">
               The 8-stage map
             </p>
             <nav role="tablist" aria-label="8-stage roadmap list" className="space-y-1">
@@ -683,7 +683,7 @@ export default function Home() {
                     aria-selected={selected}
                     aria-label={`Stage ${s.number}: ${s.title} (${n} of 4 tasks completed)`}
                     onClick={() => setStage(s.id)}
-                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer ${
+                    className={`flex min-h-[48px] w-full items-center gap-3 rounded-2xl p-3 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer ${
                       selected
                         ? "bg-[#14213d] text-white shadow-lg"
                         : "hover:bg-[#f0eee8]"
@@ -704,13 +704,13 @@ export default function Home() {
                       </span>
                       <span
                         className={`text-[9px] font-bold tracking-wider ${
-                          selected ? "text-white/55" : "text-[#9498a2]"
+                          selected ? "text-slate-300" : "text-[#4b5563]"
                         }`}
                       >
                         {s.phase}
                       </span>
                     </span>
-                    <span className="text-[9px] font-black opacity-60">
+                    <span className={`text-[9px] font-black ${selected ? "text-white/80" : "text-[#4b5563]"}`}>
                       {n}/4
                     </span>
                   </button>
@@ -718,7 +718,7 @@ export default function Home() {
               })}
             </nav>
             <div className="m-2 mt-4 rounded-2xl bg-[#f0eee8] p-4">
-              <div className="flex justify-between text-xs font-extrabold">
+              <div className="flex justify-between text-xs font-extrabold text-[#14213d]">
                 <span>Progress</span>
                 <span>
                   {doneCount}/{total}
@@ -732,7 +732,7 @@ export default function Home() {
                 variant="ghost"
                 size="sm"
                 aria-label="Reset all task progress"
-                className="mt-2 h-8 w-full rounded-lg text-[10px] font-bold text-[#687085] hover:bg-[#e4e1d7] hover:text-[#14213d]"
+                className="mt-2 min-h-[44px] h-auto w-full rounded-lg text-xs font-bold text-[#4b5563] hover:bg-[#e4e1d7] hover:text-[#14213d]"
                 onClick={() => {
                   setDone({});
                   try {
@@ -740,7 +740,7 @@ export default function Home() {
                   } catch {}
                 }}
               >
-                <RefreshCw className="size-3" /> Reset
+                <RefreshCw className="size-3.5" /> Reset Progress
               </Button>
             </div>
           </aside>
@@ -963,7 +963,7 @@ export default function Home() {
                 {/* Do It Tab */}
                 <TabsContent value="do" className="mt-6">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-xs font-black uppercase tracking-wider text-[#687085] whitespace-nowrap">
+                    <p className="text-xs font-black uppercase tracking-wider text-[#4b5563] whitespace-nowrap">
                       ✅ WHAT TO DO — STAGE ACTION ITEMS
                     </p>
                     <span className="text-xs font-bold text-[#1da98a] whitespace-nowrap">
@@ -979,7 +979,7 @@ export default function Home() {
                         <label
                           htmlFor={inputId}
                           key={a.title}
-                          className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${
+                          className={`flex min-h-[48px] cursor-pointer items-start gap-4 rounded-2xl border p-4 transition ${
                             checked
                               ? "border-transparent bg-[#eeeee9] opacity-65"
                               : "border-[#dfdcd3] bg-white hover:shadow-sm"
@@ -990,7 +990,7 @@ export default function Home() {
                             aria-label={`Task ${i + 1}: ${a.title}`}
                             checked={checked}
                             onCheckedChange={(v) => toggle(key, v === true)}
-                            className="mt-1 size-5"
+                            className="mt-1 size-5 shrink-0"
                           />
                           <span
                             className="grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black"
@@ -1000,13 +1000,13 @@ export default function Home() {
                           </span>
                           <span>
                             <span
-                              className={`block text-sm font-extrabold ${
+                              className={`block text-sm font-extrabold text-[#14213d] ${
                                 checked ? "line-through" : ""
                               }`}
                             >
                               {a.title}
                             </span>
-                            <span className="mt-1 block text-xs leading-6 text-[#687085]">
+                            <span className="mt-1 block text-xs leading-6 text-[#4b5563]">
                               {a.detail}
                             </span>
                           </span>
@@ -1020,7 +1020,7 @@ export default function Home() {
                 <TabsContent value="gate" className="mt-6">
                   <div className="grid gap-5 xl:grid-cols-[1fr_.7fr]">
                     <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
-                      <p className="flex items-center gap-2 text-xs font-black">
+                      <p className="flex items-center gap-2 text-xs font-black text-[#14213d]">
                         <Scale className="size-4" style={{ color: active.color }} />
                         ⚖️ PASS THE GATE CRITERIA (BEFORE MOVING ON)
                       </p>
@@ -1028,7 +1028,7 @@ export default function Home() {
                         {active.gate.map((g) => (
                           <div
                             key={g}
-                            className="flex gap-3 rounded-xl bg-[#f7f6f2] p-3 text-xs font-semibold leading-5"
+                            className="flex gap-3 rounded-xl bg-[#f7f6f2] p-3 text-xs font-semibold leading-5 text-[#14213d]"
                           >
                             <Check className="mt-0.5 size-4 shrink-0 text-[#1da98a]" />
                             {g}
@@ -1046,12 +1046,12 @@ export default function Home() {
                       >
                         Evidence over opinion
                       </p>
-                      <p className="mt-3 text-sm font-extrabold leading-6">
+                      <p className="mt-3 text-sm font-extrabold leading-6 text-[#14213d]">
                         Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။
                       </p>
                       <Button
                         aria-label="Go to next stage"
-                        className="mt-5 w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
+                        className="mt-5 min-h-[48px] w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
                         onClick={() => {
                           setStage(stages[(idx + 1) % 8].id);
                           scrollToRoadmap();
@@ -1074,8 +1074,8 @@ export default function Home() {
                       <Bot className="size-5" />
                     </span>
                     <div>
-                      <p className="text-sm font-extrabold">AI + Human Team</p>
-                      <p className="text-[10px] text-[#687085]">
+                      <p className="text-sm font-extrabold text-[#14213d]">AI + Human Team</p>
+                      <p className="text-[10px] font-bold text-[#4b5563]">
                         Speed + judgment
                       </p>
                     </div>
@@ -1085,7 +1085,7 @@ export default function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Ask Gemini Custom Gem mentor in new tab"
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-3 py-1.5 text-xs font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
                     title="Ask Gemini Custom Gem"
                   >
                     <GeminiGemIcon className="size-3.5" />
@@ -1109,14 +1109,14 @@ export default function Home() {
               <div className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5">
                 <div className="flex items-center gap-3">
                   <span
-                    className="grid size-10 place-items-center rounded-xl"
+                    className="grid size-10 place-items-center rounded-xl font-bold"
                     style={{ background: active.pale, color: active.color }}
                   >
                     <Gauge className="size-5" />
                   </span>
                   <div>
-                    <p className="text-sm font-extrabold">Startup Health Metrics</p>
-                    <p className="text-[10px] text-[#687085]">
+                    <p className="text-sm font-extrabold text-[#14213d]">Startup Health Metrics</p>
+                    <p className="text-[10px] font-bold text-[#4b5563]">
                       Activity မဟုတ်ဘဲ Evidence ကိုတိုင်းပါ
                     </p>
                   </div>
@@ -1131,7 +1131,7 @@ export default function Home() {
                         className="mb-2 block h-1 w-8 rounded-full"
                         style={{ background: active.color }}
                       />
-                      <p className="text-xs font-extrabold">{k}</p>
+                      <p className="text-xs font-extrabold text-[#14213d]">{k}</p>
                     </div>
                   ))}
                 </div>
@@ -1142,16 +1142,16 @@ export default function Home() {
             <section className="rounded-[24px] bg-[#14213d] p-6 text-white">
               <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#91a2c7]">
+                  <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#bcd3ff]">
                     The founder rule
                   </p>
-                  <p className="mt-2 max-w-3xl text-lg font-black leading-7">
+                  <p className="mt-2 max-w-3xl text-lg font-black leading-7 text-white">
                     Problem ကို သက်သေပြ၊ အနည်းဆုံး Offer ကို ရောင်း၊ Result ကို ကိုယ်တိုင်ပေး၊ ပြီးမှ System နဲ့ Scale လုပ်ပါ။
                   </p>
                 </div>
                 <Button
                   aria-label="Advance to Next Stage"
-                  className="shrink-0 rounded-xl bg-white font-black text-[#14213d] hover:bg-[#f3f1eb]"
+                  className="shrink-0 min-h-[48px] rounded-xl bg-white font-black text-[#14213d] hover:bg-[#f3f1eb]"
                   onClick={() => {
                     setStage(stages[(idx + 1) % 8].id);
                     scrollToRoadmap();
@@ -1166,8 +1166,8 @@ export default function Home() {
             <section className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-extrabold">30-Day Quick Start</p>
-                  <p className="mt-1 text-xs text-[#687085]">
+                  <p className="text-sm font-extrabold text-[#14213d]">30-Day Quick Start</p>
+                  <p className="mt-1 text-xs font-semibold text-[#4b5563]">
                     ပထမဆုံး Customer Evidence ရဖို့ ရိုးရှင်းတဲ့လမ်းကြောင်း
                   </p>
                 </div>

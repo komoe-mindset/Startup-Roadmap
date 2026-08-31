@@ -81,7 +81,7 @@ export function StartHereIntro({
               const el = document.getElementById("start-here-section");
               el?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="rounded-xl bg-[#14213d] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#203156]"
+            className="min-h-[44px] rounded-xl bg-[#14213d] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#203156]"
           >
             <Rocket className="size-3.5 text-[#f6c85f]" />
             Start Here
@@ -91,7 +91,7 @@ export function StartHereIntro({
             size="sm"
             variant="outline"
             onClick={onOpenStory}
-            className="rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
+            className="min-h-[44px] rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
           >
             <BookOpen className="size-3.5 text-[#4f7cff]" />
             Ko Moe Story
@@ -101,7 +101,7 @@ export function StartHereIntro({
             size="sm"
             variant="outline"
             onClick={onScrollToRoadmap}
-            className="rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
+            className="min-h-[44px] rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
           >
             <Layers className="size-3.5 text-[#1da98a]" />
             Explore 8 Stages
@@ -127,7 +127,7 @@ export function StartHereIntro({
               aria-expanded={detailsOpen}
               aria-label={detailsOpen ? "အကျဉ်းချုံ့မည် (Collapse details)" : "အသေးစိတ်ဖွင့်မည် (Expand details)"}
               onClick={() => setDetailsOpen((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d5ca] bg-white px-3 py-1.5 text-xs font-bold text-[#687085] transition hover:bg-[#f3f1eb] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9d5ca] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] transition hover:bg-[#f3f1eb] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer"
             >
               <span>{detailsOpen ? "အကျဉ်းချုံ့မည်" : "အသေးစိတ်ဖွင့်မည်"}</span>
               <ChevronDown
@@ -136,7 +136,7 @@ export function StartHereIntro({
             </button>
           </div>
 
-          <div className="mt-5 max-w-4xl space-y-3 text-sm leading-relaxed text-[#4d566b]">
+          <div className="mt-5 max-w-4xl space-y-3 text-sm leading-relaxed text-[#374151]">
             <p className="font-semibold text-[#14213d]">
               ဒီ Website က Startup တစ်ခု စတင်ချင်သူအတွက် Idea ကနေ Business System တစ်ခုဖြစ်လာတဲ့အထိ Step-by-Step နားလည်နိုင်အောင် လမ်းညွှန်ပေးထားတာ ဖြစ်ပါတယ်။
             </p>
