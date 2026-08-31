@@ -36,7 +36,7 @@ type Stage = {
 const stages: Stage[] = [
   {
     id:"problem", number:"01", title:"Problem Validation", mm:"Customer ပြဿနာကို သက်သေပြခြင်း", phase:"DISCOVER", color:"#e8693e", pale:"#fff0e9", icon:Search,
-    question:"လူအစစ်တွေမှာ မကြာခဏဖြစ်ပြီး ဖြေရှင်းဖို့ အရေးကြီးတဲ့ ပြဿနာရှိသလား?",
+    question:"တကယ့် Customer တွေမှာ မကြာခဏကြုံတွေ့ရပြီး မဖြစ်မနေ ဖြေရှင်းချင်တဲ့ ပြဿနာအစစ်အမှန် ရှိသလား?",
     what:"Idea ကောင်းတယ်လို့ထင်ခြင်းမဟုတ်ဘဲ Customer ရဲ့ အပြုအမူ၊ လက်ရှိဖြေရှင်းနည်းနဲ့ ငွေပေးလိုမှုက ပြဿနာတကယ်ရှိကြောင်း ပြသခြင်းဖြစ်သည်။",
     why:["Customer မလိုချင်သော Product ကို မတည်ဆောက်မိစေဘူး။","Problem ရဲ့ Frequency၊ Impact နဲ့ Urgency ကို နားလည်စေတယ်။","Customer အသုံးပြုတဲ့စကားလုံးတွေက နောက်ပိုင်း Marketing နဲ့ Sales ကို တိကျစေတယ်။"],
     actions:[{title:"Customer 10 ယောက်ရွေးပါ",detail:"Solution မပြောခင် သင်စိတ်ဝင်စားတဲ့ Customer segment ကို သတ်မှတ်ပါ။"},{title:"Problem Interview လုပ်ပါ",detail:"လက်ရှိ Process၊ နောက်ဆုံးကြုံခဲ့ချိန်၊ သက်ရောက်မှုနဲ့ ဖြေရှင်းနည်းကို မေးပါ။"},{title:"Pattern ရှာပါ",detail:"ထပ်တလဲလဲဖြစ်သော Pain၊ Trigger၊ Cost နဲ့ Words ကို စုပါ။"},{title:"Payment Signal စမ်းပါ",detail:"Paid diagnostic သို့မဟုတ် Pilot ကို လက်ခံမလား စစ်ပါ။"}],
