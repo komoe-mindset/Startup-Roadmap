@@ -15,6 +15,10 @@ import { STORY_STAGES } from "@/data/storyData";
 // Lazy-loaded modal components to reduce initial bundle size and boost LCP/FCP performance
 const StoryModal = lazy(() => import("@/components/StoryModal"));
 const WelcomeModal = lazy(() => import("@/components/WelcomeModal"));
+const AuthModal = lazy(() => import("@/components/AuthModal").then((m) => ({ default: m.AuthModal })));
+
+import { useAuth } from "@/context/AuthContext";
+import { saveUserProgress, subscribeToUserProgress } from "@/lib/firestoreSync";
 
 export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
 
@@ -119,12 +123,14 @@ const finderQuestions = [
 ] as const;
 
 export default function Home() {
+  const { user, isConfigured } = useAuth();
   const [activeId, setActiveId] = useState("problem");
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [finder, setFinder] = useState<Record<string, "yes" | "no">>({});
   const [finderOpen, setFinderOpen] = useState(true);
   const [storyOpen, setStoryOpen] = useState(false);
   const [welcomeOpen, setWelcomeOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
 
   const active = stages.find((s) => s.id === activeId) ?? stages[0];
   const activeStory = STORY_STAGES.find((s) => s.id === active.id) ?? STORY_STAGES[0];
@@ -143,11 +149,35 @@ export default function Home() {
     } catch {}
   }, []);
 
+  // Sync with Firestore in real-time when user is authenticated
+  useEffect(() => {
+    if (!user?.uid) return;
+    const unsubscribe = subscribeToUserProgress(user.uid, (data) => {
+      if (data.doneTasks) {
+        setDone((prev) => ({ ...prev, ...data.doneTasks }));
+      }
+      if (data.activeStageId) {
+        setActiveId(data.activeStageId);
+      }
+      if (data.finderAnswers) {
+        setFinder((prev) => ({ ...prev, ...data.finderAnswers }));
+      }
+    });
+    return () => unsubscribe();
+  }, [user?.uid]);
+
   const setStage = (id: string) => {
     setActiveId(id);
     try {
       localStorage.setItem("startup-roadmap-stage", id);
     } catch {}
+    if (user?.uid) {
+      saveUserProgress(user.uid, {
+        doneTasks: done,
+        activeStageId: id,
+        finderAnswers: finder,
+      });
+    }
   };
 
   const toggle = (key: string, value: boolean) => {
@@ -156,7 +186,15 @@ export default function Home() {
     try {
       localStorage.setItem("startup-roadmap-progress", JSON.stringify(next));
     } catch {}
+    if (user?.uid) {
+      saveUserProgress(user.uid, {
+        doneTasks: next,
+        activeStageId: activeId,
+        finderAnswers: finder,
+      });
+    }
   };
+
 
   const scrollToRoadmap = () => {
     const el = document.getElementById("roadmap-section");
@@ -272,6 +310,28 @@ export default function Home() {
               onClick={() => setFinderOpen((v) => !v)}
             >
               <Gauge className="size-4" /> Focus Finder
+            </Button>
+
+            {/* Founder Auth / Profile Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              aria-label={user ? `Founder Profile: ${user.displayName}` : "Founder အကောင့် ချိတ်ဆက်ရန်"}
+              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] gap-1.5"
+              onClick={() => setAuthOpen(true)}
+            >
+              <Users className="size-4 text-[#1da98a]" />
+              <span className="max-w-[90px] truncate text-xs sm:max-w-[140px]">
+                {user ? user.displayName : "Sign In / Join"}
+              </span>
+              {user && (
+                <span
+                  className={`size-2 rounded-full ${
+                    isConfigured ? "bg-[#1da98a]" : "bg-[#f6c85f]"
+                  }`}
+                  title={isConfigured ? "Firebase Synced" : "Local / Offline Mode"}
+                />
+              )}
             </Button>
           </div>
         </div>
@@ -1039,10 +1099,15 @@ export default function Home() {
           }}
           initialStageId={activeId}
         />
+        <AuthModal
+          isOpen={authOpen}
+          onClose={() => setAuthOpen(false)}
+        />
       </Suspense>
     </main>
   );
 }
+
 
 function MiniStat({ n, label }: { n: string; label: string }) {
   return (

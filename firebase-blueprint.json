@@ -1,0 +1,37 @@
+{
+  "entities": {
+    "userProgress": {
+      "title": "User Progress",
+      "description": "Founder checklist progress, active roadmap stage, and focus finder state",
+      "type": "object",
+      "properties": {
+        "doneTasks": {
+          "type": "object",
+          "description": "Map of task keys to boolean completion state"
+        },
+        "activeStageId": {
+          "type": "string",
+          "description": "Current active stage identifier (e.g. problem, customer, offer)"
+        },
+        "finderAnswers": {
+          "type": "object",
+          "description": "Focus finder yes/no answers"
+        },
+        "updatedAt": {
+          "type": "number",
+          "description": "Timestamp of the last update"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Founder or Startup display name"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}/progress/current": {
+      "schema": "userProgress",
+      "description": "User specific roadmap and task progress document"
+    }
+  }
+}
