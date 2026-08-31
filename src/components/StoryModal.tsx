@@ -69,11 +69,16 @@ export function StoryModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="story-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-md sm:p-6 animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 p-0 backdrop-blur-md md:items-center md:p-6 animate-in fade-in duration-200"
     >
-      <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-[28px] border border-[#26304a] bg-[#0b1020] text-[#eef3ff] shadow-[0_25px_70px_rgba(0,0,0,0.7)]">
+      <div className="relative flex max-h-[90vh] md:max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border-t border-x border-[#26304a] bg-[#0b1020] text-[#eef3ff] shadow-[0_25px_70px_rgba(0,0,0,0.7)] md:rounded-[28px] md:border animate-in slide-in-from-bottom-6 md:slide-in-from-bottom-0 md:zoom-in-95 duration-200">
+        {/* Mobile Drag Handle Bar */}
+        <div className="bg-[#121a2f] pt-2.5 pb-0.5 md:hidden">
+          <div className="mx-auto h-1.5 w-12 rounded-full bg-[#39476b]" />
+        </div>
+
         {/* Top Header */}
-        <div className="flex items-center justify-between border-b border-[#26304a] bg-[#121a2f]/90 px-5 py-4 backdrop-blur sm:px-7">
+        <div className="flex items-center justify-between border-b border-[#26304a] bg-[#121a2f]/90 px-5 py-3.5 backdrop-blur sm:px-7 sm:py-4">
           <div className="flex items-center gap-3">
             <span className="grid size-9 place-items-center rounded-xl bg-[#4f7cff] text-white shadow-md shadow-blue-500/20">
               <BookOpen className="size-5" />

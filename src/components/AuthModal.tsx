@@ -70,9 +70,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, lastSaved
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-xs md:items-center md:p-4 animate-in fade-in duration-200"
     >
-      <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-[#d9d5ca] bg-white p-6 shadow-2xl transition-all">
+      <div className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl border-t border-x border-[#d9d5ca] bg-white p-6 shadow-2xl transition-all md:rounded-3xl md:border animate-in slide-in-from-bottom-6 md:slide-in-from-bottom-0 md:zoom-in-95 duration-200">
+        {/* Mobile Drag Handle */}
+        <div className="mx-auto -mt-2 mb-3.5 h-1.5 w-12 rounded-full bg-[#d0cbbe] md:hidden" />
+
         {/* Close Button */}
         <button
           type="button"

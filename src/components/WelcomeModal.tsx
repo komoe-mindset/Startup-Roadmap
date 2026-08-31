@@ -52,11 +52,14 @@ export function WelcomeModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="welcome-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-end justify-center p-0 bg-black/60 backdrop-blur-sm md:items-center md:p-4 animate-in fade-in duration-200"
     >
-      <div className="relative w-full max-w-lg overflow-hidden rounded-[28px] border border-[#d9d5ca] bg-[#fbfaf7] text-[#14213d] shadow-2xl animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-t-2xl border-t border-x border-[#d9d5ca] bg-[#fbfaf7] text-[#14213d] shadow-2xl md:rounded-[28px] md:border animate-in slide-in-from-bottom-6 md:slide-in-from-bottom-0 md:zoom-in-95 duration-200">
         {/* Header decoration */}
-        <div className="bg-[#14213d] px-6 py-6 text-white sm:px-7">
+        <div className="bg-[#14213d] px-6 pb-6 pt-3.5 text-white sm:px-7 md:pt-6">
+          {/* Mobile Drag Handle */}
+          <div className="mx-auto mb-3.5 h-1.5 w-12 rounded-full bg-white/25 md:hidden" />
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="grid size-8 place-items-center rounded-xl bg-white/10 text-[#f6c85f]">
