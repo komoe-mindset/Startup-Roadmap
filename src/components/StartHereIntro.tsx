@@ -123,8 +123,11 @@ export function StartHereIntro({
               </h2>
             </div>
             <button
+              type="button"
+              aria-expanded={detailsOpen}
+              aria-label={detailsOpen ? "အကျဉ်းချုံ့မည် (Collapse details)" : "အသေးစိတ်ဖွင့်မည် (Expand details)"}
               onClick={() => setDetailsOpen((v) => !v)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d5ca] bg-white px-3 py-1.5 text-xs font-bold text-[#687085] transition hover:bg-[#f3f1eb] hover:text-[#14213d]"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d5ca] bg-white px-3 py-1.5 text-xs font-bold text-[#687085] transition hover:bg-[#f3f1eb] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer"
             >
               <span>{detailsOpen ? "အကျဉ်းချုံ့မည်" : "အသေးစိတ်ဖွင့်မည်"}</span>
               <ChevronDown
@@ -150,11 +153,13 @@ export function StartHereIntro({
             {QUESTIONS.map((q) => (
               <button
                 key={q.id}
+                type="button"
+                aria-label={`Stage ${q.number}: ${q.tag} - ${q.question}`}
                 onClick={() => {
                   onSelectStage(q.id);
                   onScrollToRoadmap();
                 }}
-                className="group flex flex-col justify-between rounded-2xl border border-[#dfdcd3] bg-white p-4 text-left shadow-xs transition-all hover:border-[#14213d] hover:shadow-md"
+                className="group flex flex-col justify-between rounded-2xl border border-[#dfdcd3] bg-white p-4 text-left shadow-xs transition-all hover:border-[#14213d] hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer"
               >
                 <div>
                   <div className="flex items-center justify-between">

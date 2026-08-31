@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
   ClipboardCheck, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Megaphone, RefreshCw,
@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { StoryModal } from "@/components/StoryModal";
 import { GeminiGemIcon } from "@/components/GeminiGemIcon";
 import { StartHereIntro } from "@/components/StartHereIntro";
-import { WelcomeModal } from "@/components/WelcomeModal";
 import { STORY_STAGES } from "@/data/storyData";
+
+// Lazy-loaded modal components to reduce initial bundle size and boost LCP/FCP performance
+const StoryModal = lazy(() => import("@/components/StoryModal"));
+const WelcomeModal = lazy(() => import("@/components/WelcomeModal"));
 
 export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
 
@@ -178,23 +180,25 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#f3f1eb] text-[#14213d]">
       {/* Welcome / Onboarding Modal for First Time Visitors */}
-      <WelcomeModal
-        isOpen={welcomeOpen}
-        onClose={() => setWelcomeOpen(false)}
-        onStartIntroduction={() => {
-          setWelcomeOpen(false);
-          setTimeout(scrollToStartHere, 100);
-        }}
-        onStartStage1={() => {
-          setStage("problem");
-          setWelcomeOpen(false);
-          setTimeout(scrollToRoadmap, 100);
-        }}
-        onReadStory={() => {
-          setWelcomeOpen(false);
-          setStoryOpen(true);
-        }}
-      />
+      <Suspense fallback={null}>
+        <WelcomeModal
+          isOpen={welcomeOpen}
+          onClose={() => setWelcomeOpen(false)}
+          onStartIntroduction={() => {
+            setWelcomeOpen(false);
+            setTimeout(scrollToStartHere, 100);
+          }}
+          onStartStage1={() => {
+            setStage("problem");
+            setWelcomeOpen(false);
+            setTimeout(scrollToRoadmap, 100);
+          }}
+          onReadStory={() => {
+            setWelcomeOpen(false);
+            setStoryOpen(true);
+          }}
+        />
+      </Suspense>
 
       {/* Sticky Top Header */}
       <header className="sticky top-0 z-40 border-b border-[#d9d5ca] bg-[#f3f1eb]/92 backdrop-blur-xl">
@@ -214,7 +218,7 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="hidden w-36 lg:block">
+            <div className="hidden w-36 lg:block" aria-label="Action progress summary">
               <div className="mb-1 flex justify-between text-[10px] font-bold text-[#687085]">
                 <span>ACTION PROGRESS</span>
                 <span>{percent}%</span>
@@ -228,7 +232,8 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden sm:inline-flex rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white"
+              aria-label="Scroll to Start Here Guide"
+              className="hidden sm:inline-flex rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
               onClick={scrollToStartHere}
             >
               <Rocket className="size-3.5 text-[#e8693e]" /> Start Here
@@ -238,8 +243,9 @@ export default function Home() {
               href={GEMINI_ASSISTANT_URL}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Ask Gemini Custom Gem - Startup Mentor in new tab"
               title="Ask Gemini Custom Gem - Startup Mentor"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-gradient-to-r from-[#f5f0ff] to-[#eef4ff] px-3 py-1.5 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
             >
               <GeminiGemIcon className="size-4" />
               <span className="hidden sm:inline">AI Gem Mentor</span>
@@ -250,7 +256,8 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-xl border-[#ccc7bb] bg-white/70 font-bold shadow-xs hover:bg-white"
+              aria-label="Open Story Mode modal"
+              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
               onClick={() => setStoryOpen(true)}
             >
               <BookOpen className="size-4 text-[#4f7cff]" /> Story Mode
@@ -259,7 +266,9 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-xl border-[#ccc7bb] bg-white/60 font-bold"
+              aria-expanded={finderOpen}
+              aria-label={finderOpen ? "Collapse 60-Second Focus Finder" : "Expand 60-Second Focus Finder"}
+              className="rounded-xl border-[#ccc7bb] bg-white/90 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d]"
               onClick={() => setFinderOpen((v) => !v)}
             >
               <Gauge className="size-4" /> Focus Finder
@@ -286,6 +295,7 @@ export default function Home() {
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Button
+                  aria-label="Start Here Introduction"
                   onClick={scrollToStartHere}
                   className="rounded-xl bg-[#f6c85f] px-4 py-2 text-xs font-black text-[#14213d] hover:bg-[#e0b347]"
                 >
@@ -293,8 +303,10 @@ export default function Home() {
                 </Button>
 
                 <button
+                  type="button"
+                  aria-label="Ko Moe Story Modal ဖတ်ရန်"
                   onClick={() => setStoryOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#f6c85f] cursor-pointer"
                 >
                   <BookOpen className="size-4 text-[#f6c85f]" /> Ko Moe ရဲ့ Story ဖတ်ရန်{" "}
                   <ArrowRight className="size-3.5" />
@@ -302,6 +314,7 @@ export default function Home() {
 
                 <Button
                   variant="outline"
+                  aria-label="Explore 8 Stages Roadmap"
                   onClick={scrollToRoadmap}
                   className="rounded-xl border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/15"
                 >
@@ -312,7 +325,8 @@ export default function Home() {
                   href={GEMINI_ASSISTANT_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80"
+                  aria-label="Gemini Custom Gem ဖြင့် တိုင်ပင်ရန် in new tab"
+                  className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-400"
                 >
                   <GeminiGemIcon className="size-4" />
                   <span>Gemini Custom Gem ဖြင့် တိုင်ပင်ရန်</span>
@@ -329,18 +343,26 @@ export default function Home() {
 
           {/* Quick Stage Bar */}
           <div className="border-t border-white/10 bg-white/[.04] p-3 sm:p-5">
-            <div className="grid grid-cols-4 gap-2 lg:grid-cols-8">
+            <div
+              role="tablist"
+              aria-label="Quick stage navigation"
+              className="grid grid-cols-4 gap-2 lg:grid-cols-8"
+            >
               {stages.map((s, i) => {
                 const Icon = s.icon;
                 const selected = s.id === activeId;
                 return (
                   <button
                     key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    aria-label={`Stage ${s.number}: ${s.title}`}
                     onClick={() => {
                       setStage(s.id);
                       scrollToRoadmap();
                     }}
-                    className={`group relative rounded-2xl border p-3 text-left transition-all ${
+                    className={`group relative rounded-2xl border p-3 text-left transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer ${
                       selected
                         ? "border-white bg-white text-[#14213d] shadow-xl"
                         : "border-white/10 bg-white/[.04] hover:bg-white/[.09]"
@@ -407,9 +429,10 @@ export default function Home() {
                     </p>
                     <div className="flex gap-1">
                       <button
-                        aria-label="ရပြီ"
+                        type="button"
+                        aria-label={`မေးခွန်း ${i + 1} အတွက် 'ရပြီ' ဟု ဖြေပါ`}
                         onClick={() => setFinder({ ...finder, [id]: "yes" })}
-                        className={`grid size-8 place-items-center rounded-lg border text-xs transition ${
+                        className={`grid size-8 place-items-center rounded-lg border text-xs transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a] cursor-pointer ${
                           finder[id] === "yes"
                             ? "border-[#1da98a] bg-[#1da98a] text-white"
                             : "border-[#ddd8cc] bg-white"
@@ -418,9 +441,10 @@ export default function Home() {
                         <Check className="size-4" />
                       </button>
                       <button
-                        aria-label="မရသေး"
+                        type="button"
+                        aria-label={`မေးခွန်း ${i + 1} အတွက် 'မရသေး' ဟု ဖြေပါ`}
                         onClick={() => setFinder({ ...finder, [id]: "no" })}
-                        className={`rounded-lg border px-2 text-[10px] font-bold transition ${
+                        className={`rounded-lg border px-2 text-[10px] font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#e8693e] cursor-pointer ${
                           finder[id] === "no"
                             ? "border-[#e8693e] bg-[#e8693e] text-white"
                             : "border-[#ddd8cc] bg-white"
@@ -456,7 +480,8 @@ export default function Home() {
                   </div>
                   <p className="mt-4 text-sm leading-6">{focus.question}</p>
                   <Button
-                    className="mt-5 w-full rounded-xl bg-[#14213d]"
+                    aria-label={`Start Stage ${focus.number}: ${focus.title}`}
+                    className="mt-5 w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
                     onClick={() => {
                       setStage(focus.id);
                       setFinderOpen(false);
@@ -485,7 +510,7 @@ export default function Home() {
             <p className="px-3 pb-2 pt-2 text-[10px] font-black uppercase tracking-[.2em] text-[#8a8f9b]">
               The 8-stage map
             </p>
-            <nav className="space-y-1">
+            <nav role="tablist" aria-label="8-stage roadmap list" className="space-y-1">
               {stages.map((s) => {
                 const Icon = s.icon;
                 const selected = s.id === activeId;
@@ -493,8 +518,12 @@ export default function Home() {
                 return (
                   <button
                     key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    aria-label={`Stage ${s.number}: ${s.title} (${n} of 4 tasks completed)`}
                     onClick={() => setStage(s.id)}
-                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition ${
+                    className={`flex w-full items-center gap-3 rounded-2xl p-3 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer ${
                       selected
                         ? "bg-[#14213d] text-white shadow-lg"
                         : "hover:bg-[#f0eee8]"
@@ -542,7 +571,8 @@ export default function Home() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="mt-2 h-8 w-full rounded-lg text-[10px] text-[#687085]"
+                aria-label="Reset all task progress"
+                className="mt-2 h-8 w-full rounded-lg text-[10px] font-bold text-[#687085] hover:bg-[#e4e1d7] hover:text-[#14213d]"
                 onClick={() => {
                   setDone({});
                   try {
@@ -608,19 +638,20 @@ export default function Home() {
                 className="p-5 sm:p-8"
               >
                 <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-[#ece9e1] p-1.5 sm:grid-cols-4 sm:gap-0">
-                  <TabsTrigger value="understand" className="h-11 rounded-xl text-xs">
+                  <TabsTrigger value="understand" aria-label="Understand stage concepts tab" className="h-11 rounded-xl text-xs">
                     📖 Understand
                   </TabsTrigger>
                   <TabsTrigger
                     value="story"
+                    aria-label="Ko Moe Story tab"
                     className="flex h-11 items-center gap-1.5 rounded-xl text-xs"
                   >
                     <BookOpen className="size-3.5 text-[#4f7cff]" /> 📖 Story (Ko Moe)
                   </TabsTrigger>
-                  <TabsTrigger value="do" className="h-11 rounded-xl text-xs">
+                  <TabsTrigger value="do" aria-label="Action items tab" className="h-11 rounded-xl text-xs">
                     ✅ Do it ({active.actions.filter((_, i) => done[`${active.id}-${i}`]).length}/4)
                   </TabsTrigger>
-                  <TabsTrigger value="gate" className="h-11 rounded-xl text-xs">
+                  <TabsTrigger value="gate" aria-label="Pass the Gate criteria tab" className="h-11 rounded-xl text-xs">
                     ⚖️ Pass the Gate
                   </TabsTrigger>
                 </TabsList>
@@ -691,7 +722,8 @@ export default function Home() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#8ea8df] hover:bg-[#253250] hover:text-white"
+                        aria-label="Open full Story Mode modal"
+                        className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#bcd3ff] hover:bg-[#253250] hover:text-white"
                         onClick={() => setStoryOpen(true)}
                       >
                         Story Mode အပြည့်ဖွင့်မည် <ArrowRight className="size-3.5" />
@@ -746,7 +778,8 @@ export default function Home() {
                         href={GEMINI_ASSISTANT_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#4f7cff]/40 bg-[#4f7cff]/20 px-3 py-1 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#4f7cff] hover:text-white"
+                        aria-label={`Ask Gemini Gem about stage ${active.title} in new tab`}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#4f7cff]/40 bg-[#4f7cff]/20 px-3 py-1 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#4f7cff] hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#4f7cff]"
                       >
                         <span>Gemini Gem မေးမယ်</span>
                         <ExternalLink className="size-3" />
@@ -769,8 +802,10 @@ export default function Home() {
                     {active.actions.map((a, i) => {
                       const key = `${active.id}-${i}`;
                       const checked = !!done[key];
+                      const inputId = `action-task-${key}`;
                       return (
                         <label
+                          htmlFor={inputId}
                           key={a.title}
                           className={`flex cursor-pointer gap-4 rounded-2xl border p-4 transition ${
                             checked
@@ -779,6 +814,8 @@ export default function Home() {
                           }`}
                         >
                           <Checkbox
+                            id={inputId}
+                            aria-label={`Task ${i + 1}: ${a.title}`}
                             checked={checked}
                             onCheckedChange={(v) => toggle(key, v === true)}
                             className="mt-1 size-5"
@@ -841,7 +878,8 @@ export default function Home() {
                         Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။
                       </p>
                       <Button
-                        className="mt-5 w-full rounded-xl bg-[#14213d]"
+                        aria-label="Go to next stage"
+                        className="mt-5 w-full rounded-xl bg-[#14213d] text-white font-bold hover:bg-[#203156]"
                         onClick={() => {
                           setStage(stages[(idx + 1) % 8].id);
                           scrollToRoadmap();
@@ -874,7 +912,8 @@ export default function Home() {
                     href={GEMINI_ASSISTANT_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff]"
+                    aria-label="Ask Gemini Custom Gem mentor in new tab"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9d0ea] bg-white px-2.5 py-1 text-[11px] font-bold text-[#53389e] shadow-xs transition hover:border-[#bfa8eb] hover:bg-[#fcfaff] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
                     title="Ask Gemini Custom Gem"
                   >
                     <GeminiGemIcon className="size-3.5" />
@@ -939,7 +978,8 @@ export default function Home() {
                   </p>
                 </div>
                 <Button
-                  className="shrink-0 rounded-xl bg-white text-[#14213d] hover:bg-[#f3f1eb]"
+                  aria-label="Advance to Next Stage"
+                  className="shrink-0 rounded-xl bg-white font-black text-[#14213d] hover:bg-[#f3f1eb]"
                   onClick={() => {
                     setStage(stages[(idx + 1) % 8].id);
                     scrollToRoadmap();
@@ -989,15 +1029,17 @@ export default function Home() {
       </div>
 
       {/* Full Screen Interactive Story Modal */}
-      <StoryModal
-        isOpen={storyOpen}
-        onClose={() => setStoryOpen(false)}
-        onSelectStage={(id) => {
-          setStage(id);
-          scrollToRoadmap();
-        }}
-        initialStageId={activeId}
-      />
+      <Suspense fallback={null}>
+        <StoryModal
+          isOpen={storyOpen}
+          onClose={() => setStoryOpen(false)}
+          onSelectStage={(id) => {
+            setStage(id);
+            scrollToRoadmap();
+          }}
+          initialStageId={activeId}
+        />
+      </Suspense>
     </main>
   );
 }

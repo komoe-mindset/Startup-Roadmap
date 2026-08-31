@@ -65,7 +65,12 @@ export function StoryModal({
   const percent = Math.round(((currentIdx + 1) / STORY_STAGES.length) * 100);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-md sm:p-6 animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="story-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/75 p-3 backdrop-blur-md sm:p-6 animate-in fade-in duration-200"
+    >
       <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-[28px] border border-[#26304a] bg-[#0b1020] text-[#eef3ff] shadow-[0_25px_70px_rgba(0,0,0,0.7)]">
         {/* Top Header */}
         <div className="flex items-center justify-between border-b border-[#26304a] bg-[#121a2f]/90 px-5 py-4 backdrop-blur sm:px-7">
@@ -77,7 +82,7 @@ export function StoryModal({
               <p className="text-[10px] font-black uppercase tracking-[.22em] text-[#8ea8df]">
                 AI STARTUP STORY MODE
               </p>
-              <h2 className="text-sm font-extrabold sm:text-base">
+              <h2 id="story-modal-title" className="text-sm font-extrabold sm:text-base">
                 Ko Moe ရဲ့ AI Startup Journey
               </h2>
             </div>
@@ -85,10 +90,17 @@ export function StoryModal({
 
           <div className="flex items-center gap-2 sm:gap-3">
             {/* View Mode Toggle */}
-            <div className="hidden items-center rounded-xl border border-[#26304a] bg-[#0b1020] p-0.5 sm:flex">
+            <div
+              role="group"
+              aria-label="Story view mode toggle"
+              className="hidden items-center rounded-xl border border-[#26304a] bg-[#0b1020] p-0.5 sm:flex"
+            >
               <button
+                type="button"
+                aria-pressed={viewMode === "stepper"}
+                aria-label="အဆင့်လိုက်ကြည့်မည်"
                 onClick={() => setViewMode("stepper")}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#4f7cff] cursor-pointer ${
                   viewMode === "stepper"
                     ? "bg-[#253250] text-white"
                     : "text-[#8ea8df] hover:text-white"
@@ -97,8 +109,11 @@ export function StoryModal({
                 <Compass className="size-3.5" /> အဆင့်လိုက်
               </button>
               <button
+                type="button"
+                aria-pressed={viewMode === "all"}
+                aria-label="အကုန်ဖတ်မည်"
                 onClick={() => setViewMode("all")}
-                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#4f7cff] cursor-pointer ${
                   viewMode === "all"
                     ? "bg-[#253250] text-white"
                     : "text-[#8ea8df] hover:text-white"
@@ -112,7 +127,8 @@ export function StoryModal({
               href={GEMINI_ASSISTANT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-xl border border-[#7c3aed]/50 bg-gradient-to-r from-[#4f46e5]/40 to-[#7c3aed]/40 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:border-[#a78bfa] hover:from-[#4f46e5]/60 hover:to-[#7c3aed]/60"
+              aria-label="Open Gemini Custom Gem for personalized AI Startup guidance in new tab"
+              className="flex items-center gap-1.5 rounded-xl border border-[#7c3aed]/50 bg-gradient-to-r from-[#4f46e5]/40 to-[#7c3aed]/40 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:border-[#a78bfa] hover:from-[#4f46e5]/60 hover:to-[#7c3aed]/60 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-400"
               title="Open Gemini Custom Gem for personalized AI Startup guidance"
             >
               <GeminiGemIcon className="size-3.5" />
@@ -124,15 +140,17 @@ export function StoryModal({
               href="./story.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden items-center gap-1 rounded-xl border border-[#26304a] bg-[#18223b] px-3 py-1.5 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#253250] hover:text-white md:flex"
+              aria-label="Open standalone offline HTML page in new tab"
+              className="hidden items-center gap-1 rounded-xl border border-[#26304a] bg-[#18223b] px-3 py-1.5 text-xs font-bold text-[#bcd3ff] transition hover:bg-[#253250] hover:text-white md:flex outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#4f7cff]"
               title="Open standalone offline HTML page in new tab"
             >
               <ExternalLink className="size-3.5" /> Standalone HTML
             </a>
 
             <button
+              type="button"
               onClick={onClose}
-              className="grid size-9 place-items-center rounded-xl border border-[#26304a] bg-[#18223b] text-[#aeb9d6] transition hover:bg-[#253250] hover:text-white"
+              className="grid size-9 place-items-center rounded-xl border border-[#26304a] bg-[#18223b] text-[#aeb9d6] transition hover:bg-[#253250] hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#4f7cff] cursor-pointer"
               aria-label="Close story modal"
             >
               <X className="size-5" />
@@ -205,12 +223,20 @@ export function StoryModal({
               </div>
 
               {/* Stage Quick Chips */}
-              <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              <div
+                role="tablist"
+                aria-label="Story stages"
+                className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none"
+              >
                 {STORY_STAGES.map((s, idx) => (
                   <button
                     key={s.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={idx === currentIdx}
+                    aria-label={`Stage ${s.number}: ${s.title}`}
                     onClick={() => setCurrentIdx(idx)}
-                    className={`shrink-0 rounded-xl px-3 py-1.5 text-[11px] font-extrabold transition ${
+                    className={`shrink-0 rounded-xl px-3 py-1.5 text-[11px] font-extrabold transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#6ea8fe] cursor-pointer ${
                       idx === currentIdx
                         ? "bg-[#6ea8fe] text-[#0b1020]"
                         : "border border-[#26304a] bg-[#121a2f] text-[#8ea8df] hover:text-white"
@@ -436,6 +462,7 @@ export function StoryModal({
               size="sm"
               className="rounded-xl border-[#26304a] bg-[#18223b] text-white hover:bg-[#253250]"
               onClick={onClose}
+              aria-label="Close story modal"
             >
               ပိတ်မည်
             </Button>
@@ -445,3 +472,5 @@ export function StoryModal({
     </div>
   );
 }
+
+export default StoryModal;

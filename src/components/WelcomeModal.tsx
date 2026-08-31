@@ -51,6 +51,7 @@ export function WelcomeModal({
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby="welcome-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
     >
       <div className="relative w-full max-w-lg overflow-hidden rounded-[28px] border border-[#d9d5ca] bg-[#fbfaf7] text-[#14213d] shadow-2xl animate-in zoom-in-95 duration-200">
@@ -66,14 +67,15 @@ export function WelcomeModal({
               </span>
             </div>
             <button
+              type="button"
               onClick={handleDismiss}
-              className="grid size-8 place-items-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition"
-              aria-label="Close"
+              className="grid size-8 place-items-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer"
+              aria-label="Close welcome modal"
             >
               <X className="size-4" />
             </button>
           </div>
-          <h2 className="mt-3 text-xl font-black sm:text-2xl">
+          <h2 id="welcome-modal-title" className="mt-3 text-xl font-black sm:text-2xl">
             AI Startup Roadmap မှ ကြိုဆိုပါတယ် 👋
           </h2>
         </div>
@@ -99,6 +101,7 @@ export function WelcomeModal({
             <Button
               className="w-full justify-between rounded-xl bg-[#14213d] text-white hover:bg-[#203156] py-5 font-extrabold"
               onClick={() => handleAction(onStartIntroduction)}
+              aria-label="Start with 2-Minute Introduction"
             >
               <span className="flex items-center gap-2">
                 <Rocket className="size-4 text-[#f6c85f]" />
@@ -112,6 +115,7 @@ export function WelcomeModal({
                 variant="outline"
                 className="justify-center rounded-xl border-[#d0cbbe] bg-white font-bold text-[#14213d] hover:bg-[#f3f1eb]"
                 onClick={() => handleAction(onStartStage1)}
+                aria-label="Start Stage 1 Problem Validation"
               >
                 <Compass className="mr-1.5 size-4 text-[#e8693e]" />
                 Start Stage 1
@@ -121,6 +125,7 @@ export function WelcomeModal({
                 variant="outline"
                 className="justify-center rounded-xl border-[#d0cbbe] bg-white font-bold text-[#14213d] hover:bg-[#f3f1eb]"
                 onClick={() => handleAction(onReadStory)}
+                aria-label="Read Ko Moe Story Mode"
               >
                 <BookOpen className="mr-1.5 size-4 text-[#4f7cff]" />
                 Read Ko Moe Story
@@ -133,15 +138,18 @@ export function WelcomeModal({
             <label className="flex cursor-pointer items-center gap-2 text-[#687085]">
               <input
                 type="checkbox"
+                aria-label="နောက်တစ်ခါ မပြတော့ပါ (Do not show this orientation again)"
                 checked={dontShowAgain}
                 onChange={(e) => setDontShowAgain(e.target.checked)}
-                className="size-4 rounded border-gray-300 text-[#14213d] focus:ring-0"
+                className="size-4 rounded border-gray-300 text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d]"
               />
               <span>နောက်တစ်ခါ မပြတော့ပါ</span>
             </label>
             <button
+              type="button"
               onClick={handleDismiss}
-              className="font-bold text-[#687085] hover:text-[#14213d]"
+              className="font-bold text-[#687085] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] rounded px-1 cursor-pointer"
+              aria-label="Skip orientation modal"
             >
               Skip
             </button>
@@ -151,3 +159,5 @@ export function WelcomeModal({
     </div>
   );
 }
+
+export default WelcomeModal;
