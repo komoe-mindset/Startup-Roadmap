@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
-  ClipboardCheck, CloudCheck, CloudOff, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Loader2,
+  ClipboardCheck, CloudCheck, CloudOff, Compass, ExternalLink, Gauge, Handshake, Headphones, Layers, Lightbulb, Loader2,
   Megaphone, RefreshCw, Rocket, Scale, Search, Settings2, ShieldCheck, Sparkles, Target, Users, Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeminiGemIcon } from "@/components/GeminiGemIcon";
 import { StartHereIntro } from "@/components/StartHereIntro";
+import { PodcastPlayer } from "@/components/PodcastPlayer";
 import { STORY_STAGES } from "@/data/storyData";
 
 // Lazy-loaded modal components to reduce initial bundle size and boost LCP/FCP performance
@@ -392,6 +393,19 @@ export default function Home() {
     el?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToPodcast = () => {
+    const el = document.getElementById("podcast-section");
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToFocusFinder = () => {
+    setFinderOpen(true);
+    setTimeout(() => {
+      const el = document.getElementById("focus-finder-section");
+      el?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  };
+
   const doneCount = Object.values(done).filter(Boolean).length;
   const total = stages.reduce((n, s) => n + s.actions.length, 0);
   const percent = Math.round((doneCount / total) * 100);
@@ -420,6 +434,10 @@ export default function Home() {
           onReadStory={() => {
             setWelcomeOpen(false);
             setStoryOpen(true);
+          }}
+          onListenPodcast={() => {
+            setWelcomeOpen(false);
+            setTimeout(scrollToPodcast, 100);
           }}
         />
       </Suspense>
@@ -591,6 +609,16 @@ export default function Home() {
                 💡 အဆင့်အားလုံးကို တစ်ပြိုင်နက်တည်း မလုပ်ပါနှင့်။ သင့်လုပ်ငန်းကို လက်ရှိတားဆီးနေသော အဆင့်ကို အရင်ရှာဖွေပြီး လက်တွေ့သက်သေရရှိမှ နောက်အဆင့်သို့ ဆက်လက်သွားပါ။
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  aria-label="Myanmar Podcast နားထောင်ရန်"
+                  onClick={scrollToPodcast}
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#f6c85f]/50 bg-[#f6c85f]/20 px-4 py-2 text-xs font-black text-[#f6c85f] shadow-sm transition hover:bg-[#f6c85f] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#f6c85f] cursor-pointer"
+                >
+                  <Headphones className="size-3.5" />
+                  <span>Podcast နားထောင်မည်</span>
+                </button>
+
                 <Button
                   aria-label="Start Here Introduction"
                   onClick={scrollToStartHere}
@@ -694,16 +722,20 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 1-6. BEGINNER START HERE INTRODUCTION SECTION */}
-        <StartHereIntro
-          onSelectStage={(id) => setStage(id)}
-          onOpenStory={() => setStoryOpen(true)}
-          onScrollToRoadmap={scrollToRoadmap}
-        />
+        {/* 1. PODCAST: LISTEN FIRST SECTION */}
+        <div id="podcast-section">
+          <PodcastPlayer
+            onScrollToFocusFinder={scrollToFocusFinder}
+            onScrollToRoadmap={scrollToRoadmap}
+          />
+        </div>
 
-        {/* Focus Finder Widget */}
+        {/* 2. 60-SECOND FOCUS FINDER WIDGET */}
         {finderOpen && (
-          <section className="grid gap-5 rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 shadow-sm lg:grid-cols-[1.35fr_.65fr] lg:p-7">
+          <section
+            id="focus-finder-section"
+            className="grid gap-5 rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 shadow-sm lg:grid-cols-[1.35fr_.65fr] lg:p-7"
+          >
             <div>
               <div className="flex items-center gap-2">
                 <Gauge className="size-5 text-[#8c70db]" />
@@ -796,6 +828,15 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* 3. BEGINNER START HERE INTRODUCTION SECTION */}
+        <div id="start-here-section">
+          <StartHereIntro
+            onSelectStage={(id) => setStage(id)}
+            onOpenStory={() => setStoryOpen(true)}
+            onScrollToRoadmap={scrollToRoadmap}
+          />
+        </div>
 
         {/* 8-Stage Roadmap Explorer Layout */}
         <div

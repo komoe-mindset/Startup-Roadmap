@@ -3,6 +3,7 @@ import {
   ArrowRight,
   BookOpen,
   Compass,
+  Headphones,
   Rocket,
   Sparkles,
   X,
@@ -15,6 +16,7 @@ interface WelcomeModalProps {
   onStartIntroduction: () => void;
   onStartStage1: () => void;
   onReadStory: () => void;
+  onListenPodcast?: () => void;
 }
 
 export function WelcomeModal({
@@ -23,6 +25,7 @@ export function WelcomeModal({
   onStartIntroduction,
   onStartStage1,
   onReadStory,
+  onListenPodcast,
 }: WelcomeModalProps) {
   const [dontShowAgain, setDontShowAgain] = useState(true);
 
@@ -104,6 +107,21 @@ export function WelcomeModal({
 
           {/* Action Buttons */}
           <div className="mt-6 space-y-2.5 pt-2">
+            {onListenPodcast && (
+              <Button
+                variant="outline"
+                className="w-full justify-between rounded-xl border-[#8c70db]/40 bg-[#8c70db]/10 py-5 font-extrabold text-[#53389e] hover:bg-[#8c70db]/20"
+                onClick={() => handleAction(onListenPodcast)}
+                aria-label="Podcast အရင်နားထောင်မယ်"
+              >
+                <span className="flex items-center gap-2">
+                  <Headphones className="size-4 text-[#8c70db]" />
+                  🎧 Podcast အရင်နားထောင်မယ်
+                </span>
+                <ArrowRight className="size-4" />
+              </Button>
+            )}
+
             <Button
               className="w-full justify-between rounded-xl bg-[#14213d] text-white hover:bg-[#203156] py-5 font-extrabold"
               onClick={() => handleAction(onStartIntroduction)}
