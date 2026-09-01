@@ -1,5 +1,5 @@
 export const PODCAST_PRIMARY_AUDIO_URL =
-  "https://pub-bcb2c09c2b684d8fadaf99424e9eb9d0.r2.dev/startup.mp3";
+  "https://startup-roadmap-media.komoe.org/startup.mp3";
 
 export const PODCAST_GOOGLE_DRIVE_PREVIEW_URL = "";
 
