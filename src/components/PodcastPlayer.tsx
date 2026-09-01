@@ -12,12 +12,12 @@ import {
   Layers,
   AlertCircle,
   X,
-  Radio,
   CheckCircle2,
   Bookmark,
 } from "lucide-react";
 import {
-  PODCAST_AUDIO_URL,
+  PODCAST_PRIMARY_AUDIO_URL,
+  PODCAST_GOOGLE_DRIVE_PREVIEW_URL,
   PODCAST_TOPICS,
   PODCAST_METADATA_BADGES,
 } from "../data/podcastData";
@@ -39,7 +39,7 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [savedPosition, setSavedPosition] = useState<number | null>(null);
@@ -113,7 +113,7 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     }
   }, []);
 
-  // Audio Event Handlers
+  // Audio Event Handlers (Single Source of Truth)
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
       const dur = audioRef.current.duration;
@@ -216,24 +216,6 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
 
   return (
     <div ref={containerRef} className="space-y-4">
-      {/* Hidden/Native Audio Element */}
-      <audio
-        ref={audioRef}
-        preload="metadata"
-        onLoadedMetadata={handleLoadedMetadata}
-        onTimeUpdate={handleTimeUpdate}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onWaiting={handleWaiting}
-        onPlaying={handlePlaying}
-        onEnded={handleEnded}
-        onError={handleError}
-        className="hidden"
-      >
-        <source src={PODCAST_AUDIO_URL} type="audio/mpeg" />
-        သင့် Browser မှာ Audio Player ကို အသုံးပြု၍မရပါ။
-      </audio>
-
       {/* Main Podcast Card */}
       <section
         aria-label="Myanmar Startup Roadmap Podcast"
@@ -289,15 +271,28 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                 <AlertCircle className="size-4 shrink-0 text-rose-400 mt-0.5" />
                 <div className="space-y-1">
                   <p>{errorMessage}</p>
-                  <a
-                    href={PODCAST_AUDIO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-bold text-rose-300 underline hover:text-white"
-                  >
-                    <span>Audio Player အလုပ်မလုပ်ပါက MP3 ကို တိုက်ရိုက်ဖွင့်နားထောင်ပါ</span>
-                    <ExternalLink className="size-3" />
-                  </a>
+                  <div className="flex flex-wrap items-center gap-3 pt-1">
+                    <a
+                      href={PODCAST_PRIMARY_AUDIO_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-bold text-rose-300 underline hover:text-white"
+                    >
+                      <span>Primary MP3 တိုက်ရိုက်ဖွင့်နားထောင်ပါ</span>
+                      <ExternalLink className="size-3" />
+                    </a>
+                    {PODCAST_GOOGLE_DRIVE_PREVIEW_URL && (
+                      <a
+                        href={PODCAST_GOOGLE_DRIVE_PREVIEW_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-bold text-amber-300 underline hover:text-white"
+                      >
+                        <span>Google Drive Preview</span>
+                        <ExternalLink className="size-3" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -390,9 +385,10 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
               </button>
             </div>
 
-            {/* Native HTML5 Audio Controls Fallback/Option */}
+            {/* Exactly ONE HTML5 Audio Element as Single Source of Truth */}
             <div className="pt-2">
               <audio
+                ref={audioRef}
                 controls
                 preload="metadata"
                 className="w-full h-10 opacity-90 brightness-95"
@@ -400,13 +396,16 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
                 onTimeUpdate={handleTimeUpdate}
                 onPlay={handlePlay}
                 onPause={handlePause}
+                onWaiting={handleWaiting}
+                onPlaying={handlePlaying}
+                onEnded={handleEnded}
                 onError={handleError}
                 aria-label="Native audio controls for Startup Roadmap podcast"
               >
-                <source src={PODCAST_AUDIO_URL} type="audio/mpeg" />
+                <source src={PODCAST_PRIMARY_AUDIO_URL} type="audio/mpeg" />
                 သင့် Browser မှာ Audio Player ကို အသုံးပြု၍မရပါ။
                 <a
-                  href={PODCAST_AUDIO_URL}
+                  href={PODCAST_PRIMARY_AUDIO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="ml-2 underline text-[#f6c85f]"
@@ -503,7 +502,7 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
         </div>
       </section>
 
-      {/* Sticky Mini Player (appears when main card is scrolled out of view and audio is active) */}
+      {/* Sticky Mini Player (controls the EXACT same single audio element) */}
       {!isMainCardVisible && (isPlaying || currentTime > 0) && !isMiniPlayerDismissed && (
         <div
           role="region"
@@ -566,3 +565,4 @@ export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({
     </div>
   );
 };
+

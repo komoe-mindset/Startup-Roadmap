@@ -1,5 +1,9 @@
-export const PODCAST_AUDIO_URL =
+export const PODCAST_PRIMARY_AUDIO_URL =
   "https://pub-bcb2c09c2b684d8fadaf99424e9eb9d0.r2.dev/startup.mp3";
+
+export const PODCAST_GOOGLE_DRIVE_PREVIEW_URL = "";
+
+export const PODCAST_AUDIO_URL = PODCAST_PRIMARY_AUDIO_URL;
 
 export interface PodcastTopic {
   number: string;
