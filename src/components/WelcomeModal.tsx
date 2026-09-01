@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ArrowRight,
   BookOpen,
-  Check,
   Compass,
   Rocket,
   Sparkles,
@@ -73,7 +72,7 @@ export function WelcomeModal({
               type="button"
               onClick={handleDismiss}
               className="grid size-8 place-items-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white cursor-pointer"
-              aria-label="Close welcome modal"
+              aria-label="ပိတ်မည် (Close)"
             >
               <X className="size-4" />
             </button>
@@ -86,16 +85,20 @@ export function WelcomeModal({
         {/* Content */}
         <div className="p-6 sm:p-7 space-y-4">
           <div className="space-y-3 text-sm leading-relaxed text-[#4d566b]">
-            <p className="font-bold text-[#14213d]">
-              ဒီ Roadmap ကို 8 Stages အဖြစ် လေ့လာနိုင်ပါတယ်။ Startup Idea ရှိရုံနဲ့ မလုံလောက်ပါဘူး။
+            <p className="font-semibold text-[#14213d]">
+              Startup စိတ်ကူးရှိပေမယ့် ဘယ်ကစရမလဲ မသိသေးသူတွေအတွက် ဒီ Roadmap ကို ဖန်တီးထားပါတယ်။
+            </p>
+
+            <p className="text-xs leading-6 text-[#4d566b]">
+              Website သို့မဟုတ် App အရင်တည်ဆောက်ဖို့ထက် Customer ရဲ့ ပြဿနာကို အရင်နားလည်ရပါမယ်။ အဲဒီနောက် ရောင်းချနိုင်တဲ့ ဖြေရှင်းချက်၊ Customer ရရှိရေး၊ ရလဒ်ပေးရေးနဲ့ စနစ်တကျချဲ့ထွင်ရေးအထိ အဆင့်လိုက် လုပ်ဆောင်နိုင်ပါတယ်။
             </p>
 
             <div className="rounded-xl border border-[#dfdcd3] bg-[#f0eee8] p-3 text-center text-xs font-black text-[#14213d]">
-              Problem → Customer → Offer → Leads → Sales → Delivery → Operations → Growth
+              Problem → Customer → Offer → Leads → Sales → Delivery → Retention → Operations
             </div>
 
             <p className="font-medium text-[#14213d]">
-              ဆိုတဲ့ Business System တစ်ခုလုံးကို နားလည်ဖို့ ဒီ Website က ကူညီပေးပါမယ်။
+              အရင်ဆုံး မေးခွန်းတိုတွေကို ဖြေပြီး သင်လက်ရှိစတင်သင့်တဲ့အဆင့်ကို ရှာကြည့်ပါ။
             </p>
           </div>
 
@@ -104,11 +107,11 @@ export function WelcomeModal({
             <Button
               className="w-full justify-between rounded-xl bg-[#14213d] text-white hover:bg-[#203156] py-5 font-extrabold"
               onClick={() => handleAction(onStartIntroduction)}
-              aria-label="Start with 2-Minute Introduction"
+              aria-label="လက်ရှိအဆင့်ကို ရှာမယ်"
             >
               <span className="flex items-center gap-2">
                 <Rocket className="size-4 text-[#f6c85f]" />
-                2-Minute Introduction ဖတ်မယ်
+                လက်ရှိအဆင့်ကို ရှာမယ်
               </span>
               <ArrowRight className="size-4" />
             </Button>
@@ -118,20 +121,20 @@ export function WelcomeModal({
                 variant="outline"
                 className="justify-center rounded-xl border-[#d0cbbe] bg-white font-bold text-[#14213d] hover:bg-[#f3f1eb]"
                 onClick={() => handleAction(onStartStage1)}
-                aria-label="Start Stage 1 Problem Validation"
+                aria-label="Stage 1 ကနေ စမယ်"
               >
                 <Compass className="mr-1.5 size-4 text-[#e8693e]" />
-                Start Stage 1
+                Stage 1 ကနေ စမယ်
               </Button>
 
               <Button
                 variant="outline"
                 className="justify-center rounded-xl border-[#d0cbbe] bg-white font-bold text-[#14213d] hover:bg-[#f3f1eb]"
                 onClick={() => handleAction(onReadStory)}
-                aria-label="Read Ko Moe Story Mode"
+                aria-label="Ko Moe ရဲ့ Story ဖတ်မယ်"
               >
                 <BookOpen className="mr-1.5 size-4 text-[#4f7cff]" />
-                Read Ko Moe Story
+                Ko Moe Story ဖတ်မယ်
               </Button>
             </div>
           </div>
@@ -141,7 +144,7 @@ export function WelcomeModal({
             <label className="flex cursor-pointer items-center gap-2 text-[#687085]">
               <input
                 type="checkbox"
-                aria-label="နောက်တစ်ခါ မပြတော့ပါ (Do not show this orientation again)"
+                aria-label="နောက်တစ်ခါ မပြတော့ပါ"
                 checked={dontShowAgain}
                 onChange={(e) => setDontShowAgain(e.target.checked)}
                 className="size-4 rounded border-gray-300 text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d]"
@@ -152,9 +155,9 @@ export function WelcomeModal({
               type="button"
               onClick={handleDismiss}
               className="font-bold text-[#687085] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] rounded px-1 cursor-pointer"
-              aria-label="Skip orientation modal"
+              aria-label="ကျော်မည်"
             >
-              Skip
+              ကျော်မည်
             </button>
           </div>
         </div>

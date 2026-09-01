@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import {
   ArrowRight, BookOpen, Bot, Boxes, Check, CheckCircle2, ChevronRight, CircleDollarSign,
-  ClipboardCheck, Cloud, CloudCheck, CloudOff, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Loader2,
-  Megaphone, RefreshCw, Rocket, Scale, Search, Settings2, ShieldAlert, ShieldCheck, Sparkles, Target, Users, Workflow, Zap,
+  ClipboardCheck, CloudCheck, CloudOff, Compass, ExternalLink, Gauge, Handshake, Layers, Lightbulb, Loader2,
+  Megaphone, RefreshCw, Rocket, Scale, Search, Settings2, ShieldCheck, Sparkles, Target, Users, Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,96 +35,232 @@ type Stage = {
 
 const stages: Stage[] = [
   {
-    id:"problem", number:"01", title:"Problem Validation", mm:"Customer ပြဿနာကို သက်သေပြခြင်း", phase:"DISCOVER", color:"#e8693e", pale:"#fff0e9", icon:Search,
-    question:"တကယ့် Customer တွေမှာ မကြာခဏကြုံတွေ့ရပြီး မဖြစ်မနေ ဖြေရှင်းချင်တဲ့ ပြဿနာအစစ်အမှန် ရှိသလား?",
-    what:"Idea ကောင်းတယ်လို့ထင်ခြင်းမဟုတ်ဘဲ Customer ရဲ့ အပြုအမူ၊ လက်ရှိဖြေရှင်းနည်းနဲ့ ငွေပေးလိုမှုက ပြဿနာတကယ်ရှိကြောင်း ပြသခြင်းဖြစ်သည်။",
-    why:["Customer မလိုချင်သော Product ကို မတည်ဆောက်မိစေဘူး။","Problem ရဲ့ Frequency၊ Impact နဲ့ Urgency ကို နားလည်စေတယ်။","Customer အသုံးပြုတဲ့စကားလုံးတွေက နောက်ပိုင်း Marketing နဲ့ Sales ကို တိကျစေတယ်။"],
-    actions:[{title:"Customer 10 ယောက်ရွေးပါ",detail:"Solution မပြောခင် သင်စိတ်ဝင်စားတဲ့ Customer segment ကို သတ်မှတ်ပါ။"},{title:"Problem Interview လုပ်ပါ",detail:"လက်ရှိ Process၊ နောက်ဆုံးကြုံခဲ့ချိန်၊ သက်ရောက်မှုနဲ့ ဖြေရှင်းနည်းကို မေးပါ။"},{title:"Pattern ရှာပါ",detail:"ထပ်တလဲလဲဖြစ်သော Pain၊ Trigger၊ Cost နဲ့ Words ကို စုပါ။"},{title:"Payment Signal စမ်းပါ",detail:"Paid diagnostic သို့မဟုတ် Pilot ကို လက်ခံမလား စစ်ပါ။"}],
-    gate:["အနည်းဆုံး Customer 10 ယောက်နှင့် စကားပြောပြီးပြီ","အလားတူ Pain ကို Customer အများစု ပြောတယ်","လက်ရှိ Alternative သို့မဟုတ် Cost ရှိတယ်","Paid Pilot အတွက် အပြုသဘော Signal ရှိတယ်"],
-    kpis:["Interviews","Pain frequency","Current cost","Payment signal"], ai:["Interview guide draft","Notes ကို themes ခွဲခြင်း","Competitor research"], human:["စကားပြောခြင်း","အမူအရာနားလည်ခြင်း","Evidence အတည်ပြုခြင်း"],
-    mistake:"AI-generated Persona ကို Customer Research အစစ်လို့ ယူဆခြင်း။", example:"“AI လိုချင်လား?” မမေးဘဲ “ပြီးခဲ့တဲ့အပတ် ဒီအလုပ်ကို ဘယ်လိုလုပ်ခဲ့လဲ?” လို့မေးပါ။"
+    id: "problem", number: "01", title: "Problem Validation", mm: "ဖြေရှင်းသင့်တဲ့ ပြဿနာ ဟုတ်မဟုတ် သက်သေပြခြင်း", phase: "DISCOVER", color: "#e8693e", pale: "#fff0e9", icon: Search,
+    question: "လူတွေ တကယ်ကြုံနေရပြီး ဖြေရှင်းဖို့ အရေးကြီးတဲ့ ပြဿနာကို သက်သေပြထားပြီလား?",
+    what: "ကိုယ့်စိတ်ကူးကိုသာ သဘောကျနေခြင်းမဟုတ်ဘဲ Customer ရဲ့ တကယ့်အပြုအမူ၊ လက်ရှိဖြေရှင်းနေရသော ဒုက္ခနှင့် ငွေပေးစမ်းသုံးလိုမှုက ပြဿနာတကယ်ရှိကြောင်း ပြသခြင်းဖြစ်ပါတယ်။",
+    why: [
+      "Customer မလိုချင်သော Product ကို အချိန်ကုန်ခံပြီး မတည်ဆောက်မိစေပါ။",
+      "ပြဿနာရဲ့ မကြာခဏဖြစ်ပွားမှု၊ ထိခိုက်မှုနဲ့ အရေးတကြီးလိုအပ်မှုကို တိကျစွာ နားလည်စေပါတယ်။",
+      "Customer ကိုယ်တိုင်ပြောတဲ့ စကားလုံးတွေက နောက်ပိုင်း Marketing နဲ့ Sales အတွက် အစွမ်းထက်ပါတယ်။"
+    ],
+    actions: [
+      { title: "Customer ၁၀ ယောက် ရွေးချယ်ပါ", detail: "ဖြေရှင်းနည်းမပြောခင် သင်အဓိကကူညီလိုသော Customer အုပ်စုကို သတ်မှတ်ပါ။" },
+      { title: "ပြဿနာအကြောင်း အင်တာဗျူးပါ", detail: "လက်ရှိဖြေရှင်းနည်း၊ နောက်ဆုံးကြုံခဲ့ရချိန်၊ ဆုံးရှုံးမှုနဲ့ အခက်အခဲများကို မေးမြန်းပါ။" },
+      { title: "တူညီသောပုံစံများကို ရှာဖွေပါ", detail: "ထပ်တလဲလဲတွေ့ရသော နာကျင်မှု၊ အစပျိုးရခြင်းအကြောင်းရင်း၊ ကုန်ကျစရိတ်နှင့် စကားလုံးများကို စုစည်းပါ။" },
+      { title: "ငွေပေးစမ်းသုံးလိုမှုကို စစ်ဆေးပါ", detail: "အနည်းဆုံး ဖြေရှင်းပေးမယ့် စမ်းသပ်မှု (Paid Diagnostic သို့မဟုတ် Pilot) ကို စိတ်ဝင်စားမှုရှိမရှိ စမ်းသပ်ပါ။" }
+    ],
+    gate: [
+      "အနည်းဆုံး Customer ၁၀ ယောက်နှင့် စကားပြောပြီးဖြစ်ခြင်း",
+      "အလားတူ နာကျင်မှုပြဿနာကို အများစုက အတည်ပြုပြောဆိုခြင်း",
+      "လက်ရှိမှာ အချိန် သို့မဟုတ် ငွေကုန်ခံပြီး ဖြေရှင်းနေရမှုရှိခြင်း",
+      "Paid Pilot အတွက် လက်တွေ့စမ်းသပ်လိုသည့် အပြုသဘော လက္ခဏာရှိခြင်း"
+    ],
+    kpis: ["Customer Interviews", "Pain Frequency", "Current Cost", "Payment Signal"],
+    ai: ["Interview မေးခွန်းများ ရေးဆွဲခြင်း", "မှတ်စုများမှ Theme ခွဲထုတ်ခြင်း", "ပြိုင်ဘက်များ စျေးကွက်လေ့လာခြင်း"],
+    human: ["လူချင်း တိုက်ရိုက်စကားပြောခြင်း", "ခံစားချက်နှင့် အမူအရာကို နားလည်ခြင်း", "လက်တွေ့သက်သေကို အတည်ပြုခြင်း"],
+    mistake: "AI ထုတ်ပေးတဲ့ Persona ကိုပဲ အားကိုးပြီး Customer အစစ်အမှန်နဲ့ စကားမပြောဘဲ စတင်ခြင်း။",
+    example: "“AI App သုံးချင်လား?” လို့ မမေးဘဲ “ပြီးခဲ့တဲ့အပတ်က ဒီအလုပ်ကို လုပ်တဲ့အခါ ဘယ်လိုအခက်အခဲတွေ ကြုံခဲ့ရလဲ?” လို့ မေးပါ။"
   },
   {
-    id:"customer", number:"02", title:"Customer & Positioning", mm:"ပထမဆုံးဝယ်မည့် Customer ကို ရွေးခြင်း", phase:"FOCUS", color:"#d79a24", pale:"#fff8df", icon:Target,
-    question:"ပထမဆုံး ဘယ်သူအတွက် ဘယ် Pain ကို ဖြေရှင်းမယ်ဆိုတာ ရှင်းလင်းသလား?",
-    what:"လူတိုင်းအတွက် Product မလုပ်ဘဲ Pain၊ Budget၊ Authority နဲ့ Access တူသော Initial Customer Segment တစ်ခုကို ရွေးခြင်းဖြစ်သည်။",
-    why:["Message တစ်ခုက လူတစ်မျိုးအတွက် ပိုတိကျလာတယ်။","Product scope နဲ့ Sales cycle ကို လျှော့ချနိုင်တယ်။","Customer ကို ရှာဖို့ Channel ရွေးရလွယ်လာတယ်။"],
-    actions:[{title:"Initial Segment ရွေးပါ",detail:"Industry၊ role၊ company size သို့မဟုတ် situation တစ်ခုနဲ့ ကျဉ်းပါ။"},{title:"Buyer နဲ့ User ခွဲပါ",detail:"အသုံးပြုသူ၊ ငွေပေးသူနဲ့ အတည်ပြုသူ ဘယ်သူလဲ သိပါ။"},{title:"Positioning Sentence ရေးပါ",detail:"We help [customer] solve [pain] to achieve [result] through [approach]."},{title:"Five-second Test လုပ်ပါ",detail:"သူငယ်ချင်းတစ်ယောက်ဖတ်ပြီး ဘယ်သူအတွက်လဲ ပြန်ပြောနိုင်မလား စစ်ပါ။"}],
-    gate:["Customer segment တစ်ခုတည်း ရွေးထားတယ်","Buyer နဲ့ User ကို သိတယ်","Pain နဲ့ Result ကို တစ်ကြောင်းတည်းပြောနိုင်တယ်","Customer ဆီရောက်နိုင်သော Channel ရှိတယ်"],
-    kpis:["Segment clarity","Buyer access","Problem relevance","Message recall"], ai:["Segment comparison","Positioning variants","Persona draft"], human:["Niche ရွေးချယ်ခြင်း","Customer access","Brand point of view"],
-    mistake:"“All businesses” သို့မဟုတ် “AI စိတ်ဝင်စားသူအားလုံး” ကို Target လုပ်ခြင်း။", example:"“SME အားလုံး” ထက် “Customer Reply မှာ အချိန်ကုန်နေတဲ့ Yangon retail owner” က ပိုရှင်းသည်။"
+    id: "customer", number: "02", title: "Customer & Positioning", mm: "ပထမဆုံးကူညီမယ့် Customer ကို ရွေးခြင်း", phase: "FOCUS", color: "#d79a24", pale: "#fff8df", icon: Target,
+    question: "ဘယ်သူ့ရဲ့ ဘယ်ပြဿနာကို အရင်ဆုံး ဖြေရှင်းပေးမလဲ?",
+    what: "လူတိုင်းအတွက် မလုပ်ဘဲ ပြဿနာ၊ ဘတ်ဂျက်၊ ဆုံးဖြတ်ပိုင်ခွင့်နှင့် ဆက်သွယ်ရလွယ်ကူမှု တူညီသော ကနဦး Customer အုပ်စုတစ်ခုတည်းကို ရွေးချယ်သတ်မှတ်ခြင်းဖြစ်ပါတယ်။",
+    why: [
+      "စကားတစ်ခွန်းက လူတစ်မျိုးတည်းအတွက် ပိုမိုတိကျစွာ ထိရောက်စေပါတယ်။",
+      "တည်ဆောက်ရမယ့် နယ်ပယ်နဲ့ ရောင်းချရမယ့် အချိန်ကို သိသာစွာ လျှော့ချပေးနိုင်ပါတယ်။",
+      "Customer တွေရှိတဲ့နေရာကို ရှာဖွေပြီး ဆက်သွယ်ရ ပိုမိုလွယ်ကူစေပါတယ်။"
+    ],
+    actions: [
+      { title: "ကနဦး Customer အုပ်စုကို ရွေးပါ", detail: "လုပ်ငန်းအမျိုးအစား၊ ရာထူး၊ ကုမ္ပဏီအရွယ်အစား သို့မဟုတ် အခြေအနေတစ်ခုဖြင့် ကျဉ်းမြောင်းစွာ သတ်မှတ်ပါ။" },
+      { title: "အသုံးပြုသူနှင့် ငွေပေးသူကို ခွဲခြားပါ", detail: "တကယ်အသုံးပြုမည့်သူ (User) နှင့် ငွေပေးဆုံးဖြတ်မည့်သူ (Buyer) ကို ရှင်းလင်းစွာ သိရှိပါစေ။" },
+      { title: "Positioning စာကြောင်း ရေးသားပါ", detail: "“ကျွန်ုပ်တို့သည် [Customer] များ [Pain] ကို ဖြေရှင်းပြီး [Result] ရရှိစေရန် [Approach] ဖြင့် ကူညီပေးသည်။”" },
+      { title: "၅ စက္ကန့် စမ်းသပ်မှု ပြုလုပ်ပါ", detail: "မိတ်ဆွေတစ်ဦးကို ဖတ်ပြပြီး ဘယ်သူ့အတွက် ဘာလုပ်ပေးတာလဲဆိုတာ ချက်ချင်း ပြန်ပြောနိုင်မလား စစ်ဆေးပါ။" }
+    ],
+    gate: [
+      "Customer အုပ်စုတစ်ခုတည်းကို တိကျစွာ ရွေးချယ်ထားခြင်း",
+      "Buyer နှင့် User ၏ ကွာခြားချက်ကို ရှင်းလင်းစွာ သိရှိခြင်း",
+      "ပြဿနာနှင့် ရလဒ်ကို စာတစ်ကြောင်းတည်းဖြင့် ရှင်းပြနိုင်ခြင်း",
+      "Customer များထံ တိုက်ရိုက်ရောက်ရှိနိုင်သည့် လမ်းကြောင်း (Channel) ရှိခြင်း"
+    ],
+    kpis: ["Segment Clarity", "Buyer Access", "Problem Relevance", "Message Recall"],
+    ai: ["Customer Segment များကို နှိုင်းယှဉ်လေ့လာခြင်း", "Positioning စာကြောင်း ပုံစံအမျိုးမျိုး ရေးသားခြင်း", "Persona မူကြမ်း ရေးဆွဲခြင်း"],
+    human: ["Niche စျေးကွက်ကို ရွေးချယ်ဆုံးဖြတ်ခြင်း", "Customer နှင့် တိုက်ရိုက်ချိတ်ဆက်ခြင်း", "Brand ၏ ရပ်တည်ချက်ကို သတ်မှတ်ခြင်း"],
+    mistake: "“လုပ်ငန်းရှင်အားလုံး” သို့မဟုတ် “AI စိတ်ဝင်စားသူအားလုံး” ကို Target လုပ်ခြင်း။",
+    example: "“SME အားလုံးအတွက်” လို့ ပြောမယ့်အစား “Customer Message ပြန်ဖို့ အချိန်မလောက်တဲ့ မြန်မာ အထည်အရောင်းဆိုင်ပိုင်ရှင်များ” လို့ ကျဉ်းမြောင်းစွာ သတ်မှတ်ပါ။"
   },
   {
-    id:"offer", number:"03", title:"Offer & MVP", mm:"အနည်းဆုံး Paid Solution တည်ဆောက်ခြင်း", phase:"CREATE", color:"#8c70db", pale:"#f2edff", icon:Boxes,
-    question:"Product အကြီးမတည်ဆောက်ခင် Result ပေးနိုင်တဲ့ Paid Pilot ရှိသလား?",
-    what:"MVP သည် Feature နည်းတဲ့ App တစ်ခုတည်းမဟုတ်ပါ။ Customer ရဲ့ အရေးကြီးဆုံး Assumption ကို အမြန်ဆုံး၊ ကုန်ကျစရိတ်နည်းစွာ စမ်းသပ်ပေးတဲ့ Solution ဖြစ်သည်။",
-    why:["Payment က compliment ထက် ပိုကောင်းသော Validation ဖြစ်တယ်။","Customer နဲ့အတူလုပ်ရင်း Product လိုအပ်ချက်ကို သင်ယူနိုင်တယ်။","Software မတည်ဆောက်ခင် Delivery နဲ့ Economics ကို စမ်းနိုင်တယ်။"],
-    actions:[{title:"Dream Outcome သတ်မှတ်ပါ",detail:"Customer ရမယ့် ပြောင်းလဲမှုကို Feature မဟုတ်ဘဲ Result အနေနဲ့ရေးပါ။"},{title:"Smallest Delivery ရွေးပါ",detail:"Service၊ workshop၊ prototype သို့မဟုတ် concierge pilot ကို ရွေးပါ။"},{title:"Scope နဲ့ Timeline ရှင်းပါ",detail:"ပါဝင်တာ၊ မပါဝင်တာ၊ Quick Win နဲ့ Definition of Done ရေးပါ။"},{title:"Price နဲ့ Ask စမ်းပါ",detail:"Customer သုံးယောက်ကို အတိအကျ Offer ပေးပြီး Decision တောင်းပါ။"}],
-    gate:["Outcome တစ်ခု ရှင်းတယ်","Scope နဲ့ Timeline ရှင်းတယ်","Paid Pilot Offer ရှိတယ်","Customer အနည်းဆုံးတစ်ယောက် ငွေပေး သို့မဟုတ် Commitment ပေးတယ်"],
-    kpis:["Pilot offers","Paid pilots","Time to build","Expected value"], ai:["Offer variants","Prototype assistance","Proposal draft"], human:["Scope decision","Pricing","Promise နဲ့ risk"],
-    mistake:"Customer မရှိခင် Platform၊ Mobile App သို့မဟုတ် SaaS အပြည့်တည်ဆောက်ခြင်း။", example:"အရင်ဆုံး “30-Day AI Business Upgrade Sprint” ရောင်းပြီး ထပ်တလဲလဲလိုအပ်ချက်မှ Software တည်ဆောက်ပါ။"
+    id: "offer", number: "03", title: "Offer & MVP", mm: "ငွေပေးဝယ်ယူရကျိုးနပ်တဲ့ အနည်းဆုံးဖြေရှင်းချက်", phase: "CREATE", color: "#8c70db", pale: "#f2edff", icon: Boxes,
+    question: "Customer ငွေပေးချင်လောက်အောင် ရလဒ်ရှင်းတဲ့ Offer ရှိပြီလား?",
+    what: "MVP ဆိုတာ Feature နည်းတဲ့ Software တစ်ခုတည်း မဟုတ်ပါဘူး။ Customer ရဲ့ အရေးကြီးဆုံး လိုအပ်ချက်ကို အမြန်ဆုံးနဲ့ ကုန်ကျစရိတ် အနည်းဆုံးဖြင့် စမ်းသပ်ပေးနိုင်တဲ့ ဖြေရှင်းချက် ဖြစ်ပါတယ်။",
+    why: [
+      "ချီးကျူးစကားထက် Customer ရဲ့ ငွေပေးချေမှုက အကောင်းဆုံး သက်သေပြချက် ဖြစ်ပါတယ်။",
+      "Customer နဲ့ လက်တွဲလုပ်ဆောင်ရင်း တကယ့် Product လိုအပ်ချက်ကို သင်ယူနိုင်ပါတယ်။",
+      "Software အကြီးကြီး မတည်ဆောက်ခင် ဝန်ဆောင်မှုပေးနိုင်မှုနှင့် စီးပွားရေးတွက်ခြေကို စမ်းသပ်နိုင်ပါတယ်။"
+    ],
+    actions: [
+      { title: "လိုချင်သော ရလဒ် (Dream Outcome) သတ်မှတ်ပါ", detail: "Feature တွေအကြောင်း မဟုတ်ဘဲ Customer ရရှိသွားမယ့် အကျိုးရလဒ်ကို အဓိကထား ရေးသားပါ။" },
+      { title: "အသေးငယ်ဆုံး ပေးပို့နည်းကို ရွေးပါ", detail: "ဝန်ဆောင်မှု၊ အလုပ်ရုံဆွေးနွေးပွဲ သို့မဟုတ် လက်တွေ့ကူညီပေးသော Pilot Project တစ်ခုဖြင့် စတင်ပါ။" },
+      { title: "အတိုင်းအတာနှင့် အချိန်ကာလကို သတ်မှတ်ပါ", detail: "ပါဝင်တာ၊ မပါဝင်တာ၊ ပထမအပတ်မှာ ရမယ့်အရာနဲ့ အပြီးသတ်သတ်မှတ်ချက်ကို ရှင်းလင်းစွာ ရေးပါ။" },
+      { title: "ဈေးနှုန်းနှင့် ကမ်းလှမ်းချက်ကို စမ်းသပ်ပါ", detail: "Customer ၃ ယောက်ကို တိကျတဲ့ Offer ပေးပြီး ဝယ်ယူစမ်းသပ်ရန် ကမ်းလှမ်းပါ။" }
+    ],
+    gate: [
+      "Customer ရရှိမယ့် ရလဒ်တစ်ခု ရှင်းလင်းစွာ သတ်မှတ်ထားခြင်း",
+      "ပါဝင်မည့် Scope နှင့် အချိန်ကာလ ရှင်းလင်းခြင်း",
+      "ငွေပေးဝယ်ယူနိုင်သော Paid Pilot Offer ရှိခြင်း",
+      "အနည်းဆုံး Customer တစ်ဦးထံမှ ငွေပေးချေမှု သို့မဟုတ် ခိုင်မာသော ကတိကဝတ် ရရှိခြင်း"
+    ],
+    kpis: ["Pilot Offers Made", "Paid Pilot Signups", "Time to Deliver", "Expected Value"],
+    ai: ["Offer မူကြမ်း အမျိုးမျိုး ရေးသားခြင်း", "Prototype ပြုလုပ်ရာတွင် အထောက်အကူယူခြင်း", "Proposal စာလွှာ မူကြမ်း ရေးသားခြင်း"],
+    human: ["လုပ်ဆောင်မည့် Scope ကို အတည်ပြုခြင်း", "သင့်တော်သော ဈေးနှုန်း သတ်မှတ်ခြင်း", "ကတိကဝတ်နှင့် အာမခံချက် ပေးခြင်း"],
+    mistake: "Customer တစ်ယောက်မှ မရှိသေးဘဲ Platform၊ Mobile App သို့မဟုတ် SaaS အကြီးကြီး တည်ဆောက်ခြင်း။",
+    example: "Software မရေးခင် “လုပ်ငန်းသုံး AI Chatbot ၃၀ ရက် စမ်းသပ်ဝန်ဆောင်မှု” ကို အရင်ရောင်းချပြီး လက်တွေ့လိုအပ်ချက်မှ Software စတင်ပါ။"
   },
   {
-    id:"leads", number:"04", title:"Lead Generation", mm:"သင့်တော်သော Prospect ကို ခေါ်လာခြင်း", phase:"ATTRACT", color:"#ef7d32", pale:"#fff1e3", icon:Megaphone,
-    question:"စကားပြောရန်သင့်တော်သော Qualified Leads တစ်သမတ်တည်း ရရှိသလား?",
-    what:"Follower သို့မဟုတ် View များခြင်းမဟုတ်ဘဲ Problem၊ Fit နဲ့ စိတ်ဝင်စားမှုရှိတဲ့ လူတွေဆီက Conversation ရရှိစေခြင်းဖြစ်သည်။",
-    why:["ကောင်းတဲ့ Offer ရှိပေမဲ့ လူမသိရင် Sale မဖြစ်ဘူး။","Awareness အလိုက် Content က Trust တည်ဆောက်တယ်။","Lead source ကိုတိုင်းတာလို့ Growth ကို ခန့်မှန်းနိုင်တယ်။"],
-    actions:[{title:"Awareness Map ရေးပါ",detail:"Unaware မှ Most Aware အထိ Customer သိထားမှုကို ခွဲပါ။"},{title:"Channel နှစ်ခုရွေးပါ",detail:"Founder content၊ outreach၊ referral၊ partnership စတဲ့ Channel နှစ်ခုသာ စပါ။"},{title:"Useful CTA ဖန်တီးပါ",detail:"Checklist၊ diagnostic သို့မဟုတ် meeting အတွက် next step တစ်ခု ပေးပါ။"},{title:"Weekly Rhythm ထားပါ",detail:"Content၊ outreach၊ follow-up နဲ့ review ကို အပတ်စဉ် သတ်မှတ်ပါ။"}],
-    gate:["Qualified Lead ကို သတ်မှတ်ထားတယ်","Channel 1–2 ခုရွေးထားတယ်","CTA တစ်ခု ရှင်းတယ်","အပတ်စဉ် Lead flow တိုင်းတာနေတယ်"],
-    kpis:["Qualified leads","Reply rate","Booking rate","Cost per lead"], ai:["Research နဲ့ draft","Content repurposing","Lead classification"], human:["Original insight","Proof စစ်ခြင်း","Relationship"],
-    mistake:"AI နဲ့ Content အများကြီးထုတ်ပေမဲ့ Point of View နဲ့ CTA မရှိခြင်း။", example:"“AI သင်တန်းဖွင့်တယ်” ထက် “တစ်ပတ်အချိန်ဆုံးရှုံးမှု စစ်ရန် 5-minute checklist” ပေးပါ။"
+    id: "leads", number: "04", title: "Lead Generation", mm: "ဖြေရှင်းချက်လိုအပ်သူများထံ ရောက်ရှိခြင်း", phase: "ATTRACT", color: "#ef7d32", pale: "#fff1e3", icon: Megaphone,
+    question: "သင့် Offer လိုအပ်သူတွေကို အပတ်စဉ် ပုံမှန်ရောက်ရှိနိုင်ပြီလား?",
+    what: "Follower သို့မဟုတ် View များရုံသက်သက် မဟုတ်ဘဲ ပြဿနာရှိပြီး ဝန်ဆောင်မှုနဲ့ ကိုက်ညီတဲ့ လူတွေဆီက စကားစမြည်ပြောဆိုမှုများ ပုံမှန်ရရှိစေခြင်း ဖြစ်ပါတယ်။",
+    why: [
+      "ဘယ်လောက်ကောင်းတဲ့ Offer ရှိပါစေ၊ လူမသိရင် အရောင်းဖြစ်ပေါ်လာမှာ မဟုတ်ပါ။",
+      "အသုံးဝင်တဲ့ အကြောင်းအရာတွေက Customer ရဲ့ ယုံကြည်မှုကို တည်ဆောက်ပေးပါတယ်။",
+      "Lead ရရှိတဲ့ လမ်းကြောင်းကို တိုင်းတာခြင်းဖြင့် စီးပွားရေး တိုးတက်မှုကို ကြိုတင်ခန့်မှန်းနိုင်ပါတယ်။"
+    ],
+    actions: [
+      { title: "Customer သိရှိမှုအဆင့် (Awareness Map) ခွဲပါ", detail: "ပြဿနာကို လုံးဝမသိသေးသူမှ စတင်ပြီး အဖြေရှာနေသူအထိ ခွဲခြားနားလည်ပါ။" },
+      { title: "အဓိက ချန်နယ် ၂ ခု ရွေးချယ်ပါ", detail: "Founder Content၊ တိုက်ရိုက်မိတ်ဆက်ခြင်း၊ မိတ်ဆွေညွှန်းဆိုခြင်း စတဲ့ Channel ၂ ခုနဲ့သာ စတင်ပါ။" },
+      { title: "အသုံးဝင်သော ကမ်းလှမ်းချက် (Useful CTA) ဖန်တီးပါ", detail: "Checklist၊ အခမဲ့စစ်ဆေးပေးမှု သို့မဟုတ် တိုင်ပင်ဆွေးနွေးမှုတစ်ခု ပေးအပ်ပါ။" },
+      { title: "အပတ်စဉ် ပုံမှန်လုပ်ဆောင်မှု သတ်မှတ်ပါ", detail: "Content တင်ခြင်း၊ ဆက်သွယ်ခြင်း၊ Follow-up ပြုလုပ်ခြင်းတို့ကို အပတ်စဉ် ပုံမှန် စာရင်းစစ်ပါ။" }
+    ],
+    gate: [
+      "ကိုက်ညီသော စိတ်ဝင်စားသူ (Qualified Lead) စံနှုန်း သတ်မှတ်ထားခြင်း",
+      "အဓိက Channel ၁–၂ ခုကို ပုံမှန်အသုံးပြုနေခြင်း",
+      "ရှင်းလင်းသော Call to Action (CTA) တစ်ခု ရှိခြင်း",
+      "အပတ်စဉ် Lead အရေအတွက်ကို တိုင်းတာစောင့်ကြည့်နေခြင်း"
+    ],
+    kpis: ["Qualified Leads", "Reply Rate", "Meeting Booking Rate", "Cost Per Lead"],
+    ai: ["Content နှင့် အကြောင်းအရာ မူကြမ်း ရေးသားခြင်း", "Content များကို ပုံစံအမျိုးမျိုး ပြောင်းလဲဖန်တီးခြင်း", "Lead များကို စိစစ်ခွဲခြားခြင်း"],
+    human: ["ကိုယ်ပိုင် အတွေ့အကြုံနှင့် အမြင်ကို ထည့်သွင်းခြင်း", "အချက်အလက် မှန်ကန်မှုကို စစ်ဆေးခြင်း", "Customer များနှင့် ရင်းနှီးမှု တည်ဆောက်ခြင်း"],
+    mistake: "AI ဖြင့် Content အများကြီး တင်နေသော်လည်း ကိုယ်ပိုင်အမြင်နှင့် တိကျသော CTA မပါဝင်ခြင်း။",
+    example: "“AI သင်တန်းဖွင့်တယ်” လို့ ကြော်ငြာမယ့်အစား “တစ်ပတ်အတွင်း အချိန်ကုန်သက်သာစေမယ့် ၅ မိနစ် စစ်ဆေးရန် Checklist” ကို အခမဲ့ ပေးပါ။"
   },
   {
-    id:"sales", number:"05", title:"Sales", mm:"Fit နဲ့ Value ကို အတည်ပြုခြင်း", phase:"CONVERT", color:"#b75fbd", pale:"#faedfb", icon:CircleDollarSign,
-    question:"သင့်တော်တဲ့ Prospect က Problem၊ Value နဲ့ Next Step ကို နားလည်ပြီး ဆုံးဖြတ်နိုင်သလား?",
-    what:"ဖိအားပေးခြင်းမဟုတ်ပါ။ Customer ရဲ့ Current Situation၊ Desired Outcome၊ Impact၊ Fit နဲ့ Offer ကို ရှင်းလင်းစေတဲ့ Decision Process ဖြစ်သည်။",
-    why:["ဝယ်မဝယ်ရတဲ့ အကြောင်းရင်းကို Founder ကိုယ်တိုင် သင်ယူနိုင်တယ်။","Wrong-fit Customer ကို ရှောင်နိုင်တယ်။","Expectation မှန်ကန်လို့ Delivery နဲ့ Retention ပိုကောင်းတယ်။"],
-    actions:[{title:"Discovery Questions ပြင်ပါ",detail:"Current state၊ desired result၊ impact၊ alternatives နဲ့ decision process ကို မေးပါ။"},{title:"Listen before Pitch",detail:"Customer ပြောတဲ့ Pain ကို သူ့စကားနဲ့ ပြန်အတည်ပြုပါ။"},{title:"Relevant Offer ပေးပါ",detail:"Feature အားလုံးမဟုတ်ဘဲ သူ့ Pain နဲ့ကိုက်တဲ့ Outcome၊ Proof၊ Time နဲ့ Effort ကို ရှင်းပါ။"},{title:"Decision မှတ်တမ်းတင်ပါ",detail:"Yes၊ No သို့မဟုတ် Not now ရဲ့ အကြောင်းရင်းကို CRM/notes ထဲရေးပါ။"}],
-    gate:["Discovery process ရှိတယ်","Fit criteria ရှိတယ်","Offer ကို Price/Scope/Timeline နဲ့ပြောနိုင်တယ်","Close rate နဲ့ reasons ကို တိုင်းတာတယ်"],
-    kpis:["Show rate","Close rate","Sales cycle","Average value"], ai:["Meeting research","Call summary","Proposal/follow-up"], human:["Deep listening","Negotiation","Promise နဲ့ final decision"],
-    mistake:"Script ကို တိုက်ရိုက်ဖတ်ပြီး Customer မပြောခင် Product အကြောင်းစပြောခြင်း။", example:"“Tool 20 ခုပါ” မပြောခင် “သုံးလအတွင်း ဘယ် Business Result ရချင်လဲ?” မေးပါ။"
+    id: "sales", number: "05", title: "Sales", mm: "ယုံကြည်စိတ်ချစွာ ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီခြင်း", phase: "CONVERT", color: "#b75fbd", pale: "#faedfb", icon: CircleDollarSign,
+    question: "Customer ရဲ့လိုအပ်ချက်ကို နားလည်ပြီး မှန်ကန်တဲ့ ဝယ်ယူဆုံးဖြတ်ချက်ချနိုင်အောင် ကူညီနိုင်ပြီလား?",
+    what: "ဖိအားပေးရောင်းချခြင်း မဟုတ်ပါ။ Customer ရဲ့ လက်ရှိအခြေအနေ၊ လိုချင်တဲ့ရလဒ်၊ ထိခိုက်မှုနဲ့ Offer ကို ရှင်းလင်းစွာ နားလည်စေပြီး မှန်ကန်စွာ ဆုံးဖြတ်နိုင်အောင် ကူညီပေးခြင်း ဖြစ်ပါတယ်။",
+    why: [
+      "Customer ဘာကြောင့် ဝယ်သည် သို့မဟုတ် မဝယ်သည်ကို Founder ကိုယ်တိုင် သင်ယူနိုင်ပါတယ်။",
+      "မကိုက်ညီသော Customer (Wrong-fit) များကို ကြိုတင်ရှောင်ရှားနိုင်ပါတယ်။",
+      "မျှော်လင့်ချက် မှန်ကန်သွားတဲ့အတွက် ဝန်ဆောင်မှုပေးရာတွင် ပိုမိုချောမွေ့စေပါတယ်။"
+    ],
+    actions: [
+      { title: "မေးခွန်းများ ကြိုတင်ပြင်ဆင်ပါ (Discovery Questions)", detail: "လက်ရှိအခြေအနေ၊ လိုချင်သောရလဒ်၊ အခက်အခဲ၊ လက်ရှိဖြေရှင်းနည်းနှင့် ဆုံးဖြတ်ချက်ချမည့်ပုံစံကို မေးမြန်းပါ။" },
+      { title: "ရောင်းချခြင်းမပြုမီ သေချာနားထောင်ပါ", detail: "Customer ပြောပြသော အခက်အခဲကို သူတို့၏ စကားလုံးများဖြင့် ပြန်လည်အတည်ပြုပါ။" },
+      { title: "ကိုက်ညီသော ကမ်းလှမ်းချက်ကို ရှင်းပြပါ", detail: "Feature အားလုံး မဟုတ်ဘဲ သူတို့၏ ပြဿနာနှင့် တိုက်ရိုက်သက်ဆိုင်သော ရလဒ်၊ သက်သေ၊ အချိန်နှင့် စိုက်ထုတ်ရမှုကို ရှင်းပြပါ။" },
+      { title: "ဆုံးဖြတ်ချက် အကြောင်းရင်းကို မှတ်တမ်းတင်ပါ", detail: "ဝယ်ယူခြင်း၊ ငြင်းပယ်ခြင်း သို့မဟုတ် နောက်မှဝယ်ယူမည့် အကြောင်းရင်းများကို မှတ်စုထဲ ရေးမှတ်ပါ။" }
+    ],
+    gate: [
+      "မေးခွန်းများဖြင့် လေ့လာသည့် စနစ် (Discovery Process) ရှိခြင်း",
+      "သင့်တော်သော Customer ကို ရွေးချယ်သည့် စံနှုန်းရှိခြင်း",
+      "Offer ကို ဈေးနှုန်း၊ အတိုင်းအတာ၊ အချိန်ကာလဖြင့် ရှင်းပြနိုင်ခြင်း",
+      "ဝယ်ယူမှုနှုန်း (Close Rate) နှင့် အကြောင်းရင်းများကို တိုင်းတာခြင်း"
+    ],
+    kpis: ["Discovery Call Rate", "Close Rate", "Sales Cycle Length", "Average Deal Value"],
+    ai: ["Customer အကြောင်း ကြိုတင်လေ့လာခြင်း", "အစည်းအဝေး မှတ်စု အကျဉ်းချုပ်ခြင်း", "Follow-up စာလွှာများ မူကြမ်းရေးဆွဲခြင်း"],
+    human: ["ဂရုတစိုက် နားထောင်ပေးခြင်း", "ဈေးနှုန်းနှင့် အခြေအနေ ညှိနှိုင်းခြင်း", "နောက်ဆုံး ဆုံးဖြတ်ချက်ကို တာဝန်ယူကတိပြုခြင်း"],
+    mistake: "Customer ၏ လိုအပ်ချက်ကို နားမထောင်ဘဲ Product အကြောင်းကိုသာ အတင်းရှင်းပြခြင်း။",
+    example: "“ကျွန်တော့် Software မှာ Feature ၂၀ ပါတယ်” လို့ ပြောမယ့်အစား “လာမယ့် ၃ လအတွင်း သင့်လုပ်ငန်းမှာ ဘယ်ရလဒ်ကို အဓိက ရချင်ပါသလဲ?” လို့ မေးပါ။"
   },
   {
-    id:"delivery", number:"06", title:"Delivery & Success", mm:"ကတိပေးထားသော Result ကို ပေးခြင်း", phase:"PROVE", color:"#1da98a", pale:"#e8fbf5", icon:ClipboardCheck,
-    question:"Customer က ပထမဆုံးတန်ဖိုးကို မြန်မြန်ခံစားပြီး နောက်ဆုံး Result ရနေသလား?",
-    what:"Product ပေးပြီးဆုံးခြင်းမဟုတ်ဘဲ Expectation၊ Onboarding၊ Quick Win၊ Milestone နဲ့ Quality Check တို့မှ Customer Outcome ရရှိစေခြင်းဖြစ်သည်။",
-    why:["Delivery က Sales မှာပေးထားတဲ့ Promise ကို Proof အဖြစ်ပြောင်းတယ်။","Quick Win က Customer momentum တိုးစေတယ်။","Real Result က Case Study၊ Referral နဲ့ Product improvement ဖြစ်စေတယ်။"],
-    actions:[{title:"Expectation Align လုပ်ပါ",detail:"Goal၊ Scope၊ Timeline၊ Responsibilities နဲ့ Done ကို အတည်ပြုပါ။"},{title:"Quick Win ပေးပါ",detail:"ပထမအပတ်အတွင်း မြင်နိုင်တဲ့တန်ဖိုးတစ်ခု ဖန်တီးပါ။"},{title:"Milestones စစ်ပါ",detail:"Progress၊ Risk နဲ့ Blocker ကို သတ်မှတ်အချိန်တိုင်း review လုပ်ပါ။"},{title:"Outcome တိုင်းပါ",detail:"Before/After၊ time saved၊ quality သို့မဟုတ် business result ကို မှတ်တမ်းတင်ပါ။"}],
-    gate:["Onboarding ရှိတယ်","Time to First Value သိတယ်","Milestones နဲ့ risk checks ရှိတယ်","Customer outcome ကို evidence နဲ့ပြနိုင်တယ်"],
-    kpis:["Time to value","Completion","Outcome rate","Satisfaction"], ai:["Onboarding guide","Progress summary","Support triage"], human:["Coaching","Quality approval","Empathy နဲ့ exceptions"],
-    mistake:"Course ပြီးခြင်း၊ File ပို့ခြင်းကို Customer Success လို့ယူဆခြင်း။", example:"သင်တန်းပြီးမှ Project မစဘဲ Week 1 မှာ Working Gemini Gem တစ်ခု ဖန်တီးစေပါ။"
+    id: "delivery", number: "06", title: "Delivery & Success", mm: "ကတိပေးထားတဲ့ရလဒ်ကို အမှန်တကယ်ပေးခြင်း", phase: "PROVE", color: "#1da98a", pale: "#e8fbf5", icon: ClipboardCheck,
+    question: "ကတိပေးထားတဲ့ရလဒ်ကို အချိန်မီ၊ အရည်အသွေးကောင်းကောင်း ပေးနိုင်ပြီလား?",
+    what: "Product သို့မဟုတ် ဝန်ဆောင်မှု ပို့ပေးရုံဖြင့် အလုပ်မပြီးသေးပါ။ သေချာစွာ စတင်စေခြင်း (Onboarding)၊ အမြန်ဆုံး ရလဒ်တစ်ခု ခံစားရစေခြင်း (Quick Win) နှင့် အရည်အသွေး စစ်ဆေးမှုများဖြင့် Customer ကို အမှန်တကယ် အောင်မြင်စေခြင်း ဖြစ်ပါတယ်။",
+    why: [
+      "အရောင်းတွင် ပေးခဲ့သော ကတိကို လက်တွေ့ရလဒ်အဖြစ် သက်သေပြနိုင်ပါတယ်။",
+      "ပထမဆုံး ရလဒ်အမြန်ရရှိခြင်းက Customer ၏ စိတ်အားထက်သန်မှုကို တိုးတက်စေပါတယ်။",
+      "ရလဒ်ကောင်းများက တကယ့် Case Study များ၊ မိတ်ဆက်ပေးမှုများနှင့် Product တိုးတက်မှုကို ဖြစ်စေပါတယ်။"
+    ],
+    actions: [
+      { title: "မျှော်လင့်ချက်များကို ကြိုတင်ညှိနှိုင်းပါ", detail: "ပန်းတိုင်၊ လုပ်ဆောင်မည့် အတိုင်းအတာ၊ အချိန်ဇယား၊ တာဝန်များနှင့် ပြီးစီးမှု သတ်မှတ်ချက်ကို အတည်ပြုပါ။" },
+      { title: "ပထမအပတ်အတွင်း Quick Win ရလဒ်တစ်ခု ပေးပါ", detail: "ပထမ ၇ ရက်အတွင်း Customer မျက်မြင်တွေ့နိုင်သော အကျိုးရလဒ်တစ်ခုကို အမြန်ဆုံး ဖန်တီးပေးပါ။" },
+      { title: "အဆင့်လိုက် တိုးတက်မှုကို စစ်ဆေးပါ", detail: "သတ်မှတ်ရက်တိုင်းတွင် လုပ်ငန်းတိုးတက်မှု၊ အခက်အခဲနှင့် စိန်ခေါ်မှုများကို အတူတကွ သုံးသပ်ပါ။" },
+      { title: "ရရှိလာသော ရလဒ်ကို တိုင်းတာပါ", detail: "မတိုင်မီနှင့် နောက်ပိုင်း ကွာခြားချက်၊ သက်သာသွားသော အချိန်နှင့် စီးပွားရေး တိုးတက်မှုကို မှတ်တမ်းတင်ပါ။" }
+    ],
+    gate: [
+      "ရှင်းလင်းသော Onboarding စနစ် ရှိခြင်း",
+      "ပထမဆုံး တန်ဖိုးခံစားရသည့်အချိန် (Time to Value) ကို သိရှိခြင်း",
+      "အဆင့်လိုက် တိုးတက်မှုနှင့် စိန်ခေါ်မှုများကို စစ်ဆေးသည့် စနစ်ရှိခြင်း",
+      "Customer ရရှိသွားသော ရလဒ်ကို သက်သေအထောက်အထားဖြင့် ပြသနိုင်ခြင်း"
+    ],
+    kpis: ["Time to First Value", "Completion Rate", "Outcome Achievement Rate", "Customer Satisfaction (CSAT)"],
+    ai: ["Onboarding လမ်းညွှန်များ ပြုစုခြင်း", "တိုးတက်မှု အကျဉ်းချုပ် အစီရင်ခံစာ ရေးသားခြင်း", "Customer အမေးအဖြေများကို စိစစ်ပေးခြင်း"],
+    human: ["တိုက်ရိုက် အကြံဉာဏ်ပေးခြင်း", "အရည်အသွေးကို ကိုယ်တိုင် စစ်ဆေးအတည်ပြုခြင်း", "စာနာနားလည်မှုဖြင့် အခက်အခဲ ဖြေရှင်းပေးခြင်း"],
+    mistake: "ဖိုင်ပို့ပေးလိုက်ရုံ သို့မဟုတ် သင်တန်းပြီးသွားရုံကို Customer Success ရပြီဟု ထင်မှတ်ခြင်း။",
+    example: "သင်တန်းပြီးမှ အလုပ်မစဘဲ ပထမဆုံး အပတ်မှာတင် အမှန်တကယ် အသုံးပြုနိုင်မယ့် AI Gem တစ်ခုကို အတူတကွ လက်တွေ့ဖန်တီးပေးပါ။"
   },
   {
-    id:"retention", number:"07", title:"Retention & Referral", mm:"Customer Value ကို ဆက်လက်တိုးခြင်း", phase:"GROW", color:"#247ebf", pale:"#eaf5ff", icon:Handshake,
-    question:"Result ရပြီးတဲ့ Customer က ဆက်သုံး၊ ပြန်ဝယ် သို့မဟုတ် တခြားသူကို မိတ်ဆက်ပေးသလား?",
-    what:"ပထမ Sale ပြီးနောက် Customer ရဲ့ ဆက်လက်အောင်မြင်မှုကို ကူညီပြီး Renewal၊ Expansion၊ Testimonial နဲ့ Referral ဖြစ်လာစေခြင်းဖြစ်သည်။",
-    why:["Existing Customer ရဲ့ Knowledge နဲ့ Trust ကို ဆက်အသုံးချနိုင်တယ်။","Recurring Revenue က Cash flow ကို တည်ငြိမ်စေတယ်။","Referral က အားကောင်းတဲ့ low-friction Lead source ဖြစ်တယ်။"],
-    actions:[{title:"Success Review လုပ်ပါ",detail:"ရခဲ့တဲ့ Result၊ ကျန်တဲ့ Gap နဲ့ Next Goal ကို ဆွေးနွေးပါ။"},{title:"Ongoing Value Offer ပေးပါ",detail:"Maintenance၊ support၊ training သို့မဟုတ် next-level package ရွေးပါ။"},{title:"Referral Moment သတ်မှတ်ပါ",detail:"Result ပြီးမှ သင့်တော်တဲ့လူကို မိတ်ဆက်ပေးနိုင်မလား မေးပါ။"},{title:"Learning Loop ပိတ်ပါ",detail:"Feedback ကို Offer၊ Marketing နဲ့ Product ထဲ ပြန်ထည့်ပါ။"}],
-    gate:["Customer success review ရှိတယ်","Renewal/next offer ရှိတယ်","Result ရပြီးမှ testimonial/referral မေးတယ်","Churn reasons ကို မှတ်တမ်းတင်တယ်"],
-    kpis:["Renewal","Churn","Referral rate","Lifetime value"], ai:["Usage summary","Follow-up draft","Feedback themes"], human:["Relationship","Value decision","Permission နဲ့ trust"],
-    mistake:"Customer Result မရခင် Testimonial သို့မဟုတ် Referral တောင်းခြင်း။", example:"Project ပြီးပြီးချင်းမပျောက်ဘဲ 30-day outcome review နဲ့ next improvement plan ပေးပါ။"
+    id: "retention", number: "07", title: "Retention & Referral", mm: "ဆက်သုံး၊ ပြန်ဝယ်၊ မိတ်ဆက်ပေးစေခြင်း", phase: "GROW", color: "#247ebf", pale: "#eaf5ff", icon: Handshake,
+    question: "ရလဒ်ရပြီးတဲ့ Customer က ဆက်သုံး၊ ပြန်ဝယ် ဒါမှမဟုတ် တခြားသူကို မိတ်ဆက်ပေးနေပြီလား?",
+    what: "ပထမအကြိမ် ရောင်းချပြီးနောက် Customer ၏ ရေရှည်အောင်မြင်မှုကို ကူညီပေးပြီး ဆက်လက်အသုံးပြုခြင်း (Renewal)၊ ထပ်မံဝယ်ယူခြင်း၊ ထောက်ခံချက်နှင့် မိတ်ဆွေများထံ ညွှန်းဆိုပေးခြင်းများ ဖြစ်ပေါ်လာစေခြင်း ဖြစ်ပါတယ်။",
+    why: [
+      "ရှိပြီးသား Customer ရဲ့ ယုံကြည်မှုကို အခြေခံပြီး တိုးတက်အောင် လုပ်ဆောင်နိုင်ပါတယ်။",
+      "ပုံမှန်ဝင်ငွေ (Recurring Revenue) က လုပ်ငန်း၏ ငွေကြေးလည်ပတ်မှုကို တည်ငြိမ်စေပါတယ်။",
+      "မိတ်ဆက်ပေးမှု (Referral) က ကုန်ကျစရိတ် အသက်သာဆုံးနှင့် အခိုင်မာဆုံး ဖောက်သည်ရရှိနည်း ဖြစ်ပါတယ်။"
+    ],
+    actions: [
+      { title: "အောင်မြင်မှု သုံးသပ်ချက် ပြုလုပ်ပါ (Success Review)", detail: "ရရှိခဲ့သော ရလဒ်များ၊ လိုအပ်နေသေးသော အချက်များနှင့် နောက်ထပ် ပန်းတိုင်များကို အတူတကွ ဆွေးနွေးပါ။" },
+      { title: "ရေရှည်တန်ဖိုးရှိမည့် အစီအစဉ်ကို ကမ်းလှမ်းပါ", detail: "ထိန်းသိမ်းစောင့်ရှောက်မှု၊ ဆက်လက်ကူညီပေးမှု သို့မဟုတ် နောက်တစ်ဆင့် အဆင့်မြှင့်တင်မှု အစီအစဉ်ကို ရွေးချယ်ပေးပါ။" },
+      { title: "မိတ်ဆက်ပေးရန် သင့်တော်သော အချိန်ကို သတ်မှတ်ပါ", detail: "Customer ထံ ရလဒ်ကောင်း ရရှိပြီးမှသာ အလားတူ လိုအပ်မည့် မိတ်ဆွေများကို မိတ်ဆက်ပေးနိုင်မလား မေးမြန်းပါ။" },
+      { title: "ရရှိသော အကြံပြုချက်များကို ပြန်လည်အသုံးချပါ", detail: "Customer တုံ့ပြန်ချက်များကို Offer၊ Marketing နှင့် Product ထဲသို့ ပြန်လည်ထည့်သွင်း ပိုမိုကောင်းမွန်အောင် ပြင်ဆင်ပါ။" }
+    ],
+    gate: [
+      "Customer အောင်မြင်မှု သုံးသပ်ချက် (Success Review) ပြုလုပ်ခြင်း",
+      "ဆက်လက်အသုံးပြုရန် နောက်ထပ် Offer ရှိခြင်း",
+      "ရလဒ်ကောင်း ရရှိပြီးမှသာ Testimonial နှင့် Referral တောင်းဆိုခြင်း",
+      "လက်လွှတ်ရသည့် အကြောင်းရင်းများ (Churn Reasons) ကို စနစ်တကျ မှတ်တမ်းတင်ခြင်း"
+    ],
+    kpis: ["Retention / Renewal Rate", "Churn Rate", "Referral Rate", "Customer Lifetime Value (LTV)"],
+    ai: ["အသုံးပြုမှု အချက်အလက်များ အကျဉ်းချုပ်ခြင်း", "Follow-up ဆက်သွယ်ရန် မူကြမ်း ရေးသားခြင်း", "Customer တုံ့ပြန်ချက်များမှ Theme ရှာဖွေခြင်း"],
+    human: ["ရေရှည် ရင်းနှီးမှု တည်ဆောက်ခြင်း", "တန်ဖိုးရှိသော ဆုံးဖြတ်ချက်များ ချမှတ်ပေးခြင်း", "ယုံကြည်စိတ်ချရမှု ထိန်းသိမ်းခြင်း"],
+    mistake: "Customer ရလဒ်ကောင်း မရသေးမီ Testimonial သို့မဟုတ် Referral တောင်းဆိုခြင်း။",
+    example: "Project ပြီးပြီးချင်း အဆက်အသွယ် မပြတ်သွားဘဲ ရက် ၃၀ အောင်မြင်မှု သုံးသပ်ချက်နှင့် နောက်ထပ် တိုးတက်စေမည့် အစီအစဉ်ကို ပေးအပ်ပါ။"
   },
   {
-    id:"operations", number:"08", title:"Operations & Scale", mm:"Quality ကို ထပ်ခါတလဲလဲ ပေးနိုင်ခြင်း", phase:"SCALE", color:"#3156a3", pale:"#ebf0ff", icon:Settings2,
-    question:"Founder မပါဘဲ Team နဲ့ System က Quality၊ Cost နဲ့ Speed ကို ထိန်းနိုင်သလား?",
-    what:"လူ၊ Process၊ Tool၊ Data၊ Quality Standard နဲ့ KPI တို့ကို ချိတ်ဆက်ပြီး Result ကို predictable အဖြစ်ထပ်ပေးနိုင်သော Business System ဖြစ်သည်။",
-    why:["Founder bottleneck ကို လျှော့တယ်။","Quality၊ cost၊ capacity ကို မြင်နိုင်တယ်။","Demand သက်သေရှိပြီးမှ Safe scaling လုပ်နိုင်တယ်။"],
-    actions:[{title:"Process Map ရေးပါ",detail:"Trigger မှ Result အထိ steps၊ handoffs၊ decisions နဲ့ exceptions ကို မြင်အောင်ရေးပါ။"},{title:"Standardize လုပ်ပါ",detail:"SOP၊ checklist၊ owner နဲ့ Definition of Done သတ်မှတ်ပါ။"},{title:"Automate after stable",detail:"Repeatable၊ rule-based portion ကိုသာ AI/automation ထည့်ပါ။"},{title:"PDCA Review လုပ်ပါ",detail:"Plan → Do → Check → Act နဲ့ cost၊ quality၊ speed ကို တိုးတက်ပါ။"}],
-    gate:["Core process documented ဖြစ်တယ်","Owner နဲ့ quality standard ရှိတယ်","Unit economics နဲ့ capacity သိတယ်","Automation မတိုင်ခင် process stable ဖြစ်တယ်"],
-    kpis:["Cycle time","Cost/delivery","Error rate","Capacity & margin"], ai:["SOP draft","Reporting","Routing/automation"], human:["System design","Risk/privacy","Accountability"],
-    mistake:"Process မရှင်းသေးခင် Automation လုပ်ပြီး Error ကို ပိုမြန်အောင်လုပ်ခြင်း။", example:"Payment → Welcome → Setup → Delivery → Review ကို SOP ပြီးမှ automation ထည့်ပါ။"
+    id: "operations", number: "08", title: "Operations & Scale", mm: "အရည်အသွေးမကျဘဲ စနစ်တကျချဲ့ထွင်ခြင်း", phase: "SCALE", color: "#3156a3", pale: "#ebf0ff", icon: Settings2,
+    question: "သင်မပါလည်း Team နဲ့ System က တူညီတဲ့အရည်အသွေးကို ပေးနိုင်ပြီလား?",
+    what: "လူ၊ လုပ်ငန်းစဉ်၊ Tool၊ Data၊ အရည်အသွေးစံနှုန်းများနှင့် KPI များကို ချိတ်ဆက်ပြီး ရလဒ်ကောင်းကို ခန့်မှန်းရလွယ်ကူစွာဖြင့် ထပ်ခါတလဲလဲ ပေးနိုင်သော စီးပွားရေးစနစ် တည်ဆောက်ခြင်း ဖြစ်ပါတယ်။",
+    why: [
+      "Founder တစ်ဦးတည်းအပေါ် ဝန်ပိနေမှုကို လျှော့ချပေးနိုင်ပါတယ်။",
+      "အရည်အသွေး၊ ကုန်ကျစရိတ်နှင့် လုပ်ဆောင်နိုင်စွမ်းကို ရှင်းလင်းစွာ မြင်တွေ့စေပါတယ်။",
+      "စျေးကွက်လိုအပ်ချက် သက်သေရပြီးမှသာ စနစ်တကျ ဘေးကင်းစွာ လုပ်ငန်းချဲ့ထွင်နိုင်ပါတယ်။"
+    ],
+    actions: [
+      { title: "လုပ်ငန်းစဉ် အဆင့်ဆင့်ကို ရေးဆွဲပါ (Process Map)", detail: "စတင်ချိန်မှ ရလဒ်ရရှိချိန်အထိ အဆင့်များ၊ တာဝန်လွှဲပြောင်းမှုများ၊ ဆုံးဖြတ်ချက်များနှင့် ခြွင်းချက်များကို မြင်သာအောင် ရေးဆွဲပါ။" },
+      { title: "စံသတ်မှတ်ချက်များ ပြုစုပါ (Standardize)", detail: "လုပ်ငန်းစဉ်လမ်းညွှန် (SOP)၊ စစ်ဆေးရန် Checklist၊ တာဝန်ခံနှင့် ပြီးစီးမှု စံနှုန်းများကို သတ်မှတ်ပါ။" },
+      { title: "တည်ငြိမ်ပြီးမှ စက်စနစ် ထည့်သွင်းပါ (Automate)", detail: "ထပ်တလဲလဲ ပြုလုပ်ရသော စည်းမျဉ်းကျသည့် အပိုင်းများကိုသာ AI နှင့် Automation ဖြင့် အစားထိုးပါ။" },
+      { title: "စဉ်ဆက်မပြတ် သုံးသပ်တိုးတက်ပါ (PDCA Review)", detail: "Plan → Do → Check → Act နည်းလမ်းဖြင့် ကုန်ကျစရိတ်၊ အရည်အသွေးနှင့် အမြန်နှုန်းကို အမြဲတိုးတက်စေပါ။" }
+    ],
+    gate: [
+      "အဓိက လုပ်ငန်းစဉ်များကို စာဖြင့် မှတ်တမ်းတင်ထားပြီးဖြစ်ခြင်း (Documented Core Process)",
+      "လုပ်ငန်းတာဝန်ခံနှင့် အရည်အသွေးစံနှုန်းများ ရှင်းလင်းစွာ သတ်မှတ်ထားခြင်း",
+      "ယူနစ်အလိုက် ကုန်ကျစရိတ်နှင့် ဝန်ဆောင်မှုပေးနိုင်စွမ်းကို တိကျစွာ သိရှိခြင်း",
+      "Automation မထည့်သွင်းမီ လုပ်ငန်းစဉ်ကိုယ်တိုင် တည်ငြိမ်နေခြင်း"
+    ],
+    kpis: ["Process Cycle Time", "Cost Per Delivery", "Error / Rework Rate", "Capacity & Profit Margin"],
+    ai: ["SOP လမ်းညွှန်များ မူကြမ်းရေးသားခြင်း", "အစီရင်ခံစာများ အလိုအလျောက် ထုတ်ယူခြင်း", "လုပ်ငန်းစဉ် လမ်းကြောင်းချိတ်ဆက်မှုများ ပြုလုပ်ခြင်း"],
+    human: ["စီးပွားရေးစနစ် တစ်ခုလုံးကို ဒီဇိုင်းဆွဲခြင်း", "စွန့်စားရမှုနှင့် လုံခြုံရေးကို ထိန်းသိမ်းခြင်း", "တာဝန်ယူမှု၊ တာဝန်ခံမှု သတ်မှတ်ခြင်း"],
+    mistake: "လုပ်ငန်းစဉ် မရှင်းလင်းသေးမီ Automation ချက်ချင်းလုပ်ဆောင်ပြီး အမှားများကို ပိုမိုမြန်ဆန်သွားစေခြင်း။",
+    example: "ငွေပေးချေမှု → ကြိုဆိုမှု → စတင်ပြင်ဆင်မှု → ပေးပို့မှု → သုံးသပ်မှု အဆင့်များကို SOP အရင်သေချာရေးဆွဲပြီးမှ Automation စနစ် ထည့်သွင်းပါ။"
   },
 ];
 
 const finderQuestions = [
-  ["problem","Customer 10 ယောက်နဲ့ ပြဿနာအကြောင်း စကားပြောပြီးပြီလား?"],
-  ["customer","ပထမဆုံးဝယ်မယ့် Customer ကို တိတိကျကျ သတ်မှတ်ထားလား?"],
-  ["offer","တစ်ယောက်ယောက်က Paid Pilot အတွက် ငွေပေးထားလား?"],
-  ["leads","Qualified Leads အပတ်စဉ် ရနေသလား?"],
-  ["sales","သင့်တော်တဲ့ Leads တွေထဲက တချို့ ဝယ်နေသလား?"],
-  ["delivery","Customer က ကတိပေးထားတဲ့ Result ရနေသလား?"],
-  ["retention","Customer က ပြန်ဝယ် သို့မဟုတ် မိတ်ဆက်ပေးသလား?"],
-  ["operations","Founder မပါဘဲ Process ကို ထပ်လုပ်နိုင်သလား?"],
+  ["problem", "Customer ၁၀ ယောက်နဲ့ ပြဿနာအကြောင်း စကားပြောပြီးပြီလား?"],
+  ["customer", "ပထမဆုံးဝယ်မယ့် Customer ကို တိတိကျကျ သတ်မှတ်ထားလား?"],
+  ["offer", "Customer ငွေပေးချင်လောက်အောင် ရှင်းလင်းတဲ့ Offer ရှိပြီလား?"],
+  ["leads", "သင့် Offer လိုအပ်သူတွေကို အပတ်စဉ် ပုံမှန်ရောက်ရှိနေပြီလား?"],
+  ["sales", "သင့်တော်တဲ့ Customer တွေ ဝယ်ယူဆုံးဖြတ်အောင် ကူညီနိုင်နေပြီလား?"],
+  ["delivery", "Customer တွေ ကတိပေးထားတဲ့ ရလဒ် အမှန်တကယ် ရနေပြီလား?"],
+  ["retention", "ရလဒ်ရပြီးတဲ့ Customer က ဆက်သုံး၊ ပြန်ဝယ် ဒါမှမဟုတ် မိတ်ဆက်ပေးနေပြီလား?"],
+  ["operations", "သင်မပါလည်း Team နဲ့ System က တူညီတဲ့ အရည်အသွေးကို ပေးနိုင်ပြီလား?"],
 ] as const;
 
 export default function Home() {
@@ -246,7 +382,6 @@ export default function Home() {
     }
   };
 
-
   const scrollToRoadmap = () => {
     const el = document.getElementById("roadmap-section");
     el?.scrollIntoView({ behavior: "smooth" });
@@ -345,20 +480,20 @@ export default function Home() {
               variant="outline"
               size="sm"
               aria-label="Open Story Mode modal"
-              title="Story Mode"
+              title="Story Mode (ဥပမာ Story)"
               className="min-h-[44px] rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setStoryOpen(true)}
             >
               <BookOpen className="size-4 text-[#4f7cff] shrink-0" />
-              <span className="hidden sm:inline">Story Mode</span>
+              <span className="hidden sm:inline">ဥပမာ Story</span>
             </Button>
 
             <Button
               variant="outline"
               size="sm"
               aria-expanded={finderOpen}
-              aria-label={finderOpen ? "Collapse 60-Second Focus Finder" : "Expand 60-Second Focus Finder"}
-              title="60-Second Focus Finder"
+              aria-label={finderOpen ? "၆၀ စက္ကန့် စစ်ဆေးချက် သိမ်းဆည်းရန်" : "၆၀ စက္ကန့် စစ်ဆေးချက် ဖွင့်ရန်"}
+              title="၆၀ စက္ကန့်နဲ့ သင်အရင်လုပ်သင့်တဲ့အဆင့်ကို ရှာပါ"
               className="min-h-[44px] rounded-xl border-[#ccc7bb] bg-white/90 px-2.5 font-bold text-[#14213d] shadow-xs hover:bg-white hover:text-[#14213d] sm:px-3"
               onClick={() => setFinderOpen((v) => !v)}
             >
@@ -412,12 +547,12 @@ export default function Home() {
                   {syncStatus === "saving" ? (
                     <span className="flex items-center gap-1">
                       <Loader2 className="size-3 animate-spin text-blue-300" />
-                      Syncing to Cloud...
+                      Cloud သို့ သိမ်းဆည်းနေပါသည်...
                     </span>
                   ) : isConfigured ? (
                     <span className="flex items-center gap-1">
                       <CloudCheck className="size-3 text-[#1da98a]" />
-                      Data saved to Cloud
+                      Cloud တွင် အောင်မြင်စွာ သိမ်းထားပြီးဖြစ်သည်
                       {lastSavedTimestamp && (
                         <span className="text-white/70">
                           ({new Date(lastSavedTimestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })})
@@ -427,7 +562,7 @@ export default function Home() {
                   ) : (
                     <span className="flex items-center gap-1">
                       <CloudOff className="size-3 text-[#f6c85f]" />
-                      Saved locally in browser
+                      ဤ Browser ထဲတွင်သာ သိမ်းထားသည်
                     </span>
                   )}
                 </div>
@@ -444,14 +579,16 @@ export default function Home() {
           <div className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-end lg:p-8">
             <div>
               <p className="mb-3 flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#91a2c7]">
-                <Sparkles className="size-4 text-[#f6c85f]" /> Idea မှ Scale အထိ
+                <Sparkles className="size-4 text-[#f6c85f]" /> စိတ်ကူးမှ အလုပ်ဖြစ်သော စီးပွားရေးစနစ်အထိ
               </p>
               <h2 className="max-w-4xl text-2xl font-black leading-tight sm:text-4xl">
-                Startup ကို မှတ်သားဖို့မလိုဘဲ
-                <br className="hidden sm:block" /> အဆင့်လိုက် နားလည်ပြီး လုပ်ကြည့်ပါ
+                Startup စိတ်ကူးရှိပေမယ့် ဘယ်ကစရမလဲ မသိသေးဘူးလား?
               </h2>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-[#c7d0e4]">
-                အဆင့် ၈ ခုကို တစ်ခါတည်းမလုပ်ပါနဲ့။ လက်ရှိ Bottleneck ကိုရှာ၊ Action ကိုစမ်း၊ Evidence ရမှ နောက် Gate ကိုဖြတ်ပါ။
+                Customer ရဲ့ ပြဿနာကို ရှာဖွေခြင်းကနေ ရောင်းအား၊ ရလဒ်ပေးခြင်းနဲ့ လုပ်ငန်းချဲ့ထွင်ခြင်းအထိ အဆင့် ၈ ဆင့်နဲ့ လက်တွေ့လုပ်ကြည့်ပါ။
+              </p>
+              <p className="mt-2 text-xs font-semibold leading-6 text-[#91a2c7]">
+                💡 အဆင့်အားလုံးကို တစ်ခါတည်း မလုပ်ပါနဲ့။ သင့်လုပ်ငန်းကို လက်ရှိတားနေတဲ့အဆင့်ကို အရင်ရှာပြီး လက်တွေ့သက်သေရလာမှ နောက်အဆင့်ကို ဆက်သွားပါ။
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Button
@@ -459,7 +596,7 @@ export default function Home() {
                   onClick={scrollToStartHere}
                   className="min-h-[44px] rounded-xl bg-[#f6c85f] px-4 py-2 text-xs font-black text-[#14213d] hover:bg-[#e0b347]"
                 >
-                  <Rocket className="size-3.5" /> Start Here (စတင်ဖတ်ရန်)
+                  <Rocket className="size-3.5" /> Start Here (ဘယ်ကစရမလဲ)
                 </Button>
 
                 <button
@@ -468,7 +605,7 @@ export default function Home() {
                   onClick={() => setStoryOpen(true)}
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold text-[#bcd3ff] transition hover:bg-white/20 hover:text-white outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#f6c85f] cursor-pointer"
                 >
-                  <BookOpen className="size-4 text-[#f6c85f]" /> Ko Moe ရဲ့ Story ဖတ်ရန်{" "}
+                  <BookOpen className="size-4 text-[#f6c85f]" /> ဥပမာ Story ဖတ်မယ်{" "}
                   <ArrowRight className="size-3.5" />
                 </button>
 
@@ -478,7 +615,7 @@ export default function Home() {
                   onClick={scrollToRoadmap}
                   className="min-h-[44px] rounded-xl border-white/20 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/15"
                 >
-                  <Layers className="size-3.5 text-[#1da98a]" /> Explore 8 Stages
+                  <Layers className="size-3.5 text-[#1da98a]" /> အဆင့် ၈ ဆင့်ကို ကြည့်မယ်
                 </Button>
 
                 <a
@@ -489,7 +626,7 @@ export default function Home() {
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-indigo-400/40 bg-gradient-to-r from-indigo-900/60 to-purple-900/60 px-4 py-2 text-xs font-extrabold text-white shadow-sm transition hover:border-indigo-400/80 hover:from-indigo-900/80 hover:to-purple-900/80 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-400"
                 >
                   <GeminiGemIcon className="size-4" />
-                  <span>Gemini Custom Gem ဖြင့် တိုင်ပင်ရန်</span>
+                  <span>Gemini Mentor နဲ့ တိုင်ပင်မယ်</span>
                   <ExternalLink className="size-3.5 opacity-80" />
                 </a>
               </div>
@@ -557,7 +694,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 1-6. NEW BEGINNER START HERE INTRODUCTION SECTION */}
+        {/* 1-6. BEGINNER START HERE INTRODUCTION SECTION */}
         <StartHereIntro
           onSelectStage={(id) => setStage(id)}
           onOpenStory={() => setStoryOpen(true)}
@@ -570,10 +707,10 @@ export default function Home() {
             <div>
               <div className="flex items-center gap-2">
                 <Gauge className="size-5 text-[#8c70db]" />
-                <h3 className="font-extrabold">60-Second Startup Focus Finder</h3>
+                <h3 className="font-extrabold">၆၀ စက္ကန့်နဲ့ သင်အရင်လုပ်သင့်တဲ့အဆင့်ကို ရှာပါ</h3>
               </div>
               <p className="mt-2 text-sm leading-6 text-[#687085]">
-                အပေါ်ကနေ အစဉ်လိုက်ဖြေပါ။ ပထမဆုံး “မရသေး” က သင့်လက်ရှိ Bottleneck ဖြစ်နိုင်ပါတယ်။
+                မေးခွန်းတွေကို အပေါ်ကနေ အစဉ်လိုက်ဖြေပါ။ ပထမဆုံး “မရသေး” လို့ဖြေတဲ့နေရာက သင့်လုပ်ငန်းကို လက်ရှိတားနေတဲ့ အဓိကအဆင့် ဖြစ်နိုင်ပါတယ်။
               </p>
               <div className="mt-4 grid gap-2 md:grid-cols-2">
                 {finderQuestions.map(([id, q], i) => (
@@ -622,7 +759,7 @@ export default function Home() {
               style={{ background: focus?.pale ?? "#f0eee8" }}
             >
               <p className="text-[10px] font-black uppercase tracking-[.18em] text-[#374151]">
-                Your next focus
+                အခု အရင်လုပ်သင့်တဲ့အဆင့်
               </p>
               {focus ? (
                 <>
@@ -648,12 +785,12 @@ export default function Home() {
                       scrollToRoadmap();
                     }}
                   >
-                    ဒီ Stage ကိုစမယ် <ArrowRight className="size-4" />
+                    ဒီအဆင့်ကို စလုပ်မယ် <ArrowRight className="size-4" />
                   </Button>
                 </>
               ) : (
                 <p className="mt-4 text-sm leading-7 text-[#374151]">
-                  မေးခွန်းတွေဖြေပြီးရင် အခုအရင်လုပ်သင့်တဲ့ Startup Stage ကို ပြပေးပါမယ်။
+                  မေးခွန်းတွေကို ဖြေပြီးရင် သင်လက်ရှိ အရင်ဆုံး လုပ်ဆောင်သင့်တဲ့အဆင့်ကို ဖော်ပြပေးပါမယ်။
                 </p>
               )}
             </div>
@@ -719,7 +856,7 @@ export default function Home() {
             </nav>
             <div className="m-2 mt-4 rounded-2xl bg-[#f0eee8] p-4">
               <div className="flex justify-between text-xs font-extrabold text-[#14213d]">
-                <span>Progress</span>
+                <span>တိုးတက်မှု အခြေအနေ</span>
                 <span>
                   {doneCount}/{total}
                 </span>
@@ -740,7 +877,7 @@ export default function Home() {
                   } catch {}
                 }}
               >
-                <RefreshCw className="size-3.5" /> Reset Progress
+                <RefreshCw className="size-3.5" /> ပြန်လည်စတင်မည်
               </Button>
             </div>
           </aside>
@@ -783,7 +920,7 @@ export default function Home() {
                   />
                   <div>
                     <p className="text-[9px] font-black uppercase tracking-[.18em] text-[#8a8f9b]">
-                      Question that matters
+                      အဓိက ဖြေဆိုရမည့် မေးခွန်း
                     </p>
                     <p className="mt-1 text-sm font-bold leading-6">
                       {active.question}
@@ -803,32 +940,32 @@ export default function Home() {
                     aria-label="Understand stage concepts tab"
                     className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
                   >
-                    📖 Understand
+                    📖 နားလည်ရန်
                   </TabsTrigger>
                   <TabsTrigger
                     value="story"
                     aria-label="Ko Moe Story tab"
                     className="flex h-12 items-center gap-1.5 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
                   >
-                    <BookOpen className="size-3.5 text-[#4f7cff] shrink-0" /> 📖 Story (Ko Moe)
+                    <BookOpen className="size-3.5 text-[#4f7cff] shrink-0" /> 📖 ဥပမာ Story
                   </TabsTrigger>
                   <TabsTrigger
                     value="do"
                     aria-label="Action items tab"
                     className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
                   >
-                    ✅ Do it ({active.actions.filter((_, i) => done[`${active.id}-${i}`]).length}/4)
+                    ✅ လက်တွေ့လုပ်ရန် ({active.actions.filter((_, i) => done[`${active.id}-${i}`]).length}/4)
                   </TabsTrigger>
                   <TabsTrigger
                     value="gate"
                     aria-label="Pass the Gate criteria tab"
                     className="h-12 whitespace-nowrap flex-shrink-0 rounded-xl px-4 text-xs font-bold sm:flex-1"
                   >
-                    ⚖️ Pass the Gate
+                    ⚖️ စစ်ဆေးရန်
                   </TabsTrigger>
                 </TabsList>
 
-                {/* 7. BEGINNER GUIDANCE ORGANIZED WITH EXPLICIT LABELS */}
+                {/* Understand Tab */}
                 <TabsContent value="understand" className="mt-6">
                   <div className="grid gap-4 xl:grid-cols-[1.1fr_.9fr]">
                     <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
@@ -836,7 +973,7 @@ export default function Home() {
                         className="flex items-center gap-2 text-xs font-black"
                         style={{ color: active.color }}
                       >
-                        <Lightbulb className="size-4" /> 📖 WHAT IS THIS?
+                        <Lightbulb className="size-4" /> 📖 ဘာလဲ? (WHAT IS THIS?)
                       </p>
                       <p className="mt-4 text-sm leading-7 text-[#4d566b]">
                         {active.what}
@@ -849,7 +986,7 @@ export default function Home() {
                           className="text-[9px] font-black uppercase tracking-widest"
                           style={{ color: active.color }}
                         >
-                          💡 EXAMPLE
+                          💡 လက်တွေ့ဥပမာ (EXAMPLE)
                         </p>
                         <p className="mt-2 text-xs font-semibold leading-6">
                           {active.example}
@@ -859,7 +996,7 @@ export default function Home() {
 
                     <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
                       <p className="flex items-center gap-2 text-xs font-black text-[#3156a3]">
-                        <ShieldCheck className="size-4" /> 🧠 WHY IT MATTERS
+                        <ShieldCheck className="size-4" /> 🧠 ဘာကြောင့် အရေးကြီးသလဲ? (WHY IT MATTERS)
                       </p>
                       <ul className="mt-4 space-y-3">
                         {active.why.map((v) => (
@@ -874,7 +1011,7 @@ export default function Home() {
                       </ul>
                       <div className="mt-5 rounded-xl bg-[#fff0e9] p-4">
                         <p className="text-[9px] font-black uppercase tracking-widest text-[#e8693e]">
-                          ❌ COMMON MISTAKE
+                          ❌ မကြာခဏလုပ်မိတဲ့ အမှား (COMMON MISTAKE)
                         </p>
                         <p className="mt-2 text-xs font-semibold leading-6 text-[#7a3b22]">
                           {active.mistake}
@@ -898,7 +1035,7 @@ export default function Home() {
                         className="h-8 rounded-xl border border-[#26304a] bg-[#18223b] text-xs font-bold text-[#bcd3ff] hover:bg-[#253250] hover:text-white"
                         onClick={() => setStoryOpen(true)}
                       >
-                        Story Mode အပြည့်ဖွင့်မည် <ArrowRight className="size-3.5" />
+                        Story အပြည့်အစုံဖတ်မည် <ArrowRight className="size-3.5" />
                       </Button>
                     </div>
                     <h3 className="mt-4 text-xl font-black text-white sm:text-2xl">
@@ -964,10 +1101,10 @@ export default function Home() {
                 <TabsContent value="do" className="mt-6">
                   <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <p className="text-xs font-black uppercase tracking-wider text-[#4b5563] whitespace-nowrap">
-                      ✅ WHAT TO DO — STAGE ACTION ITEMS
+                      ✅ လက်တွေ့လုပ်ဆောင်ရန် အချက်များ (STAGE ACTION ITEMS)
                     </p>
                     <span className="text-xs font-bold text-[#1da98a] whitespace-nowrap">
-                      အမှန်ခြစ်ပြီး Progress သိမ်းပါ
+                      အမှန်ခြစ်ပြီး တိုးတက်မှုကို သိမ်းဆည်းပါ
                     </span>
                   </div>
                   <div className="space-y-3">
@@ -1022,7 +1159,7 @@ export default function Home() {
                     <div className="rounded-2xl border border-[#dfdcd3] bg-white p-5">
                       <p className="flex items-center gap-2 text-xs font-black text-[#14213d]">
                         <Scale className="size-4" style={{ color: active.color }} />
-                        ⚖️ PASS THE GATE CRITERIA (BEFORE MOVING ON)
+                        ⚖️ နောက်အဆင့်မတက်ခင် စစ်ဆေးရန် (PASS THE GATE CRITERIA)
                       </p>
                       <div className="mt-4 space-y-3">
                         {active.gate.map((g) => (
@@ -1044,10 +1181,10 @@ export default function Home() {
                         className="text-[10px] font-black uppercase tracking-[.18em]"
                         style={{ color: active.color }}
                       >
-                        Evidence over opinion
+                        ထင်မြင်ချက်ထက် လက်တွေ့သက်သေကို ယုံပါ
                       </p>
                       <p className="mt-3 text-sm font-extrabold leading-6 text-[#14213d]">
-                        Gate ကို Evidence မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာရင် နောက် Stage မတက်ဘဲ အသေးစား Experiment ပြန်လုပ်ပါ။
+                        Gate ကို လက်တွေ့သက်သေ မရှိဘဲ မဖြတ်ပါနဲ့။ မသေချာသေးရင် နောက်အဆင့် မတက်ဘဲ စမ်းသပ်မှု ထပ်မံပြုလုပ်ပါ။
                       </p>
                       <Button
                         aria-label="Go to next stage"
@@ -1057,7 +1194,7 @@ export default function Home() {
                           scrollToRoadmap();
                         }}
                       >
-                        နောက် Stage ကိုကြည့်မယ် <ArrowRight className="size-4" />
+                        နောက်အဆင့်ကို ကြည့်မယ် <ArrowRight className="size-4" />
                       </Button>
                     </div>
                   </div>
@@ -1076,7 +1213,7 @@ export default function Home() {
                     <div>
                       <p className="text-sm font-extrabold text-[#14213d]">AI + Human Team</p>
                       <p className="text-[10px] font-bold text-[#4b5563]">
-                        Speed + judgment
+                        နည်းပညာအမြန်နှုန်း + လူသားဆုံးဖြတ်ချက်
                       </p>
                     </div>
                   </div>
@@ -1117,7 +1254,7 @@ export default function Home() {
                   <div>
                     <p className="text-sm font-extrabold text-[#14213d]">Startup Health Metrics</p>
                     <p className="text-[10px] font-bold text-[#4b5563]">
-                      Activity မဟုတ်ဘဲ Evidence ကိုတိုင်းပါ
+                      လုပ်ခဲ့တာကိုမဟုတ်ဘဲ ရလာတဲ့သက်သေကို တိုင်းပါ
                     </p>
                   </div>
                 </div>
@@ -1143,7 +1280,7 @@ export default function Home() {
               <div className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[.2em] text-[#bcd3ff]">
-                    The founder rule
+                    The founder rule (တည်ထောင်သူ စည်းမျဉ်း)
                   </p>
                   <p className="mt-2 max-w-3xl text-lg font-black leading-7 text-white">
                     Problem ကို သက်သေပြ၊ အနည်းဆုံး Offer ကို ရောင်း၊ Result ကို ကိုယ်တိုင်ပေး၊ ပြီးမှ System နဲ့ Scale လုပ်ပါ။
@@ -1157,7 +1294,7 @@ export default function Home() {
                     scrollToRoadmap();
                   }}
                 >
-                  Next stage <ArrowRight className="size-4" />
+                  Next stage (နောက်အဆင့်) <ArrowRight className="size-4" />
                 </Button>
               </div>
             </section>
@@ -1166,33 +1303,33 @@ export default function Home() {
             <section className="rounded-[24px] border border-[#d9d5ca] bg-[#fbfaf7] p-5 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="text-sm font-extrabold text-[#14213d]">30-Day Quick Start</p>
+                  <p className="text-sm font-extrabold text-[#14213d]">30-Day Quick Start (ရက် ၃၀ စတင်လမ်းကြောင်း)</p>
                   <p className="mt-1 text-xs font-semibold text-[#4b5563]">
-                    ပထမဆုံး Customer Evidence ရဖို့ ရိုးရှင်းတဲ့လမ်းကြောင်း
+                    ပထမဆုံး Customer သက်သေရရှိရန် ရိုးရှင်းသော အစီအစဉ်
                   </p>
                 </div>
                 <Workflow className="size-5 text-[#8c70db]" />
               </div>
               <div className="mt-5 grid gap-3 md:grid-cols-4">
                 <Week
-                  n="1"
+                  n="၁"
                   title="Validate"
-                  body="Customer 10 ယောက်နဲ့ Problem Interview"
+                  body="Customer ၁၀ ယောက်နဲ့ Problem Interview လုပ်ပါ"
                 />
                 <Week
-                  n="2"
+                  n="၂"
                   title="Offer"
-                  body="Paid Pilot နဲ့ Result/Scope သတ်မှတ်"
+                  body="Paid Pilot ရလဒ်နှင့် အတိုင်းအတာ သတ်မှတ်ပါ"
                 />
                 <Week
-                  n="3"
+                  n="၃"
                   title="Sell"
-                  body="20 Prospects၊ Meetings၊ Offer Decisions"
+                  body="Prospect ၂၀ ဆီဆက်သွယ်၊ Meeting ထိုင်ပြီး Offer ပေးပါ"
                 />
                 <Week
-                  n="4"
+                  n="၄"
                   title="Deliver"
-                  body="Quick Win၊ Feedback၊ SOP Draft"
+                  body="Quick Win ပေး၊ Feedback ရယူပြီး SOP စတင်ရေးဆွဲပါ"
                 />
               </div>
             </section>
@@ -1220,7 +1357,6 @@ export default function Home() {
     </main>
   );
 }
-
 
 function MiniStat({ n, label }: { n: string; label: string }) {
   return (
@@ -1276,7 +1412,7 @@ function Week({
   return (
     <div className="rounded-2xl border border-[#dfdcd3] bg-white p-4">
       <p className="text-[9px] font-black uppercase tracking-widest text-[#8c70db]">
-        Week {n}
+        Week {n} (ရက်သတ္တပတ် {n})
       </p>
       <p className="mt-2 text-sm font-extrabold">{title}</p>
       <p className="mt-2 text-[11px] leading-5 text-[#687085]">{body}</p>

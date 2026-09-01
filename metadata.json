@@ -1,6 +1,6 @@
 {
-  "name": "AI Startup Roadmap",
-  "description": "AI Startup Roadmap Myanmar - မြန်မာ Startup စွန့်ဦးတီထွင်သူများအတွက် အဆင့်ဆင့် လက်တွေ့လုပ်ဆောင်ရန် လမ်းညွှန်ချက်",
+  "name": "AI Startup Roadmap Myanmar | စိတ်ကူးမှ အလုပ်ဖြစ်သော စီးပွားရေးစနစ်အထိ",
+  "description": "Startup စိတ်ကူးရှိပေမယ့် ဘယ်ကစရမလဲ မသိသေးဘူးလား? Customer ပြဿနာရှာခြင်းကနေ ရောင်းအား၊ ရလဒ်ပေးခြင်းနဲ့ စနစ်တကျချဲ့ထွင်ခြင်းအထိ အဆင့် ၈ ဆင့်နဲ့ လက်တွေ့လေ့လာပါ။",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

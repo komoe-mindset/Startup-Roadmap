@@ -16,116 +16,121 @@ export const STORY_STAGES: StoryStage[] = [
     number: 1,
     stageBadge: "Stage 1 — 🔍 Problem",
     stageName: "Problem Validation",
-    title: "Customer ရဲ့ တကယ့်ပြဿနာကို ရှာခြင်း",
+    title: "Customer ရဲ့ တကယ့်ပြဿနာကို သက်သေပြခြင်း",
     paragraphs: [
-      "Ko Moe မှာ AI ကိုသုံးပြီး Small Business တွေအတွက် Facebook Content Service တစ်ခုလုပ်မယ့် Idea ရှိတယ်။ ဒါပေမယ့် Website တည်ဆောက်တာကနေ မစဘူး။ Customer Problem ကို နားလည်တာကနေ စတယ်။",
-      "Ko Moe က ဆိုင်ရှင် 10 ယောက်နဲ့ စကားပြောပြီး သူတို့ရဲ့ တကယ့် Problem က AI မရှိတာမဟုတ်ဘဲ Content လုပ်ဖို့ အချိန်နဲ့ Idea မရှိတာဆိုတာ သိလာတယ်."
+      "Ko Moe မှာ AI ကို အသုံးပြုပြီး လုပ်ငန်းငယ်တွေအတွက် Facebook Content Service ပြုလုပ်ပေးမယ့် စိတ်ကူးတစ်ခု ရှိခဲ့ပါတယ်။ ဒါပေမဲ့ သူဟာ Website ဒါမှမဟုတ် Software ချက်ချင်းမတည်ဆောက်ခဲ့ပါဘူး။ Customer တွေ တကယ်ကြုံနေရတဲ့ ပြဿနာကို အရင်ဆုံး နားလည်အောင် စတင်ခဲ့ပါတယ်။",
+      "Ko Moe ဟာ ဆိုင်ရှင် ၁၀ ယောက်နဲ့ စကားပြောခဲ့ပြီး သူတို့ရဲ့ အဓိကပြဿနာဟာ AI မရှိတာမဟုတ်ဘဲ Content ရေးဖို့ အချိန်မရှိတာနဲ့ စိတ်ကူးမထွက်တာဖြစ်ကြောင်း တွေ့ရှိခဲ့ပါတယ်။"
     ],
-    quote: "“မင်းမှာ Idea ရှိတာမှန်တယ်။ ဒါပေမယ့် Customer မှာ တကယ် Problem ရှိလား?”",
-    lesson: "ကိုယ့် Idea ကိုချစ်တာထက် Customer Problem ကို နားလည်ပါ။"
+    quote: "“သင့်မှာ Idea ကောင်းတစ်ခု ရှိတာမှန်ပေမဲ့ Customer တွေမှာ တကယ်ဖြေရှင်းချင်တဲ့ ပြဿနာ ရှိမရှိ အရင်ဆုံး သက်သေပြရပါမယ်။”",
+    lesson: "ကိုယ့်စိတ်ကူးကိုသာ သဘောကျနေမယ့်အစား Customer ရဲ့ တကယ့်ပြဿနာကို အရင်ဆုံး သေချာနားလည်ပါ။"
   },
   {
     id: "customer",
     number: 2,
-    stageBadge: "Stage 2 — 👤 Customer",
+    stageBadge: "Stage 2 — 🎯 Customer",
     stageName: "Customer & Positioning",
-    title: "ဘယ်သူ့အတွက်လုပ်မှာလဲ?",
+    title: "ပထမဆုံးကူညီမယ့် Customer ကို ရွေးချယ်ခြင်း",
     paragraphs: [
-      "Ko Moe က “Business အားလုံး” ကို Target မလုပ်တော့ဘဲ Facebook အသုံးပြုနေတဲ့ Myanmar Restaurant နဲ့ Small Retail Shop Owner တွေကို Focus လုပ်တယ်."
+      "Ko Moe ဟာ “လုပ်ငန်းအားလုံး” ကို မရောင်းတော့ဘဲ Facebook စာမျက်နှာ အသုံးပြုနေတဲ့ မြန်မာ စားသောက်ဆိုင်တွေနဲ့ အရောင်းဆိုင်ပိုင်ရှင်တွေကိုသာ အဓိကထား ကူညီဖို့ ရွေးချယ်ခဲ့ပါတယ်။",
+      "Customer အုပ်စုကို တိကျစွာ သတ်မှတ်လိုက်တဲ့အခါ ဘယ်နေရာမှာ ရှာရမလဲနဲ့ ဘယ်လို စကားလုံးတွေ သုံးရမလဲဆိုတာ ပိုမိုရှင်းလင်းလာပါတယ်။"
     ],
-    lesson: "လူတိုင်းကို ရောင်းချင်ရင် ဘယ်သူ့ကိုမှ တိတိကျကျ မပြောနိုင်ဘူး။"
+    lesson: "လူတိုင်းကို ရောင်းဖို့ ကြိုးစားရင် ဘယ်သူ့ကိုမှ တိတိကျကျ ဆွဲဆောင်နိုင်မှာ မဟုတ်ပါဘူး။"
   },
   {
     id: "offer",
     number: 3,
-    stageBadge: "Stage 3 — 🎁 Offer",
+    stageBadge: "Stage 3 — 📦 Offer & MVP",
     stageName: "Offer & MVP",
-    title: "Customer က ဘာကိုဝယ်မှာလဲ?",
+    title: "ငွေပေးဝယ်ယူရကျိုးနပ်တဲ့ အနည်းဆုံးဖြေရှင်းချက်",
     paragraphs: [
-      "“AI Powered Marketing Solution” လို့မပြောတော့ဘဲ —",
-      "“သင့် Product Information ပို့ပေးပါ။ တစ်လအတွက် Facebook Post Idea 30 ခုနဲ့ Caption 30 ခု ပြင်ဆင်ပေးမယ်။” လို့ တိကျတဲ့ Offer ပေးတယ်။"
+      "“AI Marketing Platform ကြီး” လို့ မိတ်ဆက်မယ့်အစား တိကျတဲ့ ကမ်းလှမ်းချက်တစ်ခုကို ပြုလုပ်ခဲ့ပါတယ်။",
+      "“သင့်ဆိုင်ရဲ့ အချက်အလက်ကို ပို့ပေးပါ။ တစ်လစာအတွက် Facebook Post စိတ်ကူး ၃၀ ခုနဲ့ မြန်မာလို Caption ၃၀ ခုကို ၃ ရက်အတွင်း ပြင်ဆင်ပေးပါမယ်။” ဆိုတဲ့ တိကျတဲ့ ရလဒ်နဲ့ ဈေးနှုန်းကို ပေးခဲ့ပါတယ်။"
     ],
-    quote: "“သင့် Product Information ပို့ပေးပါ။ တစ်လအတွက် Facebook Post Idea 30 ခုနဲ့ Caption 30 ခု ပြင်ဆင်ပေးမယ်။”",
-    lesson: "Customer က Technology ကို မဝယ်ဘူး။ Result ကို ဝယ်တယ်။"
+    quote: "“သင့်ဆိုင်ရဲ့ အချက်အလက်ကို ပို့ပေးပါ။ တစ်လစာအတွက် Facebook Post စိတ်ကူး ၃၀ ခုနဲ့ Caption ၃၀ ခုကို အဆင်သင့် ပြင်ဆင်ပေးပါမယ်။”",
+    lesson: "Customer ဟာ နည်းပညာကို မဝယ်ပါဘူး။ သူတို့ရရှိမယ့် ရလဒ်ကိုသာ ငွေပေးဝယ်ယူတာ ဖြစ်ပါတယ်။"
   },
   {
     id: "leads",
     number: 4,
     stageBadge: "Stage 4 — 📣 Lead Generation",
     stageName: "Lead Generation",
-    title: "Customer တွေကို ခေါ်လာခြင်း",
+    title: "ဖြေရှင်းချက်လိုအပ်သူများထံ ရောက်ရှိခြင်း",
     paragraphs: [
-      "Ko Moe က Facebook Post, Short Video, Free Template, Referral နဲ့ Website ကနေ Potential Customers ကို ခေါ်လာတယ်."
+      "Ko Moe ဟာ Facebook ဆွေးနွေးချက်များ၊ ဗီဒီယိုတိုများ၊ အခမဲ့ စစ်ဆေးရန် Checklist များနဲ့ မိတ်ဆက်ပေးမှုတွေကတစ်ဆင့် သူ့ဝန်ဆောင်မှု လိုအပ်နိုင်တဲ့ ဆိုင်ရှင်တွေဆီ အပတ်စဉ် ပုံမှန်ရောက်ရှိအောင် လုပ်ဆောင်ခဲ့ပါတယ်။",
+      "Follower အများကြီးရဖို့ထက် ဝန်ဆောင်မှုနဲ့ ကိုက်ညီတဲ့ စိတ်ဝင်စားသူ (Qualified Leads) တွေနဲ့ စကားစမြည် စတင်နိုင်ဖို့ကိုသာ အဓိကထားခဲ့ပါတယ်။"
     ],
-    lesson: "Lead Generation = မှန်ကန်တဲ့လူတွေကို ကိုယ့်ဆီ ခေါ်လာခြင်း။"
+    lesson: "Lead Generation ဆိုတာ စိတ်ဝင်စားသူများစွာကို ကြည့်ရုံတင်မကဘဲ တကယ်ကိုက်ညီတဲ့သူတွေကို ကိုယ့်ဆီ ရောက်လာစေခြင်း ဖြစ်ပါတယ်။"
   },
   {
     id: "sales",
     number: 5,
     stageBadge: "Stage 5 — 💰 Sales",
     stageName: "Sales",
-    title: "ဝယ်ယူဖို့ ကူညီခြင်း",
+    title: "ယုံကြည်စိတ်ချစွာ ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီခြင်း",
     paragraphs: [
-      "Customer က “စျေးဘယ်လောက်လဲ?” လို့မေးတဲ့အခါ Ko Moe က စျေးပဲမပြောဘဲ Problem ကိုမေးတယ်, Sample ပြတယ်, သင့်တော်တဲ့ Package ကို အကြံပြုတယ်."
+      "Customer က “ဈေးဘယ်လောက်လဲ?” လို့ မေးတဲ့အခါ Ko Moe ဟာ ဈေးတစ်ခုတည်းကို ချက်ချင်းမပြောဘဲ ဆိုင်ရှင်ရဲ့ လက်ရှိအခက်အခဲကို အရင်မေးမြန်းပါတယ်။",
+      "နမူနာအရည်အသွေးကို ပြသပြီး သင့်တော်တဲ့ Package ကို ရှင်းပြကာ သက်သောင့်သက်သာ ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီပေးခဲ့ပါတယ်။"
     ],
-    lesson: "Sales = သင့်တော်တဲ့ Customer ကို ဝယ်ယူဖို့ ကူညီခြင်း။"
+    lesson: "Sales ဆိုတာ ဖိအားပေးရောင်းချခြင်း မဟုတ်ပါဘူး။ Customer ရဲ့ လိုအပ်ချက်နဲ့ ကိုက်ညီတဲ့အခါ ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီပေးခြင်း ဖြစ်ပါတယ်။"
   },
   {
     id: "delivery",
     number: 6,
-    stageBadge: "Stage 6 — 📦 Delivery",
+    stageBadge: "Stage 6 — 🚚 Delivery",
     stageName: "Delivery & Success",
-    title: "ကတိပေးထားတဲ့ Result ကို ပေးခြင်း",
+    title: "ကတိပေးထားတဲ့ရလဒ်ကို အမှန်တကယ်ပေးခြင်း",
     paragraphs: [
-      "Customer ဝယ်ပြီးတာနဲ့ အလုပ်မပြီးသေးဘူး. Ko Moe က ကတိပေးထားတဲ့ Content နဲ့ Result ကို Quality ကောင်းကောင်းနဲ့ ပေးရတယ်."
+      "Customer ငွေပေးပြီးတာနဲ့ အလုပ်မပြီးသေးပါဘူး။ Ko Moe ဟာ ကတိပေးထားတဲ့ Post ၃၀ ကို သတ်မှတ်ရက်ထက်စောပြီး အရည်အသွေး ကောင်းမွန်စွာ ပေးပို့နိုင်အောင် အစွမ်းကုန် လုပ်ဆောင်ခဲ့ပါတယ်။",
+      "ပထမအပတ်အတွင်းမှာပဲ ဆိုင်ရှင်ကို ကျေနပ်ဖွယ်ရလဒ်တစ်ခု အမြန်ဆုံး ခံစားရစေခဲ့ပါတယ်။"
     ],
-    lesson: "Sales က Promise ပေးတယ်။ Delivery က Promise ကို ပြည့်စုံစေတယ်။"
-  },
-  {
-    id: "operations",
-    number: 7,
-    stageBadge: "Stage 7 — ⚙️ Operations",
-    stageName: "Operations & Scale",
-    title: "Quality ကို ထပ်ခါတလဲလဲ ပေးနိုင်အောင် System တည်ဆောက်ခြင်း",
-    paragraphs: [
-      "Customer 10 ယောက်ဖြစ်လာတော့ Ko Moe က Template, Checklist, SOP, Folder Structure နဲ့ Automation တည်ဆောက်တယ်."
-    ],
-    flow: [
-      "Customer Information",
-      "Content Brief",
-      "AI Draft",
-      "Human Review",
-      "Customer Approval",
-      "Final Delivery"
-    ],
-    lesson: "Operations က Quality တူတူနဲ့ Result ကို ထပ်ခါတလဲလဲ ပေးနိုင်စေတယ်။"
+    lesson: "Sales က ကတိပေးတာဖြစ်ပြီး Delivery က အဲဒီကတိကို လက်တွေ့ရလဒ်အဖြစ် သက်သေပြတာ ဖြစ်ပါတယ်။"
   },
   {
     id: "retention",
-    number: 8,
-    stageBadge: "Stage 8 — 🚀 Growth",
-    stageName: "Retention & Growth",
-    title: "အလုပ်ဖြစ်ပြီးသား System ကို ချဲ့ထွင်ခြင်း",
+    number: 7,
+    stageBadge: "Stage 7 — 🔄 Retention & Referral",
+    stageName: "Retention & Referral",
+    title: "ဆက်သုံး၊ ပြန်ဝယ်၊ မိတ်ဆက်ပေးစေခြင်း",
     paragraphs: [
-      "Ko Moe က Customer, Lead, Conversion, Cost နဲ့ Retention Data ကို သိလာပြီ. အခုတော့ Guess လုပ်နေတဲ့ Founder မဟုတ်တော့ဘဲ System တစ်ခုကို စီမံနေတဲ့ Business Owner ဖြစ်လာတယ်."
+      "တစ်လပြည့်ပြီးနောက် ဆိုင်ရှင်ရဲ့ အောင်မြင်မှုနဲ့ ရလဒ်တွေကို အတူတကွ သုံးသပ်ပြီး နောက်တစ်လအတွက် ဆက်လက်အားဖြည့်ပေးမယ့် အစီအစဉ်ကို ကမ်းလှမ်းခဲ့ပါတယ်။",
+      "ကျေနပ်အားရတဲ့ ဆိုင်ရှင်တွေက နောက်ထပ်မိတ်ဆွေ ဆိုင်ရှင်တွေကိုပါ ထပ်မံမိတ်ဆက်ပေးတဲ့အတွက် ကြော်ငြာစရိတ်မကုန်ဘဲ ဝယ်သူအသစ်တွေ ထပ်မံရရှိလာပါတယ်။"
     ],
-    lesson: "Growth ဆိုတာ အလုပ်မဖြစ်သေးတာကို ကြီးအောင်လုပ်တာမဟုတ်ဘူး။ အလုပ်ဖြစ်ပြီးသား System ကို ချဲ့တာ။"
+    lesson: "လက်ရှိ Customer ကို ရလဒ်ကောင်းအောင် ကူညီပေးခြင်းက အကောင်းဆုံးနဲ့ ကုန်ကျစရိတ်အသက်သာဆုံး ကြီးထွားနည်း ဖြစ်ပါတယ်။"
+  },
+  {
+    id: "operations",
+    number: 8,
+    stageBadge: "Stage 8 — ⚙️ Operations & Scale",
+    stageName: "Operations & Scale",
+    title: "အရည်အသွေးမကျဘဲ စနစ်တကျချဲ့ထွင်ခြင်း",
+    paragraphs: [
+      "Customer ၁၀ ယောက်ကျော်လာတဲ့အခါ Ko Moe ဟာ တစ်ယောက်တည်း အားလုံးမလုပ်တော့ဘဲ Template များ၊ စစ်ဆေးရန် Checklist များ၊ လုပ်ငန်းစဉ်လမ်းညွှန် (SOP) များနဲ့ AI Automation ကို အသုံးပြုပြီး စနစ်တကျ ချိတ်ဆက်ခဲ့ပါတယ်။",
+      "ဒီလိုလုပ်ဆောင်လိုက်တဲ့အတွက် သူ မပါဝင်ဘဲနဲ့လည်း တူညီတဲ့ အရည်အသွေးနဲ့ အချိန်မီ ပို့ဆောင်နိုင်တဲ့ စီးပွားရေးစနစ်တစ်ခု ဖြစ်လာခဲ့ပါတယ်။"
+    ],
+    flow: [
+      "Customer ဆိုင်အချက်အလက် လက်ခံခြင်း",
+      "Content အဓိကအချက်များ ပြင်ဆင်ခြင်း",
+      "AI မူကြမ်း ရေးသားဖန်တီးခြင်း",
+      "လူကိုယ်တိုင် စစ်ဆေးတည်းဖြတ်ခြင်း",
+      "Customer ထံမှ အတည်ပြုချက်ရယူခြင်း",
+      "အချိန်မီ အပြီးသတ် ပို့ဆောင်ပေးခြင်း"
+    ],
+    lesson: "Operations ဆိုတာ တူညီတဲ့ အရည်အသွေးနဲ့ ရလဒ်ကောင်းကို ထပ်ခါတလဲလဲ ပေးနိုင်အောင် စနစ်တည်ဆောက်ခြင်း ဖြစ်ပါတယ်။"
   }
 ];
 
 export const STORY_SUMMARY = {
-  intro: "Ko Moe မှာ AI ကိုသုံးပြီး Small Business တွေအတွက် Facebook Content Service တစ်ခုလုပ်မယ့် Idea ရှိတယ်။ ဒါပေမယ့် Website တည်ဆောက်တာကနေ မစဘူး။ Customer Problem ကို နားလည်တာကနေ စတယ်။",
-  quote: "“Startup ဆိုတာ App တစ်ခုတည်ဆောက်တာမဟုတ်ဘူး။ Customer ရဲ့ Problem ကို ဖြေရှင်းပြီး အဲဒီ Result ကို ထပ်ခါတလဲလဲ ပေးနိုင်တဲ့ System တစ်ခု တည်ဆောက်တာဖြစ်တယ်။”",
+  intro: "Ko Moe မှာ AI ကို အသုံးပြုပြီး လုပ်ငန်းငယ်တွေအတွက် Facebook Content ဝန်ဆောင်မှု ပေးမယ့် စိတ်ကူးတစ်ခု ရှိခဲ့ပါတယ်။ ဒါပေမဲ့ သူဟာ Website အရင်မတည်ဆောက်ဘဲ Customer တွေရဲ့ ပြဿနာကို အရင်ဆုံး နားလည်အောင် စတင်ခဲ့ပါတယ်။",
+  quote: "“Startup ဆိုတာ App တစ်ခုတည်ဆောက်တာပဲ မဟုတ်ပါဘူး။ Customer ရဲ့ အရေးကြီးတဲ့ပြဿနာကို ဖြေရှင်းပြီး အဲဒီရလဒ်ကို ထပ်ခါတလဲလဲ ပေးနိုင်တဲ့ စီးပွားရေးစနစ်တစ်ခု တည်ဆောက်ခြင်းဖြစ်ပါတယ်။”",
   flowSteps: [
-    "IDEA",
     "PROBLEM",
     "CUSTOMER",
     "OFFER",
     "LEAD GENERATION",
     "SALES",
     "DELIVERY",
-    "OPERATIONS",
-    "GROWTH"
+    "RETENTION",
+    "OPERATIONS"
   ],
-  oneLiner: "Problem ကိုရှာ → Customer ကိုရွေး → Offer ဖန်တီး → လူတွေကိုခေါ်လာ → ဝယ်ဖို့ကူညီ → Result ပေး → System တည်ဆောက် → အလုပ်ဖြစ်တာကို ချဲ့ထွင်"
+  oneLiner: "ပြဿနာအစစ်ကိုရှာ → ကူညီမယ့် Customer ကိုရွေး → ဝယ်ယူရကျိုးနပ်တဲ့ Offer တည်ဆောက် → လိုအပ်သူများထံ ရောက်အောင်လုပ် → ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီ → ကတိပေးထားတဲ့ရလဒ်ကို ပေး → ဆက်သုံး၊ ပြန်ဝယ်၊ မိတ်ဆက်ပေးစေ → စနစ်တကျ ချဲ့ထွင်"
 };

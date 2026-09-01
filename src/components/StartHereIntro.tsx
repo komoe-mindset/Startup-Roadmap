@@ -3,12 +3,8 @@ import {
   ArrowRight,
   BookOpen,
   ChevronDown,
-  ChevronRight,
   Compass,
-  HelpCircle,
   Layers,
-  Lightbulb,
-  MapPin,
   Rocket,
   Sparkles,
   Zap,
@@ -22,26 +18,25 @@ interface StartHereIntroProps {
 }
 
 const QUESTIONS = [
-  { id: "problem", number: "01", question: "ဘယ် Problem ကို ဖြေရှင်းမလဲ?", tag: "Problem", color: "#e8693e", pale: "#fff0e9" },
-  { id: "customer", number: "02", question: "ဘယ် Customer အတွက်လဲ?", tag: "Customer", color: "#d79a24", pale: "#fff8df" },
-  { id: "offer", number: "03", question: "Customer ကို ဘာ Offer ပေးမလဲ?", tag: "Offer", color: "#8c70db", pale: "#f2edff" },
-  { id: "leads", number: "04", question: "Customer ကို ဘယ်လိုခေါ်လာမလဲ?", tag: "Leads", color: "#ef7d32", pale: "#fff1e3" },
-  { id: "sales", number: "05", question: "ဘယ်လိုရောင်းမလဲ?", tag: "Sales", color: "#b75fbd", pale: "#faedfb" },
-  { id: "delivery", number: "06", question: "Result ကို ဘယ်လိုပေးမလဲ?", tag: "Delivery", color: "#1da98a", pale: "#e8fbf5" },
-  { id: "operations", number: "07", question: "Quality တူတူနဲ့ ဘယ်လိုထပ်လုပ်မလဲ?", tag: "Operations", color: "#3156a3", pale: "#ebf0ff" },
-  { id: "retention", number: "08", question: "အလုပ်ဖြစ်လာရင် ဘယ်လို Growth လုပ်မလဲ?", tag: "Growth", color: "#247ebf", pale: "#eaf5ff" },
+  { id: "problem", number: "01", question: "လူတွေ တကယ်ကြုံနေရပြီး ဖြေရှင်းဖို့ အရေးကြီးတဲ့ ပြဿနာကို သက်သေပြထားပြီလား?", tag: "Problem", color: "#e8693e", pale: "#fff0e9" },
+  { id: "customer", number: "02", question: "ဘယ်သူ့ရဲ့ ဘယ်ပြဿနာကို အရင်ဆုံး ဖြေရှင်းပေးမလဲ?", tag: "Customer", color: "#d79a24", pale: "#fff8df" },
+  { id: "offer", number: "03", question: "Customer ငွေပေးချင်လောက်အောင် ရလဒ်ရှင်းတဲ့ Offer ရှိပြီလား?", tag: "Offer", color: "#8c70db", pale: "#f2edff" },
+  { id: "leads", number: "04", question: "သင့် Offer လိုအပ်သူတွေကို အပတ်စဉ် ပုံမှန်ရောက်ရှိနိုင်ပြီလား?", tag: "Leads", color: "#ef7d32", pale: "#fff1e3" },
+  { id: "sales", number: "05", question: "Customer ရဲ့လိုအပ်ချက်ကို နားလည်ပြီး မှန်ကန်တဲ့ ဝယ်ယူဆုံးဖြတ်ချက်ချနိုင်အောင် ကူညီနိုင်ပြီလား?", tag: "Sales", color: "#b75fbd", pale: "#faedfb" },
+  { id: "delivery", number: "06", question: "ကတိပေးထားတဲ့ရလဒ်ကို အချိန်မီ၊ အရည်အသွေးကောင်းကောင်း ပေးနိုင်ပြီလား?", tag: "Delivery", color: "#1da98a", pale: "#e8fbf5" },
+  { id: "retention", number: "07", question: "ရလဒ်ရပြီးတဲ့ Customer က ဆက်သုံး၊ ပြန်ဝယ် ဒါမှမဟုတ် တခြားသူကို မိတ်ဆက်ပေးနေပြီလား?", tag: "Retention", color: "#247ebf", pale: "#eaf5ff" },
+  { id: "operations", number: "08", question: "သင်မပါလည်း Team နဲ့ System က တူညီတဲ့အရည်အသွေးကို ပေးနိုင်ပြီလား?", tag: "Operations", color: "#3156a3", pale: "#ebf0ff" },
 ];
 
 const SIMPLE_FLOW = [
-  { name: "IDEA", desc: "စိတ်ကူး" },
-  { name: "PROBLEM", desc: "ပြဿနာ" },
-  { name: "CUSTOMER", desc: "ဖောက်သည်" },
-  { name: "OFFER", desc: "ဖြေရှင်းချက်" },
-  { name: "LEAD GENERATION", desc: "လူခေါ်ခြင်း" },
-  { name: "SALES", desc: "အရောင်း" },
-  { name: "DELIVERY", desc: "ရလဒ်ပေးခြင်း" },
-  { name: "OPERATIONS", desc: "စနစ်တည်ဆောက်ခြင်း" },
-  { name: "GROWTH", desc: "ချဲ့ထွင်ခြင်း" },
+  { name: "PROBLEM", desc: "ပြဿနာအစစ်ရှာ" },
+  { name: "CUSTOMER", desc: "ဖောက်သည်ရွေး" },
+  { name: "OFFER", desc: "ဖြေရှင်းချက်တည်ဆောက်" },
+  { name: "LEAD GEN", desc: "လိုအပ်သူထံရောက်ရှိ" },
+  { name: "SALES", desc: "ဝယ်ယူဆုံးဖြတ်ကူညီ" },
+  { name: "DELIVERY", desc: "ကတိရလဒ်ပေး" },
+  { name: "RETENTION", desc: "ဆက်သုံး/ပြန်ဝယ်" },
+  { name: "OPERATIONS", desc: "စနစ်တကျချဲ့ထွင်" },
 ];
 
 const MACHINE_FLOW = [
@@ -51,8 +46,8 @@ const MACHINE_FLOW = [
   { label: "CUSTOMER", sub: "ဖောက်သည်" },
   { label: "DELIVERY", sub: "ပေးပို့" },
   { label: "RESULT", sub: "ရလဒ်" },
-  { label: "OPERATIONS", sub: "စနစ်" },
-  { label: "GROWTH", sub: "ချဲ့ထွင်" },
+  { label: "RETENTION", sub: "ဆက်သုံး" },
+  { label: "OPERATIONS", sub: "စနစ်တကျချဲ့ထွင်" },
 ];
 
 export function StartHereIntro({
@@ -84,7 +79,7 @@ export function StartHereIntro({
             className="min-h-[44px] rounded-xl bg-[#14213d] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-[#203156]"
           >
             <Rocket className="size-3.5 text-[#f6c85f]" />
-            Start Here
+            Start Here (ဘယ်ကစရမလဲ)
           </Button>
 
           <Button
@@ -94,7 +89,7 @@ export function StartHereIntro({
             className="min-h-[44px] rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
           >
             <BookOpen className="size-3.5 text-[#4f7cff]" />
-            Ko Moe Story
+            Ko Moe Story (ဥပမာ Story)
           </Button>
 
           <Button
@@ -104,7 +99,7 @@ export function StartHereIntro({
             className="min-h-[44px] rounded-xl border-[#d0cbbe] bg-white px-3.5 py-1.5 text-xs font-bold text-[#14213d] shadow-xs hover:bg-[#f3f1eb]"
           >
             <Layers className="size-3.5 text-[#1da98a]" />
-            Explore 8 Stages
+            Explore 8 Stages (အဆင့် ၈ ဆင့်)
           </Button>
         </div>
       </div>
@@ -119,13 +114,13 @@ export function StartHereIntro({
                 Beginner-Friendly Guide
               </p>
               <h2 className="mt-1 text-2xl font-black text-[#14213d] sm:text-3xl">
-                🚀 AI Startup Roadmap ကို ဘယ်လိုသုံးမလဲ?
+                🚀 AI Startup Roadmap ကို ဘယ်လို အသုံးပြုမလဲ?
               </h2>
             </div>
             <button
               type="button"
               aria-expanded={detailsOpen}
-              aria-label={detailsOpen ? "အကျဉ်းချုံ့မည် (Collapse details)" : "အသေးစိတ်ဖွင့်မည် (Expand details)"}
+              aria-label={detailsOpen ? "အကျဉ်းချုံ့မည်" : "အသေးစိတ်ဖွင့်မည်"}
               onClick={() => setDetailsOpen((v) => !v)}
               className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9d5ca] bg-white px-3.5 py-1.5 text-xs font-bold text-[#374151] transition hover:bg-[#f3f1eb] hover:text-[#14213d] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#14213d] cursor-pointer"
             >
@@ -138,13 +133,13 @@ export function StartHereIntro({
 
           <div className="mt-5 max-w-4xl space-y-3 text-sm leading-relaxed text-[#374151]">
             <p className="font-semibold text-[#14213d]">
-              ဒီ Website က Startup တစ်ခု စတင်ချင်သူအတွက် Idea ကနေ Business System တစ်ခုဖြစ်လာတဲ့အထိ Step-by-Step နားလည်နိုင်အောင် လမ်းညွှန်ပေးထားတာ ဖြစ်ပါတယ်။
+              ဒီ Website က Startup တစ်ခု စတင်လိုသူများအတွက် စိတ်ကူးတစ်ခုကနေ တကယ့်စီးပွားရေးစနစ်တစ်ခု ဖြစ်လာတဲ့အထိ အဆင့်ဆင့် လေ့ကျင့်လုပ်ဆောင်နိုင်အောင် လမ်းညွှန်ပေးထားတာ ဖြစ်ပါတယ်။
             </p>
             <p>
-              Startup ဆိုတာ Website တစ်ခုလုပ်တာ၊ App တစ်ခုရေးတာ၊ AI သုံးတာပဲ မဟုတ်ပါဘူး။
+              Startup ဆိုတာ App သို့မဟုတ် Website တစ်ခုတည်ဆောက်တာသက်သက် မဟုတ်ပါဘူး။ Customer ရဲ့ အရေးကြီးတဲ့ပြဿနာကို ဖြေရှင်းပြီး အဲဒီရလဒ်ကို ထပ်ခါတလဲလဲ ပေးနိုင်တဲ့ စီးပွားရေးစနစ်တစ်ခု တည်ဆောက်ခြင်း ဖြစ်ပါတယ်။
             </p>
             <p className="font-medium text-[#14213d]">
-              Startup တစ်ခု အလုပ်ဖြစ်ဖို့ ဒီမေးခွန်းတွေကို တစ်ဆင့်ချင်း ဖြေနိုင်ဖို့ လိုပါတယ်။
+              သင့်လုပ်ငန်း စနစ်တကျ အလုပ်ဖြစ်စေဖို့ အောက်ပါ မေးခွန်း ၈ ခုကို အဆင့်လိုက် ဖြေဆိုနိုင်ဖို့ လိုအပ်ပါတယ်။
             </p>
           </div>
 
@@ -195,10 +190,10 @@ export function StartHereIntro({
                 </span>
                 <div>
                   <h3 className="text-sm font-extrabold text-[#14213d]">
-                    Simple Startup Flow
+                    Startup စီးဆင်းမှု လုပ်ငန်းစဉ် (Startup Flow)
                   </h3>
                   <p className="text-[11px] text-[#687085]">
-                    Idea မှ Growth အထိ တစ်ဆင့်ချင်း စီးဆင်းပုံ
+                    စိတ်ကူးမှ လုပ်ငန်းချဲ့ထွင်ရေးအထိ အဆင့်ဆင့် စီးဆင်းပုံ
                   </p>
                 </div>
               </div>
@@ -228,7 +223,7 @@ export function StartHereIntro({
 
               {/* Under the flow memorable summary */}
               <div className="mt-4 rounded-xl border border-[#cbe4d8] bg-[#f0f9f5] p-3.5 text-center text-xs font-extrabold text-[#126b54] sm:text-sm">
-                Problem ကိုရှာ → Customer ကိုရွေး → Offer ဖန်တီး → လူတွေကိုခေါ်လာ → ဝယ်ဖို့ကူညီ → Result ပေး → System တည်ဆောက် → အလုပ်ဖြစ်တာကို ချဲ့ထွင်
+                ပြဿနာအစစ်ကိုရှာ → ကူညီမယ့် Customer ကိုရွေး → ဝယ်ယူရကျိုးနပ်တဲ့ Offer တည်ဆောက် → လိုအပ်သူများထံ ရောက်အောင်လုပ် → ဝယ်ယူဆုံးဖြတ်နိုင်အောင် ကူညီ → ကတိပေးထားတဲ့ရလဒ်ကို ပေး → ဆက်သုံး၊ ပြန်ဝယ်၊ မိတ်ဆက်ပေးစေ → စနစ်တကျ ချဲ့ထွင်
               </div>
             </div>
 
@@ -239,18 +234,18 @@ export function StartHereIntro({
                   <Compass className="size-4" />
                 </span>
                 <h3 className="text-sm font-extrabold text-[#14213d]">
-                  🧭 ဒီ Website ကို ဘယ်လိုသုံးမလဲ?
+                  🧭 ဒီ Website ကို ဘယ်လို အသုံးပြုမလဲ?
                 </h3>
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-5">
                 {[
-                  { step: "Step 1", text: "Stage 1 ကနေ စပါ။" },
-                  { step: "Step 2", text: "Stage တစ်ခုချင်းစီရဲ့ Explanation နဲ့ Example ကိုဖတ်ပါ။" },
-                  { step: "Step 3", text: "ကိုယ့် Business နဲ့ နှိုင်းယှဉ်စဉ်းစားပါ။" },
-                  { step: "Step 4", text: "Stage ထဲက Action Items ကို လုပ်ပါ။" },
-                  { step: "Step 5", text: "ပြီးမှ Next Stage ကို ဆက်သွားပါ။" },
-                ].map((item, i) => (
+                  { step: "အဆင့် ၁", text: "Stage 1 (Problem Validation) ကနေ စတင်ပါ။" },
+                  { step: "အဆင့် ၂", text: "Stage တစ်ခုချင်းစီရဲ့ ရှင်းလင်းချက်နဲ့ လက်တွေ့ဥပမာကို ဖတ်ပါ။" },
+                  { step: "အဆင့် ၃", text: "သင့်ကိုယ်ပိုင် စီးပွားရေးစိတ်ကူးနဲ့ နှိုင်းယှဉ်စဉ်းစားပါ။" },
+                  { step: "အဆင့် ၄", text: "Stage ထဲက လက်တွေ့လုပ်ဆောင်ရန် အချက်များကို လုပ်ကြည့်ပါ။" },
+                  { step: "အဆင့် ၅", text: "စစ်ဆေးရန် သက်သေရမှသာ နောက် Stage ကို ဆက်သွားပါ။" },
+                ].map((item) => (
                   <div
                     key={item.step}
                     className="flex flex-col justify-between rounded-xl border border-[#e2ded5] bg-[#faf8f4] p-3.5"
@@ -269,10 +264,10 @@ export function StartHereIntro({
               <div className="mt-4 rounded-xl border-l-4 border-[#e8693e] bg-[#fff6f2] p-4 text-xs leading-relaxed text-[#7a3b22]">
                 <p className="font-extrabold text-[#c04318]">⚠️ အရေးကြီးသော လမ်းညွှန်ချက်:</p>
                 <p className="mt-1 font-semibold">
-                  “ဒီ Roadmap ကို Checklist တစ်ခုလို အမြန်ပြီးအောင်လုပ်ဖို့ မလိုပါဘူး။ Stage တစ်ခု မရှင်းသေးရင် အဲဒီ Stage မှာပဲ ပြန်စဉ်းစားပါ။”
+                  “ဒီ Roadmap ကို Checklist တစ်ခုလို အမြန်ပြီးအောင် ဖြတ်သန်းဖို့ မလိုပါဘူး။ Stage တစ်ခုအတွက် ခိုင်မာတဲ့ သက်သေမရသေးရင် အဲဒီအဆင့်မှာပဲ သေချာစမ်းသပ်ပါ။”
                 </p>
                 <p className="mt-1 text-[11px] text-[#8e482d]">
-                  ဥပမာ: Customer Problem မရှင်းသေးရင် Offer တည်ဆောက်ဖို့ မလျင်ပါနဲ့။
+                  ဥပမာ: Customer Problem အစစ်အမှန် မရှင်းလင်းသေးဘဲ အချိန်ကုန်ခံပြီး Website သို့မဟုတ် App အကြီးကြီး တည်ဆောက်ခြင်းမျိုးကို ရှောင်ကြဉ်ပါ။
                 </p>
               </div>
             </div>
@@ -285,7 +280,7 @@ export function StartHereIntro({
                     <Sparkles className="size-4" />
                   </span>
                   <h3 className="text-sm font-extrabold tracking-wide text-white sm:text-base">
-                    The Startup Machine Concept
+                    The Startup Engine Concept (စီးပွားရေးစက်ယန္တရား)
                   </h3>
                 </div>
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-[10px] font-bold text-[#bcd3ff]">
@@ -318,7 +313,7 @@ export function StartHereIntro({
               <div className="mt-5 grid gap-3 md:grid-cols-3">
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs font-bold text-[#bcd3ff]">
-                    “Customer ကို ခေါ်လာနိုင်လား?”
+                    “Customer တွေကို ကိုယ့်ဆီ ရောက်လာအောင် ခေါ်နိုင်ပြီလား?”
                   </p>
                   <p className="mt-2 text-xs font-black text-[#f6c85f]">
                     → Marketing / Lead Generation
@@ -326,7 +321,7 @@ export function StartHereIntro({
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs font-bold text-[#bcd3ff]">
-                    “Customer ကို ဝယ်စေနိုင်လား?”
+                    “Customer တွေ ယုံကြည်စိတ်ချစွာ ဝယ်ယူအောင် ကူညီနိုင်ပြီလား?”
                   </p>
                   <p className="mt-2 text-xs font-black text-[#a3f0c4]">
                     → Sales
@@ -334,7 +329,7 @@ export function StartHereIntro({
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <p className="text-xs font-bold text-[#bcd3ff]">
-                    “ကတိပေးထားတဲ့ Result ကို ထပ်ခါတလဲလဲ ပေးနိုင်လား?”
+                    “ကတိပေးထားတဲ့ ရလဒ်ကို တူညီတဲ့ အရည်အသွေးနဲ့ ထပ်ခါတလဲလဲ ပေးနိုင်ပြီလား?”
                   </p>
                   <p className="mt-2 text-xs font-black text-[#c58af9]">
                     → Delivery + Operations
@@ -343,7 +338,7 @@ export function StartHereIntro({
               </div>
 
               <div className="mt-4 rounded-xl border border-white/10 bg-white/10 p-3.5 text-center text-xs font-bold text-[#eef3ff]">
-                💡 “ဒီ 3 ခု အလုပ်ဖြစ်လာရင် Business Engine တစ်ခု စတင်ဖြစ်လာပြီ။”
+                💡 “ဒီ အဓိက ၃ ချက် အလုပ်ဖြစ်လာတဲ့အခါ ရေရှည်ခိုင်မာတဲ့ Business Engine တစ်ခု စတင်ဖြစ်ပေါ်လာပါပြီ။”
               </div>
             </div>
           </div>
