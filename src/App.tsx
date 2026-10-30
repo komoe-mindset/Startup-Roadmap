@@ -27,6 +27,7 @@ import {
 } from "@/lib/firestoreSync";
 
 export const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
+export const AI_CONSULTING_URL = "https://ai-consulting.komoe.org/";
 
 type Stage = {
   id: string; number: string; title: string; mm: string; phase: string; color: string; pale: string;
@@ -494,6 +495,19 @@ export default function Home() {
               <ExternalLink className="size-3 opacity-60 hidden sm:inline" />
             </a>
 
+            <a
+              href={AI_CONSULTING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="AI Consulting (komoe.org) in new tab"
+              title="AI Consulting by Ko Moe - လက်တွေ့ကျသော AI အကြံပေးဝန်ဆောင်မှု"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#b8e2d8] bg-gradient-to-r from-[#e6f9f3] to-[#f0fbf8] px-2.5 py-1.5 text-xs font-extrabold text-[#0e624f] shadow-xs transition hover:border-[#8ad4c3] hover:shadow-sm sm:px-3 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a]"
+            >
+              <Bot className="size-4 text-[#1da98a] shrink-0" />
+              <span className="hidden sm:inline">AI Consulting</span>
+              <ExternalLink className="size-3 opacity-60 hidden sm:inline" />
+            </a>
+
             <Button
               variant="outline"
               size="sm"
@@ -655,6 +669,19 @@ export default function Home() {
                 >
                   <GeminiGemIcon className="size-4" />
                   <span>Gemini Mentor နှင့် တိုင်ပင်မည်</span>
+                  <ExternalLink className="size-3.5 opacity-80" />
+                </a>
+
+                <a
+                  href={AI_CONSULTING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="AI Consulting ဝန်ဆောင်မှု ရယူရန် in new tab"
+                  title="AI Consulting by Ko Moe"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-emerald-400/40 bg-gradient-to-r from-emerald-950/70 to-teal-950/70 px-4 py-2 text-xs font-extrabold text-[#a3f0c4] shadow-sm transition hover:border-emerald-400/80 hover:from-emerald-900/80 hover:to-teal-900/80 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-400"
+                >
+                  <Bot className="size-4 text-[#1da98a]" />
+                  <span>AI Consulting</span>
                   <ExternalLink className="size-3.5 opacity-80" />
                 </a>
               </div>
@@ -1377,6 +1404,66 @@ export default function Home() {
           </article>
         </div>
       </div>
+
+      {/* Footer with Creator & Consulting Links */}
+      <footer className="mt-16 border-t border-[#d9d5ca] bg-[#ebe7dc] py-10 text-[#4b5563]">
+        <div className="mx-auto max-w-[1500px] px-4 sm:px-7">
+          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <div className="flex items-center gap-3">
+              <span className="grid size-10 place-items-center rounded-xl bg-[#14213d] text-white shadow-md shrink-0">
+                <Rocket className="size-5" />
+              </span>
+              <div>
+                <p className="text-sm font-black text-[#14213d]">AI Startup Roadmap</p>
+                <p className="text-xs text-[#687085]">Founder Learning OS • စိတ်ကူးမှ စီးပွားရေးစနစ်အထိ</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={AI_CONSULTING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#b8e2d8] bg-white px-4 py-2 text-xs font-extrabold text-[#0e624f] shadow-xs transition hover:bg-[#e6f9f3] hover:border-[#8ad4c3] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1da98a]"
+                title="AI Consulting by Ko Moe"
+              >
+                <Bot className="size-4 text-[#1da98a] shrink-0" />
+                <span>AI Consulting (komoe.org)</span>
+                <ExternalLink className="size-3.5 opacity-60" />
+              </a>
+
+              <a
+                href={GEMINI_ASSISTANT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[#d9d0ea] bg-white px-4 py-2 text-xs font-extrabold text-[#53389e] shadow-xs transition hover:bg-[#f5f0ff] hover:border-[#bfa8eb] outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#8c70db]"
+                title="AI Gem Mentor"
+              >
+                <GeminiGemIcon className="size-4 shrink-0" />
+                <span>AI Gem Mentor</span>
+                <ExternalLink className="size-3.5 opacity-60" />
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-8 border-t border-[#ded9cd] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#717d96]">
+            <p>© {new Date().getFullYear()} AI Startup Roadmap. Crafted by Ko Moe.</p>
+            <p>
+              Visit{" "}
+              <a
+                href={AI_CONSULTING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-bold text-[#14213d] underline hover:text-[#0e624f]"
+              >
+                <Bot className="size-3 text-[#1da98a]" />
+                <span>ai-consulting.komoe.org</span>
+              </a>{" "}
+              for AI strategy & implementation.
+            </p>
+          </div>
+        </div>
+      </footer>
 
       {/* Full Screen Interactive Story Modal */}
       <Suspense fallback={null}>

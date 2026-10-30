@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  Bot,
   CheckCircle2,
   Compass,
   ExternalLink,
@@ -18,6 +19,7 @@ import { STORY_STAGES, STORY_SUMMARY, StoryStage } from "@/data/storyData";
 import { GeminiGemIcon } from "@/components/GeminiGemIcon";
 
 const GEMINI_ASSISTANT_URL = "https://gemini.google.com/gem/10aOjpzRICEEWbY6Z3ICDQRr88mlg3Lc1?usp=sharing";
+const AI_CONSULTING_URL = "https://ai-consulting.komoe.org/";
 
 interface StoryModalProps {
   isOpen: boolean;
@@ -448,6 +450,28 @@ export function StoryModal({
                     className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-400/50 bg-[#4f46e5] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#4338ca]"
                   >
                     <span>Gemini Gem ဖွင့်မည်</span>
+                    <ExternalLink className="size-3.5" />
+                  </a>
+                </div>
+
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#1da98a]/40 bg-gradient-to-r from-[#123626]/70 to-[#1da98a]/20 p-4">
+                  <div className="flex items-center gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-[#1da98a]/25 text-[#1da98a] border border-[#1da98a]/30">
+                      <Bot className="size-5" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-white">AI Consulting ဝန်ဆောင်မှု ရယူရန်</p>
+                      <p className="text-[11px] text-[#c7d0e4]">သင့်လုပ်ငန်းအတွက် လက်တွေ့ကျသော AI Strategy နှင့် Implementation များကို Ko Moe နှင့် တိုက်ရိုက်ဆွေးနွေးပါ</p>
+                    </div>
+                  </div>
+                  <a
+                    href={AI_CONSULTING_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/50 bg-[#1da98a] px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-[#168a71]"
+                  >
+                    <Bot className="size-3.5" />
+                    <span>AI Consulting သွားမည်</span>
                     <ExternalLink className="size-3.5" />
                   </a>
                 </div>
